@@ -1,18 +1,21 @@
 import requests
-from proxy_scraper import proxy_scraper
+from proxy.proxy_scraper import proxy_scraper
 
 def test_scraper():
 
-    url = "http://httpbin.org/ip"
+    url = "https://ipinfo.io/json"
     proxies = proxy_scraper()
 
     if proxies == []:
-        print('bye')
-        pass
+        print('no proxies')
     else:
-        for i in range(len(proxies)-1):
+        for proxy in proxies:
+            proxies = {
+                'http': proxy,
+                'https': proxy,
+            }
             try:
-                response = requests.get(url, proxies = {"http":proxies[i], "https":proxies[i]})
+                response = requests.get(url, proxies = proxies)
                 print(response.json())
             except:
                 # if the proxy is pre occupied
