@@ -10,8 +10,7 @@ def proxy_scraper():
         soup = bs(requests.get(url).content, 'html.parser')
     except Exception as e:
         print(e)
-        # time.sleep(600)
-    # to store proxy_adresses
+       
     proxies = []
     for row in soup.find(
         'table',attrs={'class': 'table-striped'}
@@ -20,14 +19,14 @@ def proxy_scraper():
         try:
             ip = tds[0].text.strip()
             port = tds[1].text.strip()
-            # code = tds[2].text.strip()
-            country = tds[3].text.strip()
             anonymity = tds[4].text.strip()
             google = tds[5].text.strip()
             https = tds[6].text.strip()
-            retreived_on = datetime.date
+            # code = tds[2].text.strip()
+            # country = tds[3].text.strip()
+            # retreived_on = datetime.date
             if (
-              anonymity == 'elite proxy' and google =='yes' and https == 'yes'
+              https == 'no' and anonymity == 'elite proxy' and google =='yes'
               ):
                 proxy = str(ip) + ':' + str(port)
                 proxies.append(proxy)

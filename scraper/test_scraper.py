@@ -1,5 +1,5 @@
 import requests
-from proxy.proxy_scraper import proxy_scraper
+from proxy_scraper import proxy_scraper
 
 def test_scraper():
 
@@ -7,7 +7,7 @@ def test_scraper():
     proxies = proxy_scraper()
 
     if proxies == []:
-        print('no proxies')
+        print('Proxies = []')
     else:
         for proxy in proxies:
             proxies = {
@@ -15,10 +15,10 @@ def test_scraper():
                 'https': proxy,
             }
             try:
-                response = requests.get(url, proxies = proxies)
+                response = requests.get(url, proxies=proxies)
                 print(response.json())
             except:
-                # if the proxy is pre occupied
-                print(f'Proxy is occupied.')
+                # if proxy is occupied
+                continue
 
 test_scraper()
