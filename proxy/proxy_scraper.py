@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
-import time
-from datetime import datetime
+# import time
+# from datetime import datetime
 
 def proxy_scraper():
     url = 'https://free-proxy-list.net/'
