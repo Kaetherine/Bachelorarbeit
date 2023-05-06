@@ -4,14 +4,14 @@ import json
 
 def get_page(url):
     try:
-        response = requests.get(url).text
+        response = requests.get(url)
     except Exception as e:
         return e
     try:
-        json_response = json.loads(response)
+        json_response = json.loads(response.text)
         return json_response
-    except:
-        return response
+    except Exception as e:
+        return e
     
 
 items = 'https://www.asos.com/api/product/search/v2/categories'
