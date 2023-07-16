@@ -6,7 +6,6 @@ import random
 #%%
 # urls
 base_url = 'https://www.zara.com/us/en'
-extension_categories ='/categories'
 
 extension_details = '/product/272001924/extra-detail?ajax=true'
 extension_related = '/product/272001924/related'
@@ -113,6 +112,9 @@ def get_product_ids():
 def get_product_details(product_id):
     pass
 
+#%%
+def get_related_products():
+    pass
 #%%
 categories = helper.get_page(
         url = 'https://www.zara.com/us/en',
