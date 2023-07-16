@@ -1,18 +1,19 @@
+#%%
 import helper_functions as helper
 from proxy import client
+import random
 
+#%%
 # urls
 base_url = 'https://www.zara.com'
-country = [
-    '/en',
-    '/us'
-    ]
+country = '/us'
 language = '/en'
-extension_categories ='categories'
-extension_products = 'category/2290933/products?ajax=true'
+extension_categories ='/categories'
+extension_products = '/category/2290933/products?ajax=true'
 extension_details = '/product/272001924/extra-detail?ajax=true'
 extension_related = '/product/272001924/related'
 
+#%%
 # request assets
 user_agent = [
     # collected
@@ -40,10 +41,11 @@ accept_language = [
 
 ]
 
+# headers
 headers ={
     'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Encoding':'gzip, deflate, br',
-    'Accept-Language':any(accept_language),
+    'Accept-Language':random.choice(accept_language),
     'Connection':'keep-alive',
     'Host':'www.zara.com',
     'Sec-Fetch-Dest':'document',
@@ -51,12 +53,47 @@ headers ={
     'Sec-Fetch-Site':'none',
     'Sec-Fetch-User':'?1',
     'Upgrade-Insecure-Requests':'1',
-    'User-Agent': any(user_agent)
+    'User-Agent': random.choice(user_agent)
 }
 
-response = helper.get_page(
-    url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true',
-    client = client,
-    headers = headers
-    )
-response = helper.page_to_json(response)
+#%%
+# functions
+def extract_category_ids(response):
+    'extracts the category ids only'
+    categories = []
+    response = response['categories']
+    print(response)
+    # for item in response:
+    #     category_id = item['id']
+    #     print(item)
+        # if 'subcategories' in item:
+        #     category_id = item
+        # response = response[i]['subcategories']['subcategories']
+        # for i in range(len(response)):
+        #     category_id = response['id']
+        #     categories.append(category_id)
+        #     if response['subcategoies']:
+        #         categories.extend([response['subcategoies'][i]['id'] for i in response['subcategoies']])
+
+def get_categories():
+    '''gets and extracts the categories from given url'''
+    category_url = base_url+country+language+extension_categories
+    response = helper.get_page(
+        url = category_url,
+        client = client,
+        headers = headers
+        )
+    response = helper.page_to_json(response)
+    return response
+
+#%%
+# executions
+categories = get_categories()
+print(categories)
+
+#%%
+categories = extract_category_ids(categories)
+# print(categories)
+# %%
+
+# https://www.zara.com/us/en/categories
