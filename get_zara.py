@@ -123,7 +123,11 @@ def get_product_details(product_ids):
                 client = client,
                 headers = headers
                 )
-    product_details[product_id] = response
+    product_details[product_id] = {
+        'materials':response['1'],
+        'certifiedmaterials': response['2'],
+        'origin':response['4']
+    }
 
 #%%
 def get_related_products():
