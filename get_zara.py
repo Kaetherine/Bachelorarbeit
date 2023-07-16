@@ -74,16 +74,6 @@ def extract_category_ids(response):
     return categories
 
 #%%
-def get_categories():
-    response = helper.get_page(
-        url = 'https://www.zara.com/us/en',
-        client = client,
-        headers = headers
-        )
-    categories = extract_category_ids()
-    return categories
-
-#%%
 def extract_product_list(response):
     products = []
     for i in range(len(response)):
@@ -92,6 +82,16 @@ def extract_product_list(response):
             response = response['commercialComponents']
             products.append(response)
     return products
+
+#%%
+def get_categories():
+    response = helper.get_page(
+        url = 'https://www.zara.com/us/en',
+        client = client,
+        headers = headers
+        )
+    categories = extract_category_ids()
+    return categories
 
 #%%
 def get_product_list(category_ids):
@@ -105,10 +105,7 @@ def get_product_list(category_ids):
         products = extract_product_list(response)
         return products
 
-
-
 #%%
-
 categories = helper.get_page(
         url = 'https://www.zara.com/us/en',
         client = client,
