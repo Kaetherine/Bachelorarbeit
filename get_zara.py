@@ -63,16 +63,15 @@ def extract_category_ids(response):
     for item in response:
         customer = item['name']
         if (customer == 'WOMAN' or customer == 'MAN' or customer == 'KIDS'):
-            category_id = item['subcategories']
-            print(category_id)
-        # if 'subcategories' in item:
-        #     category_id = item
-        # response = response[i]['subcategories']['subcategories']
-        # for i in range(len(response)):
-        #     category_id = response['id']
-        #     categories.append(category_id)
-        #     if response['subcategoies']:
-        #         categories.extend([response['subcategoies'][i]['id'] for i in response['subcategoies']])
+            category_ids = item['subcategories'] #[iterate]['subcategories']
+            for item in category_ids:
+                categories.append(item['id'])
+                if item['subcategories']:
+                    subcategories = item['subcategories']
+                    for item in subcategories:
+                        categories.append(item['id'])
+    categories = list(set(categories))
+    return categories
 
 def get_categories():
     '''gets and extracts the categories from given url'''
