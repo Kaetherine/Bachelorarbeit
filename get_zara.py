@@ -10,6 +10,8 @@ country = [
 language = '/en'
 extension_categories ='categories?categoryId=2290613&categorySeoId=1180&ajax=true'
 extension_products = 'category/2290933/products?ajax=true'
+extension_details = '/product/272001924/extra-detail?ajax=true'
+extension_related = '/product/272001924/related'
 
 # request assets
 user_agent = [
