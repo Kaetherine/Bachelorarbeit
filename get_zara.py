@@ -105,12 +105,23 @@ def get_product_list(category_ids):
         return products
     
 #%%
-def get_product_ids():
-    pass
+def get_product_id(products):
+    product_ids = []
+    for product in products:
+        product_id = product_id
+        product_ids.append(product_id)
+    product_ids = list(set(product_ids))
+    return product_ids
 
 #%%
 def get_product_details(product_id):
-    pass
+    product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
+    response = helper.get_page(
+            url = product_details_url,
+            client = client,
+            headers = headers
+            )
+    products = extract_product_list(response)
 
 #%%
 def get_related_products():
