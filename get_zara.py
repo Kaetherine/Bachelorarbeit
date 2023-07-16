@@ -1,6 +1,14 @@
 import helper_functions as helper
 from proxy import client
 
+# urls
+base_url = 'https://www.zara.com'
+country = '/en'
+language = '/en'
+extension_categories ='categories?categoryId=2290613&categorySeoId=1180&ajax=true'
+extension_products = 'category/2290933/products?ajax=true'
+
+# request assets
 user_agent = [
     # collected
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
@@ -41,8 +49,6 @@ headers ={
     'User-Agent': any(user_agent)
 }
 
-categories_url ='https://www.zara.com/de/en/categories?categoryId=2290613&categorySeoId=1180&ajax=true'
-products_url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true'
 response = helper.get_page(
     url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true',
     client = client,
