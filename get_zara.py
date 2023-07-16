@@ -6,8 +6,6 @@ import random
 #%%
 # urls
 base_url = 'https://www.zara.com/de/en'
-
-extension_details = '/product/272001924/extra-detail?ajax=true'
 extension_related = '/product/272001924/related'
 
 #%%
@@ -123,12 +121,26 @@ def get_product_details(product_ids):
                 client = client,
                 headers = headers
                 )
-    product_details[product_id] = {
-        'materials':response['1'],
-        'certifiedmaterials': response['2'],
-        'origin':response['4']
-    }
+        product_details[product_id] = {
+            'materials':response['1'],
+            'certifiedmaterials': response['2'],
+            'origin':response['4']
+        }
+    return product_details
 
 #%%
-def get_related_products():
-    pass
+def get_related_products(product_ids):
+    related_products = {}
+    
+    for product_id in product_ids:
+        product_details_url = f'{base_url}/product/{product_id}/related'
+        response = helper.get_page(
+                url = product_details_url,
+                client = client,
+                headers = headers
+                )
+        related_products[product_id] = []
+        for product in response['recommend']:
+            recommended_product = product['id']
+            related_products[product_id].append(recommended_product)
+        
