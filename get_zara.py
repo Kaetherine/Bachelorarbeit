@@ -5,11 +5,9 @@ import random
 
 #%%
 # urls
-base_url = 'https://www.zara.com'
-country = '/us'
-language = '/en'
+base_url = 'https://www.zara.com/us/en'
 extension_categories ='/categories'
-extension_products = '/category/2290933/products?ajax=true'
+
 extension_details = '/product/272001924/extra-detail?ajax=true'
 extension_related = '/product/272001924/related'
 
@@ -58,7 +56,6 @@ headers ={
 }
 
 #%%
-# functions
 def extract_category_ids(response):
     'extracts the category ids only'
     categories = []
@@ -76,17 +73,51 @@ def extract_category_ids(response):
     categories = list(set(categories))
     return categories
 
+#%%
 def get_categories():
-    '''gets and extracts the categories from given url'''
-    category_url = base_url+country+language+extension_categories
     response = helper.get_page(
-        url = category_url,
+        url = 'https://www.zara.com/us/en',
         client = client,
         headers = headers
         )
-    response = helper.page_to_json(response)
-    return response
+    categories = extract_category_ids()
+    return categories
 
+#%%
+def extract_product_list(response):
+    products = []
+    for i in range(len(response)):
+        response = response[i]['elements']
+        for i in range(len(response)):
+            response = response['commercialComponents']
+            products.append(response)
+    return products
+
+#%%
+def get_product_list(category_ids):
+    for category_id in category_ids:
+        products_url = f'{base_url}/category/{category_id}/products?ajax=true'
+        response = helper.get_page(
+            url = products_url,
+            client = client,
+            headers = headers
+            )
+        products = extract_product_list(response)
+        return products
+
+
+
+#%%
+
+categories = helper.get_page(
+        url = 'https://www.zara.com/us/en',
+        client = client,
+        headers = headers
+        )
+#%%
+categories = extract_category_ids()
+
+test = get_products()
 #%%
 # executions
 category_response = get_categories()
