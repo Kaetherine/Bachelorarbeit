@@ -6,7 +6,6 @@ import random
 #%%
 # urls
 base_url = 'https://www.zara.com/de/en'
-extension_related = '/product/272001924/related'
 
 #%%
 # request assets
