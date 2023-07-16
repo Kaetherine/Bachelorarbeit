@@ -1,3 +1,6 @@
+import helper_functions as helper
+from proxy import client
+
 headers ={
     'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Encoding':'gzip, deflate, br',
@@ -12,5 +15,9 @@ headers ={
     'User-Agent':	'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0'
 }
 
-zara = get_page('https://www.zara.com/de/en/category/2290933/products?ajax=true')
-zara
+response = helper.get_page(
+    url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true',
+    client = client,
+    headers = headers
+    )
+response = helper.page_to_json(response)
