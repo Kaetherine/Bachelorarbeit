@@ -8,7 +8,7 @@ country = [
     '/us'
     ]
 language = '/en'
-extension_categories ='categories?categoryId=2290613&categorySeoId=1180&ajax=true'
+extension_categories ='categories'
 extension_products = 'category/2290933/products?ajax=true'
 extension_details = '/product/272001924/extra-detail?ajax=true'
 extension_related = '/product/272001924/related'
