@@ -62,8 +62,8 @@ def extract_category_ids(response):
     response = response['categories']
     for item in response:
         customer = item['name']
-        if (customer == 'WOMEN' or customer == 'MAN' or customer == 'KIDS'):
-            category_id = item['subcategories'][0]
+        if (customer == 'WOMAN' or customer == 'MAN' or customer == 'KIDS'):
+            category_id = item['subcategories']
             print(category_id)
         # if 'subcategories' in item:
         #     category_id = item
