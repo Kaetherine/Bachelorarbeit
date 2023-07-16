@@ -85,7 +85,7 @@ def extract_product_list(response):
 #%%
 def get_categories():
     response = helper.get_page(
-        url = 'https://www.zara.com/us/en',
+        url = f'{base_url}/categories',
         client = client,
         headers = headers
         )
@@ -115,25 +115,3 @@ def get_product_details(product_id):
 #%%
 def get_related_products():
     pass
-#%%
-categories = helper.get_page(
-        url = 'https://www.zara.com/us/en',
-        client = client,
-        headers = headers
-        )
-#%%
-categories = extract_category_ids()
-
-test = get_products()
-#%%
-# executions
-category_response = get_categories()
-print(category_response)
-
-#%%
-categories = extract_category_ids(category_response)
-print(categories)
-# print(categories)
-# %%
-
-# https://www.zara.com/us/en/categories
