@@ -104,6 +104,14 @@ def get_product_list(category_ids):
             )
         products = extract_product_list(response)
         return products
+    
+#%%
+def get_product_ids():
+    pass
+
+#%%
+def get_product_details(product_id):
+    pass
 
 #%%
 categories = helper.get_page(
