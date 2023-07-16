@@ -12,6 +12,7 @@ def get_page(url, client=client, headers=None, params=None):
         return e
     
 def page_to_json(response):
+    '''takes a string structured as json and converts it to json'''
     try:
         json_response = json.loads(response.text)
         return json_response
