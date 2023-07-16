@@ -8,6 +8,7 @@ user_agent = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.21608.199 Safari/537.36 Avast/114.0.21608.199',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.82',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0',
 
     # ai created
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.1919.91',
@@ -16,13 +17,20 @@ user_agent = [
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36',
+    
+]
+
+accept_language = [
+    'en-US,en;q=0.5',
+    'en-US,en;q=0.8',
+    'en-US,en-GB;q=0.5,en;q=0.3'
 
 ]
 
 headers ={
     'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Encoding':'gzip, deflate, br',
-    'Accept-Language':'en-US,en;q=0.5',
+    'Accept-Language':any(accept_language),
     'Connection':'keep-alive',
     'Host':'www.zara.com',
     'Sec-Fetch-Dest':'document',
@@ -33,6 +41,8 @@ headers ={
     'User-Agent': any(user_agent)
 }
 
+categories_url ='https://www.zara.com/de/en/categories?categoryId=2290613&categorySeoId=1180&ajax=true'
+products_url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true'
 response = helper.get_page(
     url = 'https://www.zara.com/de/en/category/2290933/products?ajax=true',
     client = client,
