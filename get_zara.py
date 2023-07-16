@@ -3,7 +3,10 @@ from proxy import client
 
 # urls
 base_url = 'https://www.zara.com'
-country = '/en'
+country = [
+    '/en',
+    '/us'
+    ]
 language = '/en'
 extension_categories ='categories?categoryId=2290613&categorySeoId=1180&ajax=true'
 extension_products = 'category/2290933/products?ajax=true'
