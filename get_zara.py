@@ -143,4 +143,5 @@ def get_related_products(product_ids):
         for product in response['recommend']:
             recommended_product = product['id']
             related_products[product_id].append(recommended_product)
+    return related_products
         
