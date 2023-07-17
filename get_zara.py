@@ -91,22 +91,29 @@ def get_categories():
 def get_product_list(category_ids):
     products_by_category = {}
     for category_id in category_ids:
+        print(category_id)
         products_url = f'{base_url}/category/{category_id}/products?ajax=true'
+        print(products_url)
         response = helper.get_page(
             url = products_url,
             client = client,
             headers = headers
             )
-        products_by_category[category_id] = extract_product_list(response)
-        return products_by_category
-    
+        products_by_category[str(category_id)] = extract_product_list(response)
+    return products_by_category
+
 #%%
-def get_product_ids(products):
-    product_ids = []
-    for product in products:
-        product_id = product['id']
-        product_ids.append(product_id)
-    product_ids = list(set(product_ids))
+def get_products(products_by_category):
+    products = []
+    for category in products_by_category:
+        for item in products_by_category[category]:
+            products.append(item)
+    return products
+
+#%%
+def get_product_ids(products_by_category):
+    products = get_products(products_by_category)
+    product_ids = helper.get_dict_list_values(products, 'id')
     return product_ids
 
 #%%
@@ -151,10 +158,14 @@ print(category_ids)
 print(category_ids[:2])
 
 # %%
-products_by_category = get_product_list(category_ids[:2])
+products_by_category = get_product_list(category_ids[:3])
 
 #%%
 print(products_by_category)
 print(len(products_by_category))
 
-
+# %%
+products = get_product_ids(products_by_category)
+print(products)
+# %%
+# print()
