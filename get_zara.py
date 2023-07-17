@@ -59,7 +59,8 @@ def extract_category_ids(response):
     '''extracts the category ids only'''
     logger.info('Executing "extract_category_ids".')
     categories = []
-    response = response['categories']
+    if response:
+        response = response['categories']
     for item in response:
         customer = item['name']
         if (customer == 'WOMAN' or customer == 'MAN' or customer == 'KIDS'):
@@ -95,8 +96,9 @@ def get_categories():
         client = client,
         headers = headers
         )
-    categories = extract_category_ids(response)
-    return categories
+    if response:
+        categories = extract_category_ids(response)
+        return categories
 
 #%%
 def get_product_list(category_ids):
@@ -150,17 +152,18 @@ def get_product_details(product_ids):
                 headers = headers
                 )
     # filter content
-        for detail in response:
-            product_details[product_id] = {}
-            if detail['sectionType'] == 'materials':
-                product_details[product_id]['materials'] = detail
-            elif detail['sectionType'] == 'certifiedMaterials':
-                product_details[product_id]['certifiedmaterials'] = detail
-            elif detail['sectionType'] == 'origin':
-                product_details[product_id]['origin'] = detail
-        if 'certifiedmaterials' not in product_details[product_id]:
-            product_details[product_id]['certifiedmaterials'] = None
-    return product_details
+        if response:
+            for detail in response:
+                product_details[product_id] = {}
+                if detail['sectionType'] == 'materials':
+                    product_details[product_id]['materials'] = detail
+                elif detail['sectionType'] == 'certifiedMaterials':
+                    product_details[product_id]['certifiedmaterials'] = detail
+                elif detail['sectionType'] == 'origin':
+                    product_details[product_id]['origin'] = detail
+            if 'certifiedmaterials' not in product_details[product_id]:
+                product_details[product_id]['certifiedmaterials'] = None
+        return product_details
 
 #%%
 def get_related_products(product_ids):
@@ -212,3 +215,4 @@ related_products = get_related_products(product_ids[:3])
 print(related_products)
 
 # %%
+logger.info('SUCCESS: The script zara.py was executed successfully.')
