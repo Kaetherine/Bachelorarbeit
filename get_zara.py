@@ -4,11 +4,9 @@ from proxy import client
 import random
 
 #%%
-# urls
 base_url = 'https://www.zara.com/de/en'
 
 #%%
-# request assets
 user_agent = [
     # collected
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
@@ -30,13 +28,14 @@ user_agent = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Brave/1.30.89 Chrome/92.0.4515.159 Safari/537.36',
     ]
 
+#%%
 accept_language = [
     'en-US,en;q=0.5',
     'en-US,en;q=0.8',
     'en-US,en-GB;q=0.5,en;q=0.3'
     ]
 
-# headers
+#%%
 headers ={
     'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Encoding':'gzip, deflate, br',
@@ -72,11 +71,10 @@ def extract_category_ids(response):
 #%%
 def extract_product_list(response):
     products = []
-    for i in range(len(response)):
-        response = response[i]['elements']
-        for i in range(len(response)):
-            response = response['commercialComponents']
-            products.append(response)
+    for item in response['productGroups']:
+        if item['elements']:
+            for product in item['elements']:
+                products.extend(product['commercialComponents'])
     return products
 
 #%%
@@ -86,11 +84,12 @@ def get_categories():
         client = client,
         headers = headers
         )
-    categories = extract_category_ids()
+    categories = extract_category_ids(response)
     return categories
 
 #%%
 def get_product_list(category_ids):
+    products_by_category = {}
     for category_id in category_ids:
         products_url = f'{base_url}/category/{category_id}/products?ajax=true'
         response = helper.get_page(
@@ -98,8 +97,8 @@ def get_product_list(category_ids):
             client = client,
             headers = headers
             )
-        products = extract_product_list(response)
-        return products
+        products_by_category[category_id] = extract_product_list(response)
+        return products_by_category
     
 #%%
 def get_product_ids(products):
@@ -143,4 +142,19 @@ def get_related_products(product_ids):
             recommended_product = product['id']
             related_products[product_id].append(recommended_product)
     return related_products
-        
+
+#%%
+category_ids = get_categories()
+print(category_ids)
+
+#%%
+print(category_ids[:2])
+
+# %%
+products_by_category = get_product_list(category_ids[:2])
+
+#%%
+print(products_by_category)
+print(len(products_by_category))
+
+
