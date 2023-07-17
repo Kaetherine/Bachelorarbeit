@@ -2,24 +2,27 @@ import requests
 import json
 from proxy import client
 from logger import setup_logger
+from ratelimiter import RateLimiter
 
 logger = setup_logger()
+rate_limiter = RateLimiter(max_calls=5, period=1)
 
 def get_raw_page(url, client=client, headers=None, params=None):
     '''function to get the content of a specific url'''
-    try:
-        response = client.get(url, headers = headers, params = params)
-        logger.info(
-            f'''
-            statuscode: {response.status_code},
-            url: {url},
-            headers: {headers},
-            params:{params}'''
-        )
-        return response
-    except Exception as e:
-        logger.error(f'{url}, e')
-        return None
+    with rate_limiter:
+        try:
+            response = client.get(url, headers = headers, params = params)
+            logger.info(
+                f'''
+                statuscode: {response.status_code},
+                url: {url},
+                headers: {headers},
+                params:{params}'''
+            )
+            return response
+        except Exception as e:
+            logger.error(f'{url}, e')
+            return None
     
 def page_to_json(response):
     '''takes a string structured as json and converts it to json'''
