@@ -7,10 +7,6 @@ from logger import setup_logger
 #%%
 logger = setup_logger()
 
-logger.info('Nachricht in skript1')
-logger.warning('Warnung in skript1')
-
-
 #%%
 base_url = 'https://www.zara.com/de/en'
 
@@ -60,7 +56,8 @@ headers ={
 
 #%%
 def extract_category_ids(response):
-    'extracts the category ids only'
+    '''extracts the category ids only'''
+    logger.info('Executing "extract_category_ids".')
     categories = []
     response = response['categories']
     for item in response:
@@ -80,6 +77,7 @@ def extract_category_ids(response):
 def extract_product_list(response):
     '''takes the response and saves the key containing 
     the products of that response in "products"'''
+    logger.info('Executing "extract_product_list".')
     products = []
     for item in response['productGroups']:
         if item['elements']:
@@ -91,6 +89,7 @@ def extract_product_list(response):
 def get_categories():
     '''get the category pages and, extracts the categories from 
     their responses and returns a list of categories'''
+    logger.info('Executing "get_categories".')
     response = helper.get_page(
         url = f'{base_url}/categories',
         client = client,
@@ -105,11 +104,10 @@ def get_product_list(category_ids):
     passed list, extracts the products and assignes them to their category. 
     The functions output is a dictionary with the category as key and a 
     list of its products as values'''
+    logger.info('get_product_list".')
     products_by_category = {}
     for category_id in category_ids:
-        print(category_id)
         products_url = f'{base_url}/category/{category_id}/products?ajax=true'
-        print(products_url)
         response = helper.get_page(
             url = products_url,
             client = client,
@@ -122,8 +120,10 @@ def get_product_list(category_ids):
 def get_products(products_by_category):
     '''takes the dict "product by categories" and returns a list of 
     products (without assigned categories)'''
+    logger.info('get_products".')
     products = []
     for category in products_by_category:
+        logger.info(category)
         for item in products_by_category[category]:
             products.append(item)
     return products
@@ -131,6 +131,7 @@ def get_products(products_by_category):
 #%%
 def get_product_ids(products_by_category):
     '''returns a list of product ids'''
+    logger.info('Executing "get_product_ids".')
     products = get_products(products_by_category)
     product_ids = helper.get_dict_list_values(products, 'id')
     return product_ids
@@ -139,6 +140,7 @@ def get_product_ids(products_by_category):
 def get_product_details(product_ids):
     '''gets all product details pages of given product_ids list 
     and filters them by key'''
+    logger.info('get_product_details".')
     product_details = {}
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
@@ -149,7 +151,6 @@ def get_product_details(product_ids):
                 )
     # filter content
         for detail in response:
-            # print(detail['sectionType'])
             product_details[product_id] = {}
             if detail['sectionType'] == 'materials':
                 product_details[product_id]['materials'] = detail
@@ -164,6 +165,7 @@ def get_product_details(product_ids):
 #%%
 def get_related_products(product_ids):
     '''gets the related products and assignes them to called product'''
+    logger.info('Executing "get_related_products".')
     related_products = {}
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/related'
