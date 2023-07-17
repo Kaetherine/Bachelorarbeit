@@ -130,15 +130,12 @@ def get_product_details(product_ids):
             product_details[product_id] = {}
             if detail['sectionType'] == 'materials':
                 product_details[product_id]['materials'] = detail
-                continue
-            if detail['sectionType'] == 'certifiedMaterials':
+            elif detail['sectionType'] == 'certifiedMaterials':
                 product_details[product_id]['certifiedmaterials'] = detail
-                continue
-            if detail['sectionType'] == 'origin':
+            elif detail['sectionType'] == 'origin':
                 product_details[product_id]['origin'] = detail
-                continue
-            if not product_details[product_id]['certifiedmaterials']:
-                product_details[product_id]['certifiedmaterials'] = None
+        if not product_details[product_id]['certifiedmaterials']:
+            product_details[product_id]['certifiedmaterials'] = None
     return product_details
 
 #%%
