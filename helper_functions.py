@@ -32,5 +32,5 @@ def get_page(url, client=client, headers=None, params=None):
     
 def get_dict_list_values(dict_list, k):
     '''function to get values of given key of a list of dictionaries'''
-    values = [product[k] for product in dict_list]
+    values = [str(product[k]) for product in dict_list]
     return values

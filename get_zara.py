@@ -58,7 +58,7 @@ def extract_category_ids(response):
     for item in response:
         customer = item['name']
         if (customer == 'WOMAN' or customer == 'MAN' or customer == 'KIDS'):
-            category_ids = item['subcategories'] #[iterate]['subcategories']
+            category_ids = item['subcategories']
             for item in category_ids:
                 categories.append(item['id'])
                 if item['subcategories']:
@@ -70,6 +70,8 @@ def extract_category_ids(response):
 
 #%%
 def extract_product_list(response):
+    '''takes the response and saves the key containing 
+    the products of that response in "products"'''
     products = []
     for item in response['productGroups']:
         if item['elements']:
@@ -79,6 +81,8 @@ def extract_product_list(response):
 
 #%%
 def get_categories():
+    '''get the category pages and, extracts the categories from 
+    their responses and returns a list of categories'''
     response = helper.get_page(
         url = f'{base_url}/categories',
         client = client,
@@ -89,6 +93,10 @@ def get_categories():
 
 #%%
 def get_product_list(category_ids):
+    '''gets all available products of each category of the to the constructor 
+    passed list, extracts the products and assignes them to their category. 
+    The functions output is a dictionary with the category as key and a 
+    list of its products as values'''
     products_by_category = {}
     for category_id in category_ids:
         print(category_id)
@@ -104,6 +112,8 @@ def get_product_list(category_ids):
 
 #%%
 def get_products(products_by_category):
+    '''takes the dict "product by categories" and returns a list of 
+    products (without assigned categories)'''
     products = []
     for category in products_by_category:
         for item in products_by_category[category]:
@@ -112,6 +122,7 @@ def get_products(products_by_category):
 
 #%%
 def get_product_ids(products_by_category):
+    '''returns a list of product ids'''
     products = get_products(products_by_category)
     product_ids = helper.get_dict_list_values(products, 'id')
     return product_ids
