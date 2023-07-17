@@ -193,4 +193,9 @@ product_details = get_product_details(product_ids[:3])
 #%%
 print(product_details)
 print(len(product_details))
+
 # %%
+related_products = get_related_products(product_ids[:3])
+
+#%%
+print(related_products)
