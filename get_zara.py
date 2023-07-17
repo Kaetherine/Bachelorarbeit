@@ -2,6 +2,14 @@
 import helper_functions as helper
 from proxy import client
 import random
+from logger import setup_logger
+
+#%%
+logger = setup_logger()
+
+logger.info('Nachricht in skript1')
+logger.warning('Warnung in skript1')
+
 
 #%%
 base_url = 'https://www.zara.com/de/en'
