@@ -1,6 +1,6 @@
 # import requests
 import json
-from proxy import client
+from credentials import client
 from logger import setup_logger
 from ratelimiter import RateLimiter
 
