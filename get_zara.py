@@ -80,11 +80,12 @@ def extract_product_list(response):
     the products of that response in "products"'''
     logger.info('Executing "extract_product_list".')
     products = []
-    for item in response['productGroups']:
-        if item['elements']:
-            for product in item['elements']:
-                products.extend(product['commercialComponents'])
-    return products
+    if response:
+        for item in response['productGroups']:
+            if item['elements']:
+                for product in item['elements']:
+                    products.extend(product['commercialComponents'])
+        return products
 
 #%%
 def get_categories():
@@ -115,7 +116,8 @@ def get_product_list(category_ids):
             client = client,
             headers = headers
             )
-        products_by_category[str(category_id)] = extract_product_list(response)
+        if response:
+            products_by_category[str(category_id)] = extract_product_list(response)
     return products_by_category
 
 #%%
@@ -177,42 +179,43 @@ def get_related_products(product_ids):
                 client = client,
                 headers = headers
                 )
-        related_products[product_id] = []
-        for product in response['recommend']:
-            recommended_product = product['id']
-            related_products[product_id].append(recommended_product)
+        if response:
+            related_products[product_id] = []
+            for product in response['recommend']:
+                recommended_product = product['id']
+                related_products[product_id].append(recommended_product)
     return related_products
 
 #%%
 category_ids = get_categories()
-print(category_ids)
+# print(category_ids)
 
 #%%
-print(category_ids[:2])
+# print(category_ids[:2])
 
 # %%
-products_by_category = get_product_list(category_ids[:3])
+products_by_category = get_product_list(category_ids[3:5])
 
 #%%
-print(products_by_category)
-print(len(products_by_category))
+# print(products_by_category)
+# print(len(products_by_category))
 
 # %%
 product_ids = get_product_ids(products_by_category)
-print(product_ids)
+# print(product_ids)
 
 # %%
-product_details = get_product_details(product_ids[:3])
+product_details = get_product_details(product_ids[3:5])
 
 #%%
-print(product_details)
-print(len(product_details))
+# print(product_details)
+# print(len(product_details))
 
 # %%
-related_products = get_related_products(product_ids[:3])
+related_products = get_related_products(product_ids[3:5])
 
 #%%
-print(related_products)
+# print(related_products)
 
 # %%
 logger.info('SUCCESS: The script zara.py was executed successfully.')
