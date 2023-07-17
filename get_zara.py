@@ -126,17 +126,24 @@ def get_product_details(product_ids):
                 client = client,
                 headers = headers
                 )
-        product_details[product_id] = {
-            'materials':response['1'],
-            'certifiedmaterials': response['2'],
-            'origin':response['4']
-        }
+        for detail in response:
+            product_details[product_id] = {}
+            if detail['sectionType'] == 'materials':
+                product_details[product_id]['materials'] = detail
+                continue
+            if detail['sectionType'] == 'certifiedMaterials':
+                product_details[product_id]['certifiedmaterials'] = detail
+                continue
+            if detail['sectionType'] == 'origin':
+                product_details[product_id]['origin'] = detail
+                continue
+            if not product_details[product_id]['certifiedmaterials']:
+                product_details[product_id]['certifiedmaterials'] = None
     return product_details
 
 #%%
 def get_related_products(product_ids):
     related_products = {}
-    
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/related'
         response = helper.get_page(
@@ -165,7 +172,12 @@ print(products_by_category)
 print(len(products_by_category))
 
 # %%
-products = get_product_ids(products_by_category)
-print(products)
+product_ids = get_product_ids(products_by_category)
+print(product_ids)
+
 # %%
-# print()
+product_details = get_product_details(product_ids[:3])
+
+#%%
+print(product_details)
+# %%
