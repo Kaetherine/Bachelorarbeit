@@ -9,7 +9,13 @@ def get_raw_page(url, client=client, headers=None, params=None):
     '''function to get the content of a specific url'''
     try:
         response = client.get(url, headers = headers, params = params)
-        logger.info(f'{response.status_code}, {url}')
+        logger.info(
+            f'''
+            statuscode: {response.status_code},
+            url: {url},
+            headers: {headers},
+            params:{params}'''
+        )
         return response
     except Exception as e:
         logger.error(f'{url}, e')
