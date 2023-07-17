@@ -1,6 +1,6 @@
 #%%
 import helper_functions as helper
-from proxy import client
+from credentials import client
 import random
 from logger import setup_logger
 
@@ -165,7 +165,7 @@ def get_product_details(product_ids):
                     product_details[product_id]['origin'] = detail
             if 'certifiedmaterials' not in product_details[product_id]:
                 product_details[product_id]['certifiedmaterials'] = None
-        return product_details
+    return product_details
 
 #%%
 def get_related_products(product_ids):
@@ -188,34 +188,34 @@ def get_related_products(product_ids):
 
 #%%
 category_ids = get_categories()
-# print(category_ids)
+print(category_ids)
 
 #%%
-# print(category_ids[:2])
+print(category_ids[:2])
 
 # %%
 products_by_category = get_product_list(category_ids[3:5])
 
 #%%
-# print(products_by_category)
-# print(len(products_by_category))
+print(products_by_category)
+print(len(products_by_category))
 
 # %%
 product_ids = get_product_ids(products_by_category)
-# print(product_ids)
+print(product_ids)
 
 # %%
 product_details = get_product_details(product_ids[3:5])
 
 #%%
-# print(product_details)
-# print(len(product_details))
+print(product_details)
+print(len(product_details))
 
 # %%
 related_products = get_related_products(product_ids[3:5])
 
 #%%
-# print(related_products)
+print(related_products)
 
 # %%
 logger.info('SUCCESS: The script zara.py was executed successfully.')

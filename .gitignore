@@ -132,3 +132,4 @@ proxies.py
 client.py
 notes.py
 draft.py
+credentials.py

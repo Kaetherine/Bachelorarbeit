@@ -1,4 +1,4 @@
-import requests
+# import requests
 import json
 from proxy import client
 from logger import setup_logger
