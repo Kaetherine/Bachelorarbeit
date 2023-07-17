@@ -7,7 +7,6 @@ def get_raw_page(url, client=client, headers=None, params=None):
     try:
         response = client.get(url, headers = headers, params = params)
         return response
-        # response = requests.get(url, headers = headers)
     except Exception as e:
         return e
     
