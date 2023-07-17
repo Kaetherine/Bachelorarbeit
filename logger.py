@@ -6,5 +6,5 @@ def setup_logger():
         filename='logfile.log',
         level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
         )
-    logger = logging.getLogger('mein_logger')
+    logger = logging.getLogger('logger1')
     return logger
