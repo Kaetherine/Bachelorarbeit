@@ -130,3 +130,5 @@ dmypy.json
 proxy.py
 proxies.py
 client.py
+notes.py
+draft.py

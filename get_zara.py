@@ -105,7 +105,7 @@ def get_product_list(category_ids):
 def get_product_ids(products):
     product_ids = []
     for product in products:
-        product_id = product_id
+        product_id = product['id']
         product_ids.append(product_id)
     product_ids = list(set(product_ids))
     return product_ids
