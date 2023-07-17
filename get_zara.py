@@ -155,6 +155,7 @@ def get_product_details(product_ids):
 
 #%%
 def get_related_products(product_ids):
+    '''gets the related products and assignes them to called product'''
     related_products = {}
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/related'
