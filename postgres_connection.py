@@ -1,6 +1,5 @@
-from credentials import master_username, master_password, endpoint, dbname
-
 import psycopg2
+from credentials import master_username, master_password, endpoint, dbname
 
 def connect_to_db():
     try:
