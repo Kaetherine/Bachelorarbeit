@@ -127,9 +127,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-proxy.py
-proxies.py
 client.py
-notes.py
-draft.py
 credentials.py
