@@ -14,12 +14,12 @@ def data_to_byte(data):
     data_byte_stream = bytes(json.dumps(data).encode('UTF-8'))
     return data_byte_stream
 
-def upload_json_to_bucket(filename, data, bucket=aws_bucket, ):
+def upload_json_to_bucket(data, filename, bucket=aws_bucket, ):
     '''converts json to bytestream and uploads it to the specified 
     (projekt default) s3 bucket'''
     data_byte_stream = data_to_byte(data)
     s3.put_object(
         Bucket=bucket,
-        Key=f'{filename}.json',
+        Key=filename,
         Body=data_byte_stream
     )
