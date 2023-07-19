@@ -1,27 +1,27 @@
-
 #!/bin/bash
 
-# Die E-Mail-Adresse, an die Benachrichtigungen gesendet werden sollen
-EMAIL="kuhle.katherine@gmail.com"
+EMAIL_RECEIPIENT="kuhle.katherine@gmail.com"
 
-# Der Pfad zu Ihrem Python-Skript
+# main file to be executed
 SCRIPT="/home/katherine/Development/Bachelorarbeit/main.py"
 
-# Der Pfad zu Ihrer Protokolldatei
+# path to logfile
 LOGFILE="/home/katherine/Development/Bachelorarbeit/logfile.log"
 
-# Senden Sie eine E-Mail, um den Start des Skripts anzukündigen
-echo "Der Cronjob startet jetzt das Skript $SCRIPT" | mail -s "Cronjob startet" $EMAIL
+# send notificationmal to email receipient
+echo -e "Subject: Cronjob for Bachelorarbeit/main.py started #1\n\nThe cronjob started the script now." | sendmail $EMAIL_RECEIPIENT
 
-# Führen Sie das Python-Skript aus und leiten Sie etwaige Fehler an die Protokolldatei weiter
+# execution of python script
 python3 $SCRIPT 2>> $LOGFILE
 
-# Überprüfen Sie, ob das Skript erfolgreich war
-if [ $? -eq 0 ]; then
-    # Wenn das Skript erfolgreich war, senden Sie eine Erfolgsmeldung
-    echo "Das Skript $SCRIPT wurde erfolgreich ausgeführt" | mail -s "Cronjob erfolgreich" $EMAIL
-else
-    # Wenn das Skript fehlschlug, senden Sie die Fehlermeldung und die Protokolldatei
-    echo "Das Skript $SCRIPT ist auf einen Fehler gestoßen. Siehe angehängte Protokolldatei für Details." | mail -s "Cronjob Fehler" -A $LOGFILE $EMAIL
-fi
+# read last 50 lines of logfile
+LOG_CONTENT=$(tail -n 50 "$LOGFILE")
 
+# check if script failed or ran successfully
+if [ $? -eq 0 ]; then
+    # if successful
+    echo -e "Subject: Bachelorarbeit/main.py successful! #1\n\nThe script Bachelorarbeit/main.py was executed successfully\n\nLogfile content:\n$LOG_CONTENT" | sendmail $EMAIL_RECEIPIENT
+else
+    # if failed
+    echo -e "Subject: Bachelorarbeit/main.py failed! #1\n\nExecution of the script Bachelorarbeit/main.py FAILED!\n\nLogfile content:\n$LOG_CONTENT" | sendmail $EMAIL_RECEIPIENT
+fi
