@@ -1,4 +1,5 @@
 import get_zara as zara
+from to_s3_bucket import upload_json_to_bucket
 
 category_ids = zara.get_categories()
 print(category_ids)
