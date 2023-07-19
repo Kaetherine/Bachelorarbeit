@@ -186,35 +186,3 @@ def get_related_products(product_ids):
                 recommended_product = product['id']
                 related_products[product_id].append(recommended_product)
     return related_products
-
-def get_zara():
-    '''executes all functions to get the content of zara'''
-    category_ids = get_categories()
-    print(category_ids)
-
-    #%%
-    print(category_ids[:2])
-
-    # %%
-    products_by_category = get_product_list(category_ids[3:5])
-
-    #%%
-    print(products_by_category)
-    print(len(products_by_category))
-
-    # %%
-    product_ids = get_product_ids(products_by_category)
-    print(product_ids)
-
-    # %%
-    product_details = get_product_details(product_ids[3:5])
-
-    #%%
-    print(product_details)
-    print(len(product_details))
-
-    # %%
-    related_products = get_related_products(product_ids[3:5])
-
-    #%%
-    print(related_products)
