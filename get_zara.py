@@ -72,7 +72,7 @@ def extract_category_ids(response):
                     subcategories = item['subcategories']
                     for item in subcategories:
                         categories.append(item['id'])
-    categories = list(set(categories))
+    categories = {'category_ids':list(set(categories))}
     return categories
 
 #%%
@@ -138,7 +138,7 @@ def get_product_ids(products_by_category):
     '''returns a list of product ids'''
     logger.info('Executing "get_product_ids".')
     products = get_products(products_by_category)
-    product_ids = helper.get_dict_list_values(products, 'id')
+    product_ids = {'product_ids':helper.get_dict_list_values(products, 'id')}
     return product_ids
 
 #%%
@@ -184,5 +184,5 @@ def get_related_products(product_ids):
             related_products[product_id] = []
             for product in response['recommend']:
                 recommended_product = product['id']
-                related_products[product_id].append(recommended_product)
+                related_products[product_id].append(str(recommended_product))
     return related_products

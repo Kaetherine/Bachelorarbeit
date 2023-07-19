@@ -6,10 +6,10 @@ date = datetime.now()
 
 def get_zara_data_and_upload():
     category_ids = zara.get_categories()
-    products_by_category = zara.get_product_list(category_ids[14:18])
+    products_by_category = zara.get_product_list(category_ids['category_ids'][14:18])
     product_ids = zara.get_product_ids(products_by_category)
-    product_details = zara.get_product_details(product_ids[14:18])
-    related_products = zara.get_related_products(product_ids[14:18])
+    product_details = zara.get_product_details(product_ids['product_ids'][14:18])
+    related_products = zara.get_related_products(product_ids['product_ids'][14:18])
 
     # saving data to s3bucket
     upload_json_to_bucket(category_ids, f'{date}-category_ids.json')
