@@ -14,7 +14,7 @@ def connect_to_db():
     cur = connection.cursor()
     return cur, connection
 
-def close_db_connection(cur, connection):
+def disconnect_from_db(cur, connection):
      # close cursor and connection
     cur.close()
     connection.close()
