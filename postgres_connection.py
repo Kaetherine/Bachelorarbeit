@@ -2,6 +2,8 @@ import psycopg2
 from credentials import master_username, master_password, endpoint, dbname
 
 def connect_to_db():
+    '''establishes the db connection and return
+    cursor and connection object'''
     connection = psycopg2.connect(
         host = endpoint,
         port = '5432',
@@ -15,7 +17,7 @@ def connect_to_db():
     return cur, connection
 
 def disconnect_from_db(cur, connection):
-     # close cursor and connection
+    '''close cursor and connection'''
     cur.close()
     connection.close()
 
