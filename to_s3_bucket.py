@@ -1,6 +1,7 @@
 import boto3
-from credentials import aws_access_key, aws_secret_access_key, aws_bucket, aws_region
 import json
+
+from credentials import aws_access_key, aws_secret_access_key, aws_bucket, aws_region
 
 s3 = boto3.client(
     's3',

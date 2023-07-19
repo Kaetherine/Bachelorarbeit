@@ -1,8 +1,8 @@
-# import requests
 import json
+from ratelimiter import RateLimiter
+
 from credentials import client
 from logger import setup_logger
-from ratelimiter import RateLimiter
 
 logger = setup_logger()
 rate_limiter = RateLimiter(max_calls=3, period=1)

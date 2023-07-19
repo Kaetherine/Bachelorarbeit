@@ -2,28 +2,26 @@ import psycopg2
 from credentials import master_username, master_password, endpoint, dbname
 
 def connect_to_db():
-    try:
-        connection = psycopg2.connect(
-            host = endpoint,
-            port = '5432',
-            dbname = dbname,
-            user = master_username,
-            password = master_password
-        )
+    connection = psycopg2.connect(
+        host = endpoint,
+        port = '5432',
+        dbname = dbname,
+        user = master_username,
+        password = master_password
+    )
 
         # cursor object
-        cur = connection.cursor()
+    cur = connection.cursor()
+    return cur, connection
 
-        # sample query
-        cur.execute("""SELECT * FROM vendors""")
-        query_results = cur.fetchall()
-        print(query_results)
+def close_db_connection(cur, connection):
+     # close cursor and connection
+    cur.close()
+    connection.close()
 
-        # close cursor and connection
-        cur.close()
-        connection.close()
+        
+# # sample query
+# cur.execute("""SELECT * FROM vendors""")
+# query_results = cur.fetchall()
+# print(query_results)
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-connect_to_db()

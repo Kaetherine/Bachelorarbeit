@@ -1,6 +1,7 @@
+from datetime import datetime
+
 import get_zara as zara
 from to_s3_bucket import upload_json_to_bucket
-from datetime import datetime
 
 date = datetime.now()
 
