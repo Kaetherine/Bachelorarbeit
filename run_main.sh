@@ -19,8 +19,9 @@ LOG_CONTENT=$(tail -n 50 "$LOGFILE")
 
 # check if script failed or ran successfully
 if [ $? -eq 0 ]; then
-    # if successful
+    # if successful send email and run transform_zara.py
     echo -e "Subject: Bachelorarbeit/main.py successful!\n\nThe script Bachelorarbeit/main.py was executed successfully\n\nLogfile content:\n$LOG_CONTENT" | sendmail $EMAIL_RECEIPIENT
+
 else
     # if failed
     echo -e "Subject: Bachelorarbeit/main.py failed!\n\nExecution of the script Bachelorarbeit/main.py FAILED!\n\nLogfile content:\n$LOG_CONTENT" | sendmail $EMAIL_RECEIPIENT
