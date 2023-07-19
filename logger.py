@@ -3,7 +3,7 @@ import logging
 def setup_logger():
     '''Logger konfigurieren und Instanz zurückgeben'''
     logging.basicConfig(
-        filename='logfile.log',
+        filename='/home/katherine/Development/Bachelorarbeit/logfile.log',
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'
         )

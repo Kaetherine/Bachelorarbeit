@@ -6,7 +6,7 @@ from logger import setup_logger
 from to_s3_bucket import upload_json_to_bucket
 
 #%%
-logger = setup_logger()
+logger = setup_logger('logger1')
 
 #%%
 base_url = 'https://www.zara.com/de/en'

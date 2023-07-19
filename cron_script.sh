@@ -8,13 +8,14 @@ EMAIL="kuhle.katherine@gmail.com"
 SCRIPT="/home/katherine/Development/Bachelorarbeit/main.py"
 
 # Der Pfad zu Ihrer Protokolldatei
-LOGFILE="/home/katherine/Development/Bachelorarbeit/logfile.log"
+# LOGFILE="/home/katherine/Development/Bachelorarbeit/logfile.log"
 
 # Senden Sie eine E-Mail, um den Start des Skripts anzukündigen
 echo "Der Cronjob startet jetzt das Skript $SCRIPT" | mail -s "Cronjob startet" $EMAIL
 
 # Führen Sie das Python-Skript aus und leiten Sie etwaige Fehler an die Protokolldatei weiter
-python3 $SCRIPT 2>> $LOGFILE
+python3 $SCRIPT 
+# 2>> $LOGFILE
 
 # Überprüfen Sie, ob das Skript erfolgreich war
 if [ $? -eq 0 ]; then
