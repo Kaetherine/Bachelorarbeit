@@ -22,10 +22,11 @@ def get_zara_data_and_upload():
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
     product_ids = zara.get_product_ids(products_by_category)
+    print(product_ids)
     upload_json_to_bucket(product_ids, f'{date}-product_ids.json')
 
     product_details = {}
-    for product_id in product_ids[23:26]:
+    for product_id in product_ids['product_ids'][23:26]:
         try:
             product_details[product_id] = zara.get_product_details(product_id)
         except Exception as e:
@@ -34,7 +35,7 @@ def get_zara_data_and_upload():
         upload_json_to_bucket(product_details, f'{date}-product_details.json')
 
     related_products = {}
-    for product_id in product_ids[23:26]:
+    for product_id in product_ids['product_ids'][23:26]:
         try:
             related_products[product_id] = zara.get_related_products(product_id)
         except Exception as e:
