@@ -142,8 +142,8 @@ def get_product_ids(products_by_category):
 
 #%%
 def get_product_details(product_id):
-    '''gets all product details pages of given product_ids list 
-    and filters them by key'''
+    '''gets products details of in the constructor passed product
+    and returns the response'''
     logger.info('Executing get_product_details.')
     product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
     response = helper.get_page(
@@ -153,9 +153,18 @@ def get_product_details(product_id):
             )
     return response
 
+
+def extract_related_product_ids(response):
+    '''extracts related products by id, stores them in a list and retunrs that list'''
+    recommended_products = []
+    if 'recommend' in response:
+        for product in response['recommend']:
+            recommended_products.append(str(product['id']))
+        return recommended_products
+    
 #%%
 def get_related_products(product_id):
-    '''gets the related products and assignes them to called product'''
+    '''gets the related products of in constructor passed products and returns'''
     logger.info('Executing get_related_products.')
     product_details_url = f'{base_url}/product/{product_id}/related'
     response = helper.get_page(
@@ -164,8 +173,5 @@ def get_related_products(product_id):
             headers = headers
             )
     if response:
-        recommended_products = []
-        if 'recommend' in response:
-            for product in response['recommend']:
-                recommended_products.append(str(product['id']))
-            return recommended_products
+        recommended_products = extract_category_ids(response)
+        return recommended_products
