@@ -141,47 +141,30 @@ def get_product_ids(products_by_category):
     return product_ids
 
 #%%
-def get_product_details(product_ids):
+def get_product_details(product_id):
     '''gets all product details pages of given product_ids list 
     and filters them by key'''
     logger.info('Executing get_product_details.')
-    product_details = {}
-    for product_id in product_ids:
-        product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
-        response = helper.get_page(
-                url = product_details_url,
-                client = client,
-                headers = headers
-                )
-    # filter content
-        if response:
-            for detail in response:
-                product_details[product_id] = {}
-                if detail['sectionType'] == 'materials':
-                    product_details[product_id]['materials'] = detail
-                elif detail['sectionType'] == 'certifiedMaterials':
-                    product_details[product_id]['certifiedmaterials'] = detail
-                elif detail['sectionType'] == 'origin':
-                    product_details[product_id]['origin'] = detail
-            if 'certifiedmaterials' not in product_details[product_id]:
-                product_details[product_id]['certifiedmaterials'] = None
-    return product_details
+    product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
+    response = helper.get_page(
+            url = product_details_url,
+            client = client,
+            headers = headers
+            )
+    return response
 
 #%%
-def get_related_products(product_ids):
+def get_related_products(product_id):
     '''gets the related products and assignes them to called product'''
     logger.info('Executing get_related_products.')
-    related_products = {}
-    for product_id in product_ids:
-        product_details_url = f'{base_url}/product/{product_id}/related'
-        response = helper.get_page(
-                url = product_details_url,
-                client = client,
-                headers = headers
-                )
-        if response:
-            related_products[product_id] = []
+    product_details_url = f'{base_url}/product/{product_id}/related'
+    response = helper.get_page(
+            url = product_details_url,
+            client = client,
+            headers = headers
+            )
+    if response:
+        if 'recommended' in response:
             for product in response['recommend']:
-                recommended_product = product['id']
-                related_products[product_id].append(str(recommended_product))
-    return related_products
+                recommended_product = str(product['id'])
+    return recommended_product
