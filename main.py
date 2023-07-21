@@ -10,7 +10,6 @@ date = datetime.now().strftime('%Y-%m-%d')
 def get_zara_data_and_upload():
     '''docstring here'''
     category_ids = zara.get_categories()
-    print(category_ids)
     upload_json_to_bucket(category_ids, f'{date}-category_ids.json')
 
     products_by_category = {}
@@ -23,7 +22,6 @@ def get_zara_data_and_upload():
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
     product_ids = zara.get_product_ids(products_by_category)
-    print(product_ids)
     upload_json_to_bucket(product_ids, f'{date}-product_ids.json')
 
     product_details = {}
@@ -31,7 +29,6 @@ def get_zara_data_and_upload():
         try:
             product_details[product_id] = zara.get_product_details(product_id)
         except Exception as e:
-            print(e)
             logger.error(e)
             continue
         upload_json_to_bucket(product_details, f'{date}-product_details.json')
@@ -41,11 +38,9 @@ def get_zara_data_and_upload():
         try:
             related_products[product_id] = zara.get_related_products(product_id)
         except Exception as e:
-            print(e)
             logger.error(e)
             continue
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
-    print(related_products)
 
 
 if __name__ == "__main__":
