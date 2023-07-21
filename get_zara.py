@@ -126,7 +126,7 @@ def get_product_list(category_ids):
 def get_products(products_by_category):
     '''takes the dict "product by categories" and returns a list of 
     products (without assigned categories)'''
-    logger.info('get_products".')
+    logger.info('Executing get_products.')
     products = []
     for category in products_by_category:
         logger.info(category)
@@ -137,7 +137,7 @@ def get_products(products_by_category):
 #%%
 def get_product_ids(products_by_category):
     '''returns a list of product ids'''
-    logger.info('Executing "get_product_ids".')
+    logger.info('Executing get_product_ids.')
     products = get_products(products_by_category)
     product_ids = {'product_ids':helper.get_dict_list_values(products, 'id')}
     return product_ids
@@ -146,7 +146,7 @@ def get_product_ids(products_by_category):
 def get_product_details(product_ids):
     '''gets all product details pages of given product_ids list 
     and filters them by key'''
-    logger.info('get_product_details".')
+    logger.info('Executing get_product_details.')
     product_details = {}
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
@@ -172,7 +172,7 @@ def get_product_details(product_ids):
 #%%
 def get_related_products(product_ids):
     '''gets the related products and assignes them to called product'''
-    logger.info('Executing "get_related_products".')
+    logger.info('Executing get_related_products.')
     related_products = {}
     for product_id in product_ids:
         product_details_url = f'{base_url}/product/{product_id}/related'
