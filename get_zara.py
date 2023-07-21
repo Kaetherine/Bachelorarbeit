@@ -127,7 +127,7 @@ def get_products(products_by_category):
     logger.info('Executing get_products.')
     products = []
     for category in products_by_category:
-        logger.info(category)
+        logger.info(f'category_id: {category}')
         for item in products_by_category[category]:
             products.append(item)
     return products
@@ -145,6 +145,7 @@ def get_product_details(product_id):
     '''gets products details of in the constructor passed product
     and returns the response'''
     logger.info('Executing get_product_details.')
+    logger.info(f'product details for: {product_id}')
     product_details_url = f'{base_url}/product/{product_id}/extra-detail?ajax=true'
     response = helper.get_page(
             url = product_details_url,
@@ -166,6 +167,7 @@ def extract_related_product_ids(response):
 def get_related_products(product_id):
     '''gets the related products of in constructor passed products and returns'''
     logger.info('Executing get_related_products.')
+    logger.info(f'related products for: {product_id}')
     product_details_url = f'{base_url}/product/{product_id}/related'
     response = helper.get_page(
             url = product_details_url,
