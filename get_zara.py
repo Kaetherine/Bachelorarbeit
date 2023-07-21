@@ -86,7 +86,7 @@ def extract_product_list(response):
             if 'elements' in item:
                 for product in item['elements']:
                     if 'commercialComponents' in product:
-                        products.extend(product['commercialComponents'])
+                        products = product['commercialComponents']
     return products
 
 #%%
@@ -110,7 +110,6 @@ def get_product_list(category_id):
     The functions output is a dictionary with the category as key and a 
     list of its products as values'''
     logger.info('Executing get_product_list.')
-
     products_url = f'{base_url}/category/{category_id}/products?ajax=true'
     response = helper.get_page(
         url = products_url,
