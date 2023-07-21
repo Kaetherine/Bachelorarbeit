@@ -5,7 +5,7 @@ from credentials import client
 from logger import setup_logger
 
 logger = setup_logger()
-rate_limiter = RateLimiter(max_calls=3, period=1)
+rate_limiter = RateLimiter(max_calls=5, period=1)
 
 def get_raw_page(url, client=client, headers=None, params=None):
     '''function to get the content of a specific url'''
