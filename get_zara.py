@@ -134,7 +134,7 @@ def get_products(products_by_category):
 
 #%%
 def get_product_ids(products_by_category):
-    '''returns a list of product ids'''
+    '''returns a list with product ids'''
     logger.info('Executing get_product_ids.')
     products = get_products(products_by_category)
     product_ids = {'product_ids':helper.get_dict_list_values(products, 'id')}
@@ -153,7 +153,7 @@ def get_product_details(product_id):
             )
     return response
 
-
+#%%
 def extract_related_product_ids(response):
     '''extracts related products by id, stores them in a list and retunrs that list'''
     recommended_products = []
@@ -173,5 +173,5 @@ def get_related_products(product_id):
             headers = headers
             )
     if response:
-        recommended_products = extract_category_ids(response)
+        recommended_products = extract_related_product_ids(response)
         return recommended_products
