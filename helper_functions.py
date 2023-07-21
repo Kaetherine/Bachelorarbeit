@@ -9,20 +9,21 @@ rate_limiter = RateLimiter(max_calls=5, period=1)
 
 def get_raw_page(url, client=client, headers=None, params=None):
     '''function to get the content of a specific url'''
-    with rate_limiter:
-        try:
-            response = client.get(url, headers = headers, params = params)
-            logger.info(
-                f'''
+    info = f'''
                 statuscode: {response.status_code},
                 url: {url},
                 headers: {headers},
                 params:{params}'''
-            )
+    
+    with rate_limiter:
+        try:
+            response = client.get(url, headers = headers, params = params)
+            logger.info(info)
+            return response
         except Exception as e:
             logger.error(f'{url}, e')
-    if response:
-        return response.status_code, response
+            logger.info(info)
+
     
 def page_to_json(response):
     '''takes a string structured as json and converts it to json'''
