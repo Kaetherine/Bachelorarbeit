@@ -87,7 +87,7 @@ def extract_product_list(response):
                 for product in item['elements']:
                     if 'commercialComponents' in product:
                         products.extend(product['commercialComponents'])
-        return products
+    return products
 
 #%%
 def get_categories():
