@@ -164,7 +164,8 @@ def get_related_products(product_id):
             headers = headers
             )
     if response:
-        if 'recommended' in response:
+        recommended_products = []
+        if 'recommend' in response:
             for product in response['recommend']:
-                recommended_product = str(product['id'])
-    return recommended_product
+                recommended_products.append(str(product['id']))
+                return recommended_products
