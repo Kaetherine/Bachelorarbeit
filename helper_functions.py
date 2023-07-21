@@ -22,7 +22,7 @@ def get_raw_page(url, client=client, headers=None, params=None):
             return response
         except Exception as e:
             logger.error(f'{url}, e')
-            logger.info(info)
+            logger.error(info)
 
     
 def page_to_json(response):
@@ -43,9 +43,8 @@ def get_page(url, client=client, headers=None, params=None):
         headers = headers,
         params = params
         )
-    if response:
-        response = page_to_json(response)
-        return response
+    response = page_to_json(response)
+    return response
     
 def get_dict_list_values(dict_list, k):
     '''function to get values of given key of a list of dictionaries'''
