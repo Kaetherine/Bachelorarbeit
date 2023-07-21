@@ -19,19 +19,20 @@ def get_raw_page(url, client=client, headers=None, params=None):
                 headers: {headers},
                 params:{params}'''
             )
-            return response
         except Exception as e:
             logger.error(f'{url}, e')
-            return None
+    if response:
+        return response.status_code, response
     
 def page_to_json(response):
     '''takes a string structured as json and converts it to json'''
-    try:
-        json_response = json.loads(response.text)
-        return json_response
-    except Exception as e:
-        logger.error(e)
-        return None
+    if response:
+        try:
+            json_response = json.loads(response.text)
+            return json_response
+        except Exception as e:
+            logger.error(e)
+            pass
 
 def get_page(url, client=client, headers=None, params=None):
     '''gets and extracts the categories from given url'''
