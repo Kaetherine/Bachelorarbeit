@@ -58,7 +58,7 @@ headers ={
 #%%
 def extract_category_ids(response):
     '''extracts the category ids only'''
-    logger.info('Executing "extract_category_ids".')
+    logger.info('Executing extract_category_ids.')
     categories = []
     if response:
         response = response['categories']
@@ -79,11 +79,11 @@ def extract_category_ids(response):
 def extract_product_list(response):
     '''takes the response and saves the key containing 
     the products of that response in "products"'''
-    logger.info('Executing "extract_product_list".')
+    logger.info('Executing extract_product_list.')
     products = []
-    if response:
+    if 'productGroups' in response:
         for item in response['productGroups']:
-            if item['elements']:
+            if 'elements' in item:
                 for product in item['elements']:
                     if 'commercialComponents' in product:
                         products.extend(product['commercialComponents'])
@@ -93,7 +93,7 @@ def extract_product_list(response):
 def get_categories():
     '''get the category pages and, extracts the categories from 
     their responses and returns a list of categories'''
-    logger.info('Executing "get_categories".')
+    logger.info('Executing get_categories.')
     response = helper.get_page(
         url = f'{base_url}/categories',
         client = client,
@@ -109,7 +109,7 @@ def get_product_list(category_ids):
     passed list, extracts the products and assignes them to their category. 
     The functions output is a dictionary with the category as key and a 
     list of its products as values'''
-    logger.info('get_product_list".')
+    logger.info('Executing get_product_list.')
     products_by_category = {}
     for category_id in category_ids:
         products_url = f'{base_url}/category/{category_id}/products?ajax=true'
