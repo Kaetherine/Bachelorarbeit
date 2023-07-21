@@ -104,23 +104,22 @@ def get_categories():
         return categories
 
 #%%
-def get_product_list(category_ids):
+def get_product_list(category_id):
     '''gets all available products of each category of the to the constructor 
     passed list, extracts the products and assignes them to their category. 
     The functions output is a dictionary with the category as key and a 
     list of its products as values'''
     logger.info('Executing get_product_list.')
-    products_by_category = {}
-    for category_id in category_ids:
-        products_url = f'{base_url}/category/{category_id}/products?ajax=true'
-        response = helper.get_page(
-            url = products_url,
-            client = client,
-            headers = headers
-            )
-        if response:
-            products_by_category[str(category_id)] = extract_product_list(response)
-    return products_by_category
+
+    products_url = f'{base_url}/category/{category_id}/products?ajax=true'
+    response = helper.get_page(
+        url = products_url,
+        client = client,
+        headers = headers
+        )
+    if response:
+        product_list = extract_product_list(response)
+    return product_list
 
 #%%
 def get_products(products_by_category):
