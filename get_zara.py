@@ -168,4 +168,4 @@ def get_related_products(product_id):
         if 'recommend' in response:
             for product in response['recommend']:
                 recommended_products.append(str(product['id']))
-                return recommended_products
+            return recommended_products
