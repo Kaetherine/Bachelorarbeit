@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 client.py
 credentials.py
+logfile.log
