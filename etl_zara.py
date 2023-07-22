@@ -29,14 +29,16 @@ def products_to_df(list_of_products):
 
 def extract_product_details(**keys):
     product_details = get_bucket_file(f'{date}-product_details.json')
+    care, certified_materials, materials, origin = None, None, None, None
     for product in product_details:
         for detail in product_details[product]:
-            if 'care' in detail:
-                care = detail['sectionType']['care']
-            if 'certifiedMaterials' in detail:
-                certified_materials = detail['sectionType']['certifiedMaterials']
-            if 'materials' in detail:
-                materials = detail['sectionType']['materials']
-            if 'origin' in detail:
-                origin = detail['sectionType']['origin']
+            section_type = detail['sectionType']
+            if section_type == 'care':
+                care = detail
+            elif section_type == 'certifiedMaterials':
+                certified_materials = detail
+            elif section_type == 'materials':
+                materials = detail
+            elif section_type == 'origin':
+                origin = detail
     return care, certified_materials, materials, origin
