@@ -9,12 +9,12 @@ def normalize_related_products(data):
             result.append((key, value))
     return result
 
+related_products = get_bucket_file('2023-07-21-products_by_category.json', 'raw-apparel-marketdata')
+print(len(related_products['2291858']),'\n')
 
-related_products = get_bucket_file('raw-apparel-marketdata', '2023-07-21-related_products.json')
-print(related_products)
 
-normalized_data = normalize_related_products(related_products)
-print(normalized_data)
+# normalized_data = normalize_related_products(related_products)
+# print(normalized_data)
 
 
 

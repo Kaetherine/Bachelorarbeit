@@ -76,20 +76,6 @@ def extract_category_ids(response):
     return categories
 
 #%%
-def extract_product_list(response):
-    '''takes the response and saves the key containing 
-    the products of that response in "products"'''
-    logger.info('Executing extract_product_list.')
-    products = []
-    if 'productGroups' in response:
-        for item in response['productGroups']:
-            if 'elements' in item:
-                for product in item['elements']:
-                    if 'commercialComponents' in product:
-                        products = product['commercialComponents']
-    return products
-
-#%%
 def get_categories():
     '''get the category pages and, extracts the categories from 
     their responses and returns a list of categories'''
@@ -102,6 +88,20 @@ def get_categories():
     if response:
         categories = extract_category_ids(response)
         return categories
+
+#%%
+def extract_product_list(response):
+    '''takes the response and saves the key containing 
+    the products of that response in "products"'''
+    logger.info('Executing extract_product_list.')
+    products = []
+    if 'productGroups' in response:
+        for item in response['productGroups']:
+            if 'elements' in item:
+                for product in item['elements']:
+                    if 'commercialComponents' in product:
+                        products.append(product['commercialComponents'])
+    return products
 
 #%%
 def get_product_list(category_id):
@@ -121,7 +121,7 @@ def get_product_list(category_id):
     return product_list
 
 #%%
-def get_products(products_by_category):
+def extract_products(products_by_category):
     '''takes the dict "product by categories" and returns a list of 
     products (without assigned categories)'''
     logger.info('Executing get_products.')
@@ -133,10 +133,10 @@ def get_products(products_by_category):
     return products
 
 #%%
-def get_product_ids(products_by_category):
+def extract_product_ids(products_by_category):
     '''returns a list with product ids'''
     logger.info('Executing get_product_ids.')
-    products = get_products(products_by_category)
+    products = extract_products(products_by_category)
     product_ids = {'product_ids':helper.get_dict_list_values(products, 'id')}
     return product_ids
 
