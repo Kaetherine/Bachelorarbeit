@@ -43,10 +43,6 @@ def extract_product_details(product_details, product_id):
             origin = detail
     return [product_id, care, certified_materials, materials, origin]
 
-
-def extract_products():
-    pass
-
 def extract_care():
     pass
         
@@ -65,7 +61,7 @@ def extract_origin():
     pass
 
 
-def sort_products():
+def organise_product_details():
     product_details = get_bucket_file(f'{date}-product_details.json')
     product = []
     care = []
@@ -75,11 +71,20 @@ def sort_products():
 
     for product_id in product_details:
         extracted_details = extract_product_details(product_details, product_id)
-        product.append(extracted_details[0])
-        care.append(extracted_details[1])
-        certified_materials.append(extracted_details[2])
-        materials.append(extracted_details[3])
-        origin.append(extracted_details[4])
+        
+        # product.append(extracted_details[0])
+
+        extracted_care = extract_care(extracted_details[1])
+        care.append(extracted_care)
+
+        extracted_certified_materials = extract_certified_materials(extracted_details[2])
+        certified_materials.append(extracted_certified_materials)
+
+        extracted_materials = extract_materials(extracted_details[3])
+        materials.append(extracted_materials)
+
+        extracted_origin = extract_origin(extracted_details[4])
+        origin.append(extracted_origin)
 
     return [product_id, care, certified_materials, materials, origin]
 
