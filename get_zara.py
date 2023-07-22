@@ -129,8 +129,9 @@ def extract_products(products_by_category):
     for category in products_by_category:
         logger.info(f'category_id: {category}')
         for item in products_by_category[category]:
-            products.append(item)
-    products = list(set(products))
+                for product in item:
+                    if 'id' in product:
+                        products.append(product)
     return products
 
 #%%
@@ -138,7 +139,10 @@ def extract_product_ids(products_by_category):
     '''returns a list with product ids'''
     logger.info('Executing get_product_ids.')
     products = extract_products(products_by_category)
-    product_ids = {'product_ids':helper.get_dict_list_values(products, 'id')}
+    product_ids = {
+        'product_ids': [str(product['id']) for product in products]
+        }
+    product_ids['product_ids'] = list(set(product_ids['product_ids']))
     return product_ids
 
 #%%

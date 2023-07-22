@@ -44,8 +44,3 @@ def get_page(url, client=client, headers=None, params=None):
         )
     response = page_to_json(response)
     return response
-    
-def get_dict_list_values(dict_list, k):
-    '''function to get values of given key of a list of dictionaries'''
-    values = [str(product[k]) for product in dict_list]
-    return values
