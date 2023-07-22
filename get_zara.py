@@ -130,6 +130,7 @@ def extract_products(products_by_category):
         logger.info(f'category_id: {category}')
         for item in products_by_category[category]:
             products.append(item)
+    products = list(set(products))
     return products
 
 #%%
