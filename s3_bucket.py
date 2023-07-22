@@ -31,14 +31,17 @@ def get_bucket(bucket_name):
 
 def get_bucket_content(bucket_name):
     response = get_bucket(bucket_name)
+    filenames = []
     for obj in response['Contents']:
-        filenames = obj['Key']
-        return obj['Key']
+        filenames.append(obj['Key'])
+    return filenames
 
 def delete_object(bucket_name, filename):
     s3_client.delete_object(
         Bucket=bucket_name,
         Key=filename
         )
+    
+def get_bucket_file(bucketcontent, filename):
+    pass
 
-get_bucket_content('raw-apparel-marketdata')

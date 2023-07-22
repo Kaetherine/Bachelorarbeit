@@ -1,18 +1,10 @@
 from postgres_connection import connect_to_db, disconnect_from_db
-from to_s3_bucket import get_bucket
+from s3_bucket import *
 
 
-# response = get_bucket('raw-apparel-marketdata')
+response = get_bucket_content('raw-apparel-marketdata')
 
-def get_bucket_content(bucket_name):
-    response = get_bucket(bucket_name)
-    for object in response['Contents']:
-        print(object['Key'])
 
-def delete_object(bucket_name, object):
-    s3_client.delete_object(Bucket='your_bucket_name', Key='your_file_key')
-
-get_bucket_content('raw-apparel-marketdata')
 
 # # Delete a specific file
 # s3_client.delete_object(Bucket='your_bucket_name', Key='your_file_key')

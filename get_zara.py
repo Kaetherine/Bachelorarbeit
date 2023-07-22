@@ -3,7 +3,7 @@ import helper_functions as helper
 from credentials import client
 import random
 from logger import setup_logger
-from to_s3_bucket import upload_json_to_bucket
+from s3_bucket import upload_json_to_bucket
 
 #%%
 logger = setup_logger()
