@@ -21,6 +21,9 @@ def get_zara_data_and_upload():
             continue
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
+    products = zara.extract_products(products_by_category)
+    upload_json_to_bucket(products, f'{date}-products.json')
+
     product_ids = zara.extract_product_ids(products_by_category)
     upload_json_to_bucket(product_ids, f'{date}-product_ids.json')
 

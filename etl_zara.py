@@ -3,18 +3,23 @@ from datetime import datetime
 from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 
+from get_zara import extract_products
+
 date = datetime.now().strftime('%Y-%m-%d')
 
 
-def normalize_related_products(data):
+def normalize_related_products(json):
     result = []
-    for key, values in data.items():
+    for key, values in json.items():
         for value in values:
             result.append((key, value))
     return result
 
-related_products = get_bucket_file(f'{date}-products_by_category.json', 'raw-apparel-marketdata')
-print(len(related_products['2291858']),'\n')
+products_by_category = get_bucket_file(
+    f'{date}-products_by_category.json', 'raw-apparel-marketdata'
+    )
+
+print(products_by_category['2291858'])
 
 
 # normalized_data = normalize_related_products(related_products)
