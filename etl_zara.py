@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
+
+date = datetime.now().strftime('%Y-%m-%d')
 
 
 def normalize_related_products(data):
@@ -9,7 +13,7 @@ def normalize_related_products(data):
             result.append((key, value))
     return result
 
-related_products = get_bucket_file('2023-07-21-products_by_category.json', 'raw-apparel-marketdata')
+related_products = get_bucket_file(f'{date}-products_by_category.json', 'raw-apparel-marketdata')
 print(len(related_products['2291858']),'\n')
 
 
