@@ -71,8 +71,6 @@ def organise_product_details():
 
     for product_id in product_details:
         extracted_details = extract_product_details(product_details, product_id)
-        
-        # product.append(extracted_details[0])
 
         extracted_care = extract_care(extracted_details[1])
         care.append(extracted_care)
