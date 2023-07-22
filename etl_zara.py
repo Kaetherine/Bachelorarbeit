@@ -8,15 +8,14 @@ from get_zara import extract_products
 
 date = datetime.now().strftime('%Y-%m-%d')
 
+
+
 def normalize_related_products(json):
     result = []
     for key, values in json.items():
         for value in values:
             result.append((key, value))
     return result
-
-def normalize_product_details(json):
-    pass
 
 def normalize_products_by_categories(json):
     pass
@@ -28,28 +27,16 @@ def products_to_df(list_of_products):
     df_products = pd.DataFrame(list_of_products)
     return df_products
 
-products = get_bucket_file(
-    f'{date}-products.json', 'raw-apparel-marketdata'
-    )
-
-df = products_to_df(products)
-print(df.columns)
-
-
-def product_details(json):
-    pass
-    '''doctstring here'''
-        # filter content
-    # product_details = {}
-    # if response:
-    #     for detail in response:
-    #         product_details[product_id] = {}
-    #         if detail['sectionType'] == 'materials':
-    #             product_details[product_id]['materials'] = detail
-    #         elif detail['sectionType'] == 'certifiedMaterials':
-    #             product_details[product_id]['certifiedmaterials'] = detail
-    #         elif detail['sectionType'] == 'origin':
-    #             product_details[product_id]['origin'] = detail
-    #     if 'certifiedmaterials' not in product_details[product_id]:
-    #         product_details[product_id]['certifiedmaterials'] = None
-    # return product_details
+def extract_product_details(**keys):
+    product_details = get_bucket_file(f'{date}-product_details.json')
+    for product in product_details:
+        for detail in product_details[product]:
+            if 'care' in detail:
+                care = detail['sectionType']['care']
+            if 'certifiedMaterials' in detail:
+                certified_materials = detail['sectionType']['certifiedMaterials']
+            if 'materials' in detail:
+                materials = detail['sectionType']['materials']
+            if 'origin' in detail:
+                origin = detail['sectionType']['origin']
+    return care, certified_materials, materials, origin
