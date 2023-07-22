@@ -43,20 +43,15 @@ def extract_product_details(product_details, product_id):
             origin = detail
     return [product_id, care, certified_materials, materials, origin]
 
-def sort_products():
-    product_details = get_bucket_file(f'{date}-product_details.json')
-    product = []
-    care = []
-    certified_materials = []
-    materials = []
-    origin = []
-    for product_id in product_details:
-        extracted_details = extract_product_details(product_details, product_id)
-        product.append(extracted_details[0])
-        care.append(extracted_details[1])
-        certified_materials.append(extracted_details[2])
-        materials.append(extracted_details[3])
-        origin.append(extracted_details[4])
+
+def extract_products():
+    pass
+
+def extract_care():
+    pass
+        
+def extract_certified_materials():
+    pass
 
 def extract_materials():
     for i, item in enumerate(materials['components']):
@@ -65,5 +60,29 @@ def extract_materials():
                 print(f"Index: {i}, Attributname: {item['text']['value']}")
             else:
                 print(f"Index: {i}, Attributwert: {item['text']['value']}")
+
+def extract_origin():
+    pass
+
+
+def sort_products():
+    product_details = get_bucket_file(f'{date}-product_details.json')
+    product = []
+    care = []
+    certified_materials = []
+    materials = []
+    origin = []
+
+    for product_id in product_details:
+        extracted_details = extract_product_details(product_details, product_id)
+        product.append(extracted_details[0])
+        care.append(extracted_details[1])
+        certified_materials.append(extracted_details[2])
+        materials.append(extracted_details[3])
+        origin.append(extracted_details[4])
+
+    return [product_id, care, certified_materials, materials, origin]
+
+
 
 
