@@ -42,6 +42,12 @@ def delete_object(bucket_name, filename):
         Key=filename
         )
     
-def get_bucket_file(bucketcontent, filename):
-    pass
+def get_bucket_file(bucket_name, filename):
+    file = s3_client.get_object(
+        Bucket=bucket_name,
+        Key=filename
+        )
+    file = file["Body"].read()
+    file = json.loads(file.decode('utf-8'))
+    return file
 

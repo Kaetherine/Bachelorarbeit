@@ -2,7 +2,19 @@ from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 
 
-response = get_bucket_content('raw-apparel-marketdata')
+def normalize_related_products(data):
+    result = []
+    for key, values in data.items():
+        for value in values:
+            result.append((key, value))
+    return result
+
+
+related_products = get_bucket_file('raw-apparel-marketdata', '2023-07-21-related_products.json')
+print(related_products)
+
+normalized_data = normalize_related_products(related_products)
+print(normalized_data)
 
 
 
