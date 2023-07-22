@@ -27,7 +27,7 @@ def products_to_df(list_of_products):
     df_products = pd.DataFrame(list_of_products)
     return df_products
 
-def extract_product_details(product_id):
+def extract_product_details(product_details, product_id):
     '''This function extracts care, certified materials, materials, 
     and origin details for a given product from the product details dataset.'''
     care, certified_materials, materials, origin = None, None, None, None
@@ -41,28 +41,29 @@ def extract_product_details(product_id):
             materials = detail
         elif section_type == 'origin':
             origin = detail
-    return product_id, care, certified_materials, materials, origin
+    return [product_id, care, certified_materials, materials, origin]
 
-product_details = get_bucket_file(f'{date}-product_details.json')
-for product_id in product_details:
-    product, care, certified_materials, materials, origin = extract_product_details(product_id)
+def sort_products():
+    product_details = get_bucket_file(f'{date}-product_details.json')
+    product = []
+    care = []
+    certified_materials = []
+    materials = []
+    origin = []
+    for product_id in product_details:
+        extracted_details = extract_product_details(product_details, product_id)
+        product.append(extracted_details[0])
+        care.append(extracted_details[1])
+        certified_materials.append(extracted_details[2])
+        materials.append(extracted_details[3])
+        origin.append(extracted_details[4])
 
-# i = 0
-# for item in materials['components']:
-#     if 'text' in item:
-#         if 'value' in item['text']:
-#             print('index:', i, 'attributname?:', item['text']['value'])
-#     i+=1
-
-
-# def remove_data_from_detail(key, indices):
-#     pass
-
-for i, item in enumerate(materials['components']):
-    if 'text' in item and 'value' in item['text']:
-        if 'typography' in item['text'] and item['text']['typography'] in ['heading-s', 'heading-xs']:
-            print(f"Index: {i}, Attributname: {item['text']['value']}")
-        else:
-            print(f"Index: {i}, Attributwert: {item['text']['value']}")
+def extract_materials():
+    for i, item in enumerate(materials['components']):
+        if 'text' in item and 'value' in item['text']:
+            if 'typography' in item['text'] and item['text']['typography'] in ['heading-s', 'heading-xs']:
+                print(f"Index: {i}, Attributname: {item['text']['value']}")
+            else:
+                print(f"Index: {i}, Attributwert: {item['text']['value']}")
 
 
