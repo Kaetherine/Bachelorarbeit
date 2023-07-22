@@ -15,6 +15,9 @@ def normalize_related_products(json):
             result.append((key, value))
     return result
 
+def normalize_product_details(json):
+    pass
+
 def normalize_products_by_categories(json):
     pass
 
@@ -31,15 +34,6 @@ products = get_bucket_file(
 
 df = products_to_df(products)
 print(df.columns)
-
-
-# normalized_data = normalize_related_products(related_products)
-# print(normalized_data)
-
-
-
-# # Delete a specific file
-# s3_client.delete_object(Bucket='your_bucket_name', Key='your_file_key')
 
 
 def product_details(json):
