@@ -41,6 +41,7 @@ def normalize_categories():
     '''docstring here'''
     categories_dict = get_bucket_file(f'{date}-categories.json')
     categories_dict = categories_dict['categories']
+    ignore = ['194501','2118764', '2292949', '2292271', '1950810', '1890848']
 
     # target_groups = normalize_target_groups(categories_dict)
     # categories = []
