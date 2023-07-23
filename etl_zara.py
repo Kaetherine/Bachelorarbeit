@@ -171,11 +171,11 @@ def normalize_origin(origin, product_id):
                         })
     return origin_list
     
-def flatten_and_convert_to_df(detail):
+def flatten_and_convert_to_df(obj):
     '''docstring here'''
-    detail = [item for sublist in detail for item in sublist]
-    df_detail = pd.DataFrame(detail)
-    return df_detail
+    obj = [item for sublist in obj for item in sublist]
+    df_obj = pd.DataFrame(obj)
+    return df_obj
 
 def organise_product_details():
     '''docstring here'''
