@@ -53,14 +53,16 @@ def normalize_categories():
         target_group_id = entry['id']
         if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
             target_groups.append({
-                'target_group_id': target_group_id,
+                'target_group_id': str(target_group_id),
                 'target_group': target_group
                 })
             # normalizing subcategories
             subcategories_0 = []
             for subcategory in entry['subcategories']:
                 subcategory_0 = subcategory['name']
-                subcategory_0_id = subcategory['id']
+                subcategory_0_id = str(subcategory['id'])
+                if subcategory_0_id in ignore:
+                    continue
                 subcategories_0.append({
                     'subcategory_0_id': subcategory_0_id,
                     'subcategory_0': subcategory_0
