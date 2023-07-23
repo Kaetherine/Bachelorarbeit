@@ -53,6 +53,7 @@ def extract_materials(materials, product_id):
     material_list = []
     attribute_name = None
     ignore = ['COMPOSITION', 'Which contains at least:']
+
     for item in materials['components']:
         if 'text' in item and 'value' in item['text']:
             if ('typography' in item['text'] and 
@@ -87,7 +88,6 @@ def extract_materials(materials, product_id):
                             'percentage': percentage,
                             'material': material
                             })
-
     return material_list
 
 def extract_origin(origin, product_id):
@@ -114,15 +114,24 @@ def organise_product_details():
     origin = []
 
     for product_id in product_details:
-        extracted_details = extract_product_details(product_details, product_id)
+        extracted_details = extract_product_details(
+            product_details,
+            product_id
+            )
         try:
-            extracted_materials = extract_materials(extracted_details[3], product_id)
+            extracted_materials = extract_materials(
+                extracted_details[3],
+                product_id
+                )
             materials.append(extracted_materials)
         except Exception as e:
             logger.error(e)
 
         try:
-            extracted_origin = extract_origin(extracted_details[4], product_id)
+            extracted_origin = extract_origin(
+                extracted_details[4],
+                product_id
+                )
             origin.append(extracted_origin)
         except Exception as e:
             logger.error(e)
