@@ -40,25 +40,24 @@ def normalize_target_groups(categories_dict):
             
 def extract_subcategories(subcategories):
     '''docstring here'''
-    ignore = [
-        '194501' ,
-        '2118764', 
-        '2292949', 
-        '2292271', 
-        '1950810', 
-        '1890848',
-        '2307636',
-        '2307635',
+    ignore_ids = [
+        '194501' , '2118764', 
+        '2292949', '2292271', 
+        '1950810', '1890848',
+        '2307636', '2307635',
         '2307136',
         ]
+    ignore_names = [
+        'DISCOVER', 'JOIN LIFE', 'CAREERS'
+    ]
     categories = []
     for subcategory in subcategories:
         subcategory_name = subcategory['name']
         subcategory_id = str(subcategory['id'])
         age_range = None
-        if subcategory_id in ignore:
+        if subcategory_id in ignore_ids:
             continue
-        elif 'DIVIDER' in subcategory_name:
+        elif 'DIVIDER' in subcategory_name or subcategory_name in ignore_names:
             continue
         elif '|' in subcategory_name:
             if ('BABY' in subcategory_name or 'GIRL' in subcategory_name 
@@ -68,7 +67,6 @@ def extract_subcategories(subcategories):
                 age_range = transform_cat[0]
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
-        
         categories.append({
             'subcategory_id': subcategory_id,
             'category': subcategory_name,
