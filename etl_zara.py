@@ -72,6 +72,10 @@ def normalize_categories():
             for subcategory in entry['subcategories']:
                 subcategory_0 = subcategory['name']
                 subcategory_0_id = str(subcategory['id'])
+                if '|' in subcategory_0:
+                    subcategory_0 = subcategory_0.split('|')
+                    age_range = subcategory_0[0]
+                    gender = subcategory_0[1]
                 if subcategory_0_id in ignore:
                     continue
                 subcategories_0.append({
