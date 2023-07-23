@@ -50,7 +50,7 @@ def extract_certified_materials():
     pass
 
 def extract_materials(materials, product_id):
-    material_dict = []
+    material_list = []
     attribute_name = None
     for i, item in enumerate(materials['components']):
         if 'text' in item and 'value' in item['text']:
@@ -69,7 +69,7 @@ def extract_materials(materials, product_id):
                             m = item.split('%')
                             percentage = f'{m[0]}%'
                             material = m[1]
-                            material_dict.append({
+                            material_list.append({
                                 'product_id': product_id,
                                 'material_part': attribute_name,
                                 'percentage': percentage,
@@ -80,31 +80,41 @@ def extract_materials(materials, product_id):
                         percentage = f'{attribute_value[0]}%'
                         material = attribute_value[1]
                         # add a new row for each material
-                        material_dict.append({
+                        material_list.append({
                             'product_id': product_id,
                             'material_part': attribute_name,
                             'percentage': percentage,
                             'material': material
                             })
 
-    return material_dict
+    return material_list
 
-def extract_origin():
-    pass
+def extract_origin(origin, product_id):
+    origin_list = []
+    country_of_origin = origin['components'][-1]['text']['value'].split('Made in')[1]
+    origin_list.append({
+                        'product_id': product_id,
+                        'country_of_origin': country_of_origin
+                        })
+    return origin_list
+    
+def detail_to_df(detail):
+    '''docstring here'''
+    detail = [item for sublist in detail for item in sublist]
+    df_detail = pd.DataFrame(detail)
+    return df_detail
 
 date = '2023-07-22'
 def organise_product_details():
     product_details = get_bucket_file(f'{date}-product_details.json')
-    product = []
-    care = []
-    certified_materials = []
+    # care = []
+    # certified_materials = []
     materials = []
     origin = []
 
     for product_id in product_details:
         extracted_details = extract_product_details(product_details, product_id)
         
-
         # extracted_care = extract_care(extracted_details[1])
         # care.append(extracted_care)
 
@@ -113,16 +123,18 @@ def organise_product_details():
 
         extracted_materials = extract_materials(extracted_details[3], product_id)
         materials.append(extracted_materials)
-        # materials.append(extracted_materials)
 
-        # extracted_origin = extract_origin(extracted_details[4])
-        # origin.append(extracted_origin)
-    # materials = pd.DataFrame(materials)
-    materials = [item for sublist in materials for item in sublist]
-    df_materials = pd.DataFrame(materials)
-    return df_materials
+        extracted_origin = extract_origin(extracted_details[4], product_id)
+        origin.append(extracted_origin)
 
-x = organise_product_details()
-print(x)
+
+    materials = detail_to_df(materials)
+    origin = detail_to_df(origin)
+
+    return materials, origin
+
+materials, origin = organise_product_details()
+print(materials)
+print(origin)
 
 
