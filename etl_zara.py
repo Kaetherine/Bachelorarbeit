@@ -64,7 +64,11 @@ def extract_materials(materials, product_id):
                 attribute_value = item['text']['value']
                 if attribute_value != 'COMPOSITION':
                     # Add a new row for each material
-                    data.append({'product_id': product_id, 'material': attribute_name, 'percentage': attribute_value})
+                    data.append({
+                        'product_id': product_id,
+                        'material': attribute_name,
+                        'percentage': attribute_value
+                        })
 
     return pd.DataFrame(data)
 
