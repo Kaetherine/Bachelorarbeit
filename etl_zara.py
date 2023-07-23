@@ -4,7 +4,7 @@ import pandas as pd
 # from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 from get_zara import extract_products
-from logger import setup_logger()
+from logger import setup_logger
 
 logger = setup_logger()
 
