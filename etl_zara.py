@@ -10,10 +10,19 @@ logger = setup_logger()
 # date = datetime.now().strftime('%Y-%m-%d')
 date = '2023-07-22'
 
-def normalize_related_products(json):
+def normalize_related_products():
     '''docstring here'''
-    related_products = get_bucket_file(f'{date}-related_products.json')
-    print(related_products)
+    related_products_dict = get_bucket_file(f'{date}-related_products.json')
+    data = []
+    for product, products in related_products_dict.items():
+        for related_product in products:
+            data.append({
+                "product_id": product,
+                "related_product_id": related_product
+            })
+    related_products = pd.DataFrame(data)
+    return related_products
+
 
 def normalize_products_by_categories(json):
     pass
@@ -132,6 +141,8 @@ def organise_product_details():
 
     return materials, origin
 
-materials, origin = organise_product_details()
+# materials, origin = organise_product_details()
+related_products = normalize_related_products()
+print(related_products)
 
 
