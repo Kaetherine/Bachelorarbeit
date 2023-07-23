@@ -23,6 +23,7 @@ def normalize_related_products():
     return related_products
 
 def normalize_target_groups(categories_dict):
+    '''docstring here'''
     target_groups = []
     for item in categories_dict:
         target_group = item['name']
@@ -41,7 +42,17 @@ def normalize_categories():
     '''docstring here'''
     categories_dict = get_bucket_file(f'{date}-categories.json')
     categories_dict = categories_dict['categories']
-    ignore = ['194501','2118764', '2292949', '2292271', '1950810', '1890848']
+    ignore = [
+        '194501' ,
+        '2118764', 
+        '2292949', 
+        '2292271', 
+        '1950810', 
+        '1890848',
+        '2307636',
+        '2307635',
+        '2307136',
+        ]
 
     # target_groups = normalize_target_groups(categories_dict)
     # categories = []
