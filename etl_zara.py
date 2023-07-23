@@ -57,20 +57,25 @@ def extract_materials(materials, product_id):
             if ('typography' in item['text'] and 
                 item['text']['typography'] in ['heading-s', 'heading-xs']):
                 attribute_name = item['text']['value']
-                if attribute_name == 'COMPOSITION':
+                if attribute_name in ['COMPOSITION', 'Which contains at least:']:
                     attribute_name = None
                     continue
             elif attribute_name is not None:
                 attribute_value = item['text']['value']
-                if attribute_value != 'COMPOSITION':
-                    # Add a new row for each material
+                if attribute_value not in ['COMPOSITION', 'Which contains at least:']:
+                    attribute_value = attribute_value.split('%')
+                    percentage = f'{attribute_value[0]}%'
+                    material = attribute_value[1]
+                    # add a new row for each material
                     data.append({
                         'product_id': product_id,
-                        'material': attribute_name,
-                        'percentage': attribute_value
+                        'material_part': attribute_name,
+                        'percentage': percentage,
+                        'material': material
                         })
 
     return pd.DataFrame(data)
+
 
 
 
