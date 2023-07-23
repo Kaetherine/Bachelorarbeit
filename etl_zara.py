@@ -93,7 +93,8 @@ def extract_materials(materials, product_id):
 def extract_origin(origin, product_id):
     '''docstring here'''
     origin_list = []
-    country_of_origin = origin['components'][-1]['text']['value'].split('Made in')[1]
+    country_of_origin = origin['components'][-1]['text']['value']
+    country_of_origin= country_of_origin.split('Made in')[1]
     origin_list.append({
                         'product_id': product_id,
                         'country_of_origin': country_of_origin
@@ -125,7 +126,6 @@ def organise_product_details():
             origin.append(extracted_origin)
         except Exception as e:
             logger.error(e)
-
 
     materials = detail_to_df(materials)
     origin = detail_to_df(origin)
