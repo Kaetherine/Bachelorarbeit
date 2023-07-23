@@ -37,25 +37,36 @@ def normalize_target_groups(categories_dict):
             
 
 def normalize_categories():
+    '''docstring here'''
     categories_dict = get_bucket_file(f'{date}-categories.json')
     categories_dict = categories_dict['categories']
 
-    target_groups = normalize_target_groups(categories_dict)
-    
+    # target_groups = normalize_target_groups(categories_dict)
     # categories = []
 
-    # for item in categories_dict:
-    #     target_group = item['name']
-    #     target_group_id = item['id']
-    #     if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
-    #         categories['target_group'] = target_group
-        
-    #         subcategories_1 = item['subcategories']
-    #         for item in subcategories_1:
-    #             if 'name' in item:
-    #                 categories['name_1'] = item['name']
-    #             if 'id' in item:
-    #                 categories['id_1'] = item['id']
+    # normalizing target_groups
+    target_groups = []
+    for entry in categories_dict:
+        target_group = entry['name']
+        target_group_id = entry['id']
+        if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
+            target_groups.append({
+                'target_group_id': target_group_id,
+                'target_group': target_group
+                })
+            # normalizing subcategories
+            subcategory_0 = []
+            for subcategory in entry['subcategories']:
+                subcategory_0 = subcategory['name']
+                subcategory_0_id = subcategory['id']
+                subcategory_0.append({
+                    'subcategory_0_id': subcategory_0_id,
+                    'subcategory_0': subcategory_0
+                    })
+    #             if 'name' in subcategory:
+    #                 categories['name_1'] = subcategory['name']
+    #             if 'id' in subcategory:
+    #                 categories['id_1'] = subcategory['id']
                 
     #             if 'subcategories' in item:
     #                 subcategories_2 = item['subcategories']
@@ -64,8 +75,8 @@ def normalize_categories():
     #                         categories['name_2'] = item['name']
     #                     if 'id' in item:
     #                         categories['id_2'] = item['id']
-    # return categories
-    return target_groups
+    # # return categories
+    # return target_groups
 
 def products_to_df(list_of_products):
     '''docstring here'''
