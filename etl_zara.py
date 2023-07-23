@@ -142,7 +142,7 @@ def organise_product_details():
     return materials, origin
 
 # materials, origin = organise_product_details()
-related_products = normalize_related_products()
-print(related_products)
+# related_products = normalize_related_products()
+
 
 
