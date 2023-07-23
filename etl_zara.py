@@ -1,7 +1,7 @@
 from datetime import datetime
 import pandas as pd
 
-from postgres_connection import connect_to_db, disconnect_from_db
+# from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 from get_zara import extract_products
 
@@ -49,19 +49,26 @@ def extract_care():
 def extract_certified_materials():
     pass
 
-def extract_materials(materials):
-    '''docstring here'''
-    df = pd.DataFrame()
+def extract_materials(materials, product_id):
+    data = []
+    attribute_name = None
     for i, item in enumerate(materials['components']):
         if 'text' in item and 'value' in item['text']:
             if ('typography' in item['text'] and 
                 item['text']['typography'] in ['heading-s', 'heading-xs']):
                 attribute_name = item['text']['value']
-                if attribute_name not in list(df.columns):
-                    list(df.columns).append(attribute_name)
-            else:
+                if attribute_name == 'COMPOSITION':
+                    attribute_name = None
+                    continue
+            elif attribute_name is not None:
                 attribute_value = item['text']['value']
-                df[attribute_name] = attribute_value
+                if attribute_value != 'COMPOSITION':
+                    # Add a new row for each material
+                    data.append({'product_id': product_id, 'material': attribute_name, 'percentage': attribute_value})
+
+    return pd.DataFrame(data)
+
+
 
 
 def extract_origin():
@@ -86,7 +93,7 @@ def organise_product_details():
         # extracted_certified_materials = extract_certified_materials(extracted_details[2])
         # certified_materials.append(extracted_certified_materials)
 
-        extracted_materials = extract_materials(extracted_details[3])
+        extracted_materials = extract_materials(extracted_details[3], product_id)
         print(extracted_materials)
         # materials.append(extracted_materials)
 
