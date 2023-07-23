@@ -39,7 +39,9 @@ def normalize_target_groups(categories_dict):
 def normalize_categories():
     categories_dict = get_bucket_file(f'{date}-categories.json')
     categories_dict = categories_dict['categories']
+
     target_groups = normalize_target_groups(categories_dict)
+    
     # categories = []
 
     # for item in categories_dict:
