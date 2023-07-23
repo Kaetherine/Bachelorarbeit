@@ -97,11 +97,6 @@ def normalize_categories():
 
     return target_groups, categories, categories_by_target_group
 
-# def products_to_df(list_of_products):
-#     '''docstring here'''
-#     df_products = pd.DataFrame(list_of_products)
-#     return df_products
-
 def extract_product_details(product_details, product_id):
     '''This function extracts care, certified materials, materials, and 
     origin details for a given product from the product details dataset.'''
@@ -211,12 +206,24 @@ def organise_product_details():
 
     return materials, origin
 
+# ['id', 'reference', 'type', 'kind', 'brand', 'xmedia', 'name', 'description', 'price', 'section', 'sectionName', 'familyName', 'subfamilyName', 'detail', 'seo', 'availability', 'tagTypes', 'extraInfo', 'startDate', 'gridPosition', 'zoomedGridPosition', 'preservedBlockPosition', 'athleticzPosition', 'productTag', 'colorList', 'isDivider', 'hasXmediaDouble', 'showAvailability', 'priceUnavailable']) 
+
+def normalize_products():
+    products_by_category = get_bucket_file(f'{date}-products_by_category.json')
+    for category in products_by_category:
+        if category == '2298051':
+            for item in products_by_category[category]:
+                for entry in item:
+                    print(entry['id'])
+                    # print(itementry), '\n')
+            # print(len(products_by_category[category]))
+    return None
+
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
-target_groups, categories, categories_by_target_group = normalize_categories()
-print(categories)
-print(target_groups)
-print(categories_by_target_group)
+# target_groups, categories, categories_by_target_group = normalize_categories()
+products = normalize_products()
+print(products)
 
 
 
