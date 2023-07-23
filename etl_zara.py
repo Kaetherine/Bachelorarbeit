@@ -4,6 +4,9 @@ import pandas as pd
 # from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 from get_zara import extract_products
+from logger import setup_logger()
+
+logger = setup_logger()
 
 # date = datetime.now().strftime('%Y-%m-%d')
 date = '2023-07-22'
@@ -111,12 +114,17 @@ def organise_product_details():
 
     for product_id in product_details:
         extracted_details = extract_product_details(product_details, product_id)
+        try:
+            extracted_materials = extract_materials(extracted_details[3], product_id)
+            materials.append(extracted_materials)
+        except Exception as e:
+            logger.error(e)
 
-        extracted_materials = extract_materials(extracted_details[3], product_id)
-        materials.append(extracted_materials)
-
-        extracted_origin = extract_origin(extracted_details[4], product_id)
-        origin.append(extracted_origin)
+        try:
+            extracted_origin = extract_origin(extracted_details[4], product_id)
+            origin.append(extracted_origin)
+        except Exception as e:
+            logger.error(e)
 
 
     materials = detail_to_df(materials)
