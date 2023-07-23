@@ -9,7 +9,10 @@ date = datetime.now().strftime('%Y-%m-%d')
 
 def get_zara_data_and_upload():
     '''docstring here'''
-    categories = zara.get_categories()
+    try:
+        categories = zara.get_categories()
+    except Exception as e:
+        logger.error(e)
     upload_json_to_bucket(categories, f'{date}-categories.json')
 
     category_ids = zara.extract_category_ids(categories)

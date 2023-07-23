@@ -7,8 +7,7 @@ from get_zara import extract_products
 from logger import setup_logger
 
 logger = setup_logger()
-# date = datetime.now().strftime('%Y-%m-%d')
-date = '2023-07-22'
+date = datetime.now().strftime('%Y-%m-%d')
 
 def normalize_related_products():
     '''docstring here'''
