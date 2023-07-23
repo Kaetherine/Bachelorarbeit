@@ -62,7 +62,8 @@ def normalize_categories():
     for entry in categories_dict:
         target_group = entry['name']
         target_group_id = entry['id']
-        if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
+        if (target_group == 'WOMAN' or 
+            target_group == 'MAN' or target_group == 'KIDS'):
             target_groups.append({
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
@@ -75,10 +76,11 @@ def normalize_categories():
                 age_range = None
                 if '|' in subcategory_0:
                     if subcategory_0 == 'ACCESSORIES | SHOES':
-                        subcategory_0.replace('|', 'AND')
-                    transform_cat = subcategory_0.split('|')
-                    subcategory_0 = transform_cat[1]
-                    age_range = transform_cat[0]
+                        subcategory_0 = 'ACCESSORIES AND SHOES'
+                    else:
+                        transform_cat = subcategory_0.split('|')
+                        subcategory_0 = transform_cat[1]
+                        age_range = transform_cat[0]
                 if subcategory_0_id in ignore:
                     continue
                 subcategories_0.append({
