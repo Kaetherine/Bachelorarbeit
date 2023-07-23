@@ -7,16 +7,13 @@ from get_zara import extract_products
 from logger import setup_logger
 
 logger = setup_logger()
-
 # date = datetime.now().strftime('%Y-%m-%d')
 date = '2023-07-22'
 
 def normalize_related_products(json):
-    result = []
-    for key, values in json.items():
-        for value in values:
-            result.append((key, value))
-    return result
+    '''docstring here'''
+    related_products = get_bucket_file(f'{date}-related_products.json')
+    print(related_products)
 
 def normalize_products_by_categories(json):
     pass
@@ -40,15 +37,10 @@ def extract_product_details(product_details, product_id):
             materials = detail
         elif section_type == 'origin':
             origin = detail
+
     return [product_id, care, certified_materials, materials, origin]
 
-def extract_care():
-    pass
-        
-def extract_certified_materials():
-    pass
-
-def extract_materials(materials, product_id):
+def normalize_materials(materials, product_id):
     '''docstring here'''
     material_list = []
     attribute_name = None
@@ -81,7 +73,6 @@ def extract_materials(materials, product_id):
                         attribute_value = attribute_value.split('%')
                         percentage = f'{attribute_value[0]}%'
                         material = attribute_value[1]
-                        # add a new row for each material
                         material_list.append({
                             'product_id': product_id,
                             'material_part': attribute_name,
@@ -90,7 +81,7 @@ def extract_materials(materials, product_id):
                             })
     return material_list
 
-def extract_origin(origin, product_id):
+def normalize_origin(origin, product_id):
     '''docstring here'''
     origin_list = []
     country_of_origin = origin['components'][-1]['text']['value']
@@ -119,20 +110,20 @@ def organise_product_details():
             product_id
             )
         try:
-            extracted_materials = extract_materials(
+            normalized_materials = normalize_materials(
                 extracted_details[3],
                 product_id
                 )
-            materials.append(extracted_materials)
+            materials.append(normalized_materials)
         except Exception as e:
             logger.error(e)
 
         try:
-            extracted_origin = extract_origin(
+            normalized_origin = normalize_origin(
                 extracted_details[4],
                 product_id
                 )
-            origin.append(extracted_origin)
+            origin.append(normalized_origin)
         except Exception as e:
             logger.error(e)
 
@@ -142,7 +133,5 @@ def organise_product_details():
     return materials, origin
 
 materials, origin = organise_product_details()
-print(materials)
-print(origin)
 
 
