@@ -22,21 +22,6 @@ def normalize_related_products():
             })
     related_products = pd.DataFrame(data)
     return related_products
-
-def normalize_target_groups(categories_dict):
-    '''docstring here'''
-    target_groups = []
-    for item in categories_dict:
-        target_group = item['name']
-        target_group_id = item['id']
-        if (target_group == 'WOMAN' or target_group == 'MAN' 
-            or target_group == 'KIDS'):
-            target_groups.append({
-                'target_group_id': target_group_id,
-                'target_group': target_group
-            })
-    target_groups = pd.DataFrame(target_groups)
-    return target_groups
             
 def extract_subcategories(subcategories):
     '''docstring here'''
@@ -74,7 +59,6 @@ def extract_subcategories(subcategories):
             })
     return categories
 
-    
 def normalize_categories():
     '''docstring here'''
     categories_dict = get_bucket_file(f'{date}-categories.json')
@@ -83,6 +67,7 @@ def normalize_categories():
     # normalizing target_groups
     categories = []
     target_groups = []
+    categories_by_target_group = []
     for entry in categories_dict:
         target_group = entry['name']
         target_group_id = entry['id']
@@ -92,21 +77,30 @@ def normalize_categories():
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
                 })
-            # normalizing subcategories
-        
+        # normalizing subcategories
         categories_0 = extract_subcategories(entry['subcategories'])
         categories.extend(categories_0)
-        # subcategories_1, categories_1 = extract_subcategories(subcategories_0['subcategories'])
-        # subcategories_2, categories_2 = extract_subcategories(subcategories_1['subcategories'])
+        # normalize categories by target_grooups
+        temp = [
+                {
+                'target_group': entry['id'],
+                'subcategory_id': value['subcategory_id']
+                } for value in categories_0
+            ]
+        categories_by_target_group.append(temp)
 
+        
+    
+    categories_by_target_group = flatten_and_convert_to_df(categories_by_target_group)
     target_groups = pd.DataFrame(target_groups)
     categories = pd.DataFrame(categories)
-    return target_groups, categories
 
-def products_to_df(list_of_products):
-    '''docstring here'''
-    df_products = pd.DataFrame(list_of_products)
-    return df_products
+    return target_groups, categories, categories_by_target_group
+
+# def products_to_df(list_of_products):
+#     '''docstring here'''
+#     df_products = pd.DataFrame(list_of_products)
+#     return df_products
 
 def extract_product_details(product_details, product_id):
     '''This function extracts care, certified materials, materials, and 
@@ -177,7 +171,7 @@ def normalize_origin(origin, product_id):
                         })
     return origin_list
     
-def detail_to_df(detail):
+def flatten_and_convert_to_df(detail):
     '''docstring here'''
     detail = [item for sublist in detail for item in sublist]
     df_detail = pd.DataFrame(detail)
@@ -212,16 +206,17 @@ def organise_product_details():
         except Exception as e:
             logger.error(e)
 
-    materials = detail_to_df(materials)
-    origin = detail_to_df(origin)
+    materials = flatten_and_convert_to_df(materials)
+    origin = flatten_and_convert_to_df(origin)
 
     return materials, origin
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
-target_groups, categories = normalize_categories()
-print(target_groups)
+target_groups, categories, categories_by_target_group = normalize_categories()
 print(categories)
+print(target_groups)
+print(categories_by_target_group)
 
 
 
