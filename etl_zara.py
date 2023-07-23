@@ -50,13 +50,19 @@ def extract_certified_materials():
     pass
 
 def extract_materials(materials):
+    '''docstring here'''
+    df = pd.DataFrame()
     for i, item in enumerate(materials['components']):
         if 'text' in item and 'value' in item['text']:
             if ('typography' in item['text'] and 
                 item['text']['typography'] in ['heading-s', 'heading-xs']):
                 attribute_name = item['text']['value']
+                if attribute_name not in list(df.columns):
+                    list(df.columns).append(attribute_name)
             else:
                 attribute_value = item['text']['value']
+                df[attribute_name] = attribute_value
+
 
 def extract_origin():
     pass
