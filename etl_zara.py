@@ -7,7 +7,8 @@ from get_zara import extract_products
 from logger import setup_logger
 
 logger = setup_logger()
-date = datetime.now().strftime('%Y-%m-%d')
+# date = datetime.now().strftime('%Y-%m-%d')
+date = '2023-07-23'
 
 def normalize_related_products():
     '''docstring here'''
@@ -37,11 +38,8 @@ def normalize_target_groups(categories_dict):
     target_groups = pd.DataFrame(target_groups)
     return target_groups
             
-
-def normalize_categories():
+def extract_subcategories(subcategories):
     '''docstring here'''
-    categories_dict = get_bucket_file(f'{date}-categories.json')
-    categories_dict = categories_dict['categories']
     ignore = [
         '194501' ,
         '2118764', 
@@ -53,11 +51,39 @@ def normalize_categories():
         '2307635',
         '2307136',
         ]
+    categories = []
+    for subcategory in subcategories:
+        subcategory_name = subcategory['name']
+        subcategory_id = str(subcategory['id'])
+        age_range = None
+        if subcategory_id in ignore:
+            continue
+        elif 'DIVIDER' in subcategory_name:
+            continue
+        elif '|' in subcategory_name:
+            if ('BABY' in subcategory_name or 'GIRL' in subcategory_name 
+            or 'BOY' in subcategory_name):
+                transform_cat = subcategory_name.split('|')
+                subcategory_name = transform_cat[1]
+                age_range = transform_cat[0]
+            else:
+                subcategory_name = subcategory_name.replace('|', 'AND')
+        
+        categories.append({
+            'subcategory_id': subcategory_id,
+            'category': subcategory_name,
+            'age_range': age_range
+            })
+    return categories
 
-    # target_groups = normalize_target_groups(categories_dict)
-    # categories = []
+    
+def normalize_categories():
+    '''docstring here'''
+    categories_dict = get_bucket_file(f'{date}-categories.json')
+    categories_dict = categories_dict['categories']
 
     # normalizing target_groups
+    categories = []
     target_groups = []
     for entry in categories_dict:
         target_group = entry['name']
@@ -69,40 +95,15 @@ def normalize_categories():
                 'target_group': target_group
                 })
             # normalizing subcategories
-            subcategories_0 = []
-            for subcategory in entry['subcategories']:
-                subcategory_0 = subcategory['name']
-                subcategory_0_id = str(subcategory['id'])
-                age_range = None
-                if '|' in subcategory_0:
-                    if subcategory_0 == 'ACCESSORIES | SHOES':
-                        subcategory_0 = 'ACCESSORIES AND SHOES'
-                    else:
-                        transform_cat = subcategory_0.split('|')
-                        subcategory_0 = transform_cat[1]
-                        age_range = transform_cat[0]
-                if subcategory_0_id in ignore:
-                    continue
-                subcategories_0.append({
-                    'subcategory_0_id': subcategory_0_id,
-                    'category': subcategory_0,
-                    'age_range': age_range
-                    })
-    #             if 'name' in subcategory:
-    #                 categories['name_1'] = subcategory['name']
-    #             if 'id' in subcategory:
-    #                 categories['id_1'] = subcategory['id']
-                
-    #             if 'subcategories' in item:
-    #                 subcategories_2 = item['subcategories']
-    #                 for item in subcategories_2:
-    #                     if 'name' in item:
-    #                         categories['name_2'] = item['name']
-    #                     if 'id' in item:
-    #                         categories['id_2'] = item['id']
+        
+        categories_0 = extract_subcategories(entry['subcategories'])
+        categories.extend(categories_0)
+        # subcategories_1, categories_1 = extract_subcategories(subcategories_0['subcategories'])
+        # subcategories_2, categories_2 = extract_subcategories(subcategories_1['subcategories'])
+
     target_groups = pd.DataFrame(target_groups)
-    subcategories_0 = pd.DataFrame(subcategories_0)
-    return target_groups, subcategories_0
+    categories = pd.DataFrame(categories)
+    return target_groups, categories
 
 def products_to_df(list_of_products):
     '''docstring here'''
@@ -220,8 +221,9 @@ def organise_product_details():
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
-target_groups, subcategories_0 = normalize_categories()
-print(subcategories_0)
+target_groups, categories = normalize_categories()
+print(target_groups)
+print(categories)
 
 
 
