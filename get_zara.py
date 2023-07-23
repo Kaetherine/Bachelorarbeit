@@ -85,9 +85,7 @@ def get_categories():
         client = client,
         headers = headers
         )
-    if response:
-        categories = extract_category_ids(response)
-        return categories
+    return response
 
 #%%
 def extract_product_list(response):
