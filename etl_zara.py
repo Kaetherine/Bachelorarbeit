@@ -49,7 +49,7 @@ def extract_care():
 def extract_certified_materials():
     pass
 
-def extract_materials():
+def extract_materials(materials):
     for i, item in enumerate(materials['components']):
         if 'text' in item and 'value' in item['text']:
             if 'typography' in item['text'] and item['text']['typography'] in ['heading-s', 'heading-xs']:
