@@ -13,7 +13,8 @@ def get_zara_data_and_upload():
         categories = zara.get_categories()
     except Exception as e:
         logger.error(e)
-    upload_json_to_bucket(categories, f'{date}-categories.json')
+    if categories:
+        upload_json_to_bucket(categories, f'{date}-categories.json')
 
     category_ids = zara.extract_category_ids(categories)
     upload_json_to_bucket(category_ids, f'{date}-category_ids.json')

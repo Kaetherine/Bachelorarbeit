@@ -22,9 +22,48 @@ def normalize_related_products():
     related_products = pd.DataFrame(data)
     return related_products
 
+def normalize_target_groups(categories_dict):
+    target_groups = []
+    for item in categories_dict:
+        target_group = item['name']
+        target_group_id = item['id']
+        if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
+            target_groups.append({
+                'target_group_id': target_group_id,
+                'target_group': target_group
+            })
+    target_groups = pd.DataFrame(target_groups)
+    return target_groups
+            
 
-def normalize_products_by_categories(json):
-    pass
+def normalize_categories():
+    categories_dict = get_bucket_file(f'{date}-categories.json')
+    categories_dict = categories_dict['categories']
+    target_groups = normalize_target_groups(categories_dict)
+    # categories = []
+
+    # for item in categories_dict:
+    #     target_group = item['name']
+    #     target_group_id = item['id']
+    #     if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
+    #         categories['target_group'] = target_group
+        
+    #         subcategories_1 = item['subcategories']
+    #         for item in subcategories_1:
+    #             if 'name' in item:
+    #                 categories['name_1'] = item['name']
+    #             if 'id' in item:
+    #                 categories['id_1'] = item['id']
+                
+    #             if 'subcategories' in item:
+    #                 subcategories_2 = item['subcategories']
+    #                 for item in subcategories_2:
+    #                     if 'name' in item:
+    #                         categories['name_2'] = item['name']
+    #                     if 'id' in item:
+    #                         categories['id_2'] = item['id']
+    # return categories
+    return target_groups
 
 def products_to_df(list_of_products):
     '''docstring here'''
@@ -142,6 +181,8 @@ def organise_product_details():
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
+categories = normalize_categories()
+print(categories)
 
 
 
