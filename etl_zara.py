@@ -55,13 +55,13 @@ def normalize_categories():
                 'target_group': target_group
                 })
             # normalizing subcategories
-            subcategory_0 = []
+            subcategories_0 = []
             for subcategory in entry['subcategories']:
-                subcategory_0 = subcategory['name']
-                subcategory_0_id = subcategory['id']
-                subcategory_0.append({
-                    'subcategory_0_id': subcategory_0_id,
-                    'subcategory_0': subcategory_0
+                subcategories_0 = subcategory['name']
+                subcategories_0_id = subcategory['id']
+                subcategories_0.append({
+                    'subcategory_0_id': subcategories_0_id,
+                    'subcategory_0': subcategories_0
                     })
     #             if 'name' in subcategory:
     #                 categories['name_1'] = subcategory['name']
@@ -75,7 +75,8 @@ def normalize_categories():
     #                         categories['name_2'] = item['name']
     #                     if 'id' in item:
     #                         categories['id_2'] = item['id']
-    # # return categories
+    target_groups = pd.DataFrame(target_groups)
+    subcategories_0 = pd.DataFrame(target_groups)
     # return target_groups
 
 def products_to_df(list_of_products):
