@@ -50,7 +50,7 @@ def extract_certified_materials():
     pass
 
 def extract_materials(materials, product_id):
-    data = []
+    material_dict = []
     attribute_name = None
     for i, item in enumerate(materials['components']):
         if 'text' in item and 'value' in item['text']:
@@ -67,18 +67,14 @@ def extract_materials(materials, product_id):
                     percentage = f'{attribute_value[0]}%'
                     material = attribute_value[1]
                     # add a new row for each material
-                    data.append({
+                    material_dict.append({
                         'product_id': product_id,
                         'material_part': attribute_name,
                         'percentage': percentage,
                         'material': material
                         })
 
-    return pd.DataFrame(data)
-
-
-
-
+    return material_dict
 
 def extract_origin():
     pass
@@ -103,15 +99,17 @@ def organise_product_details():
         # certified_materials.append(extracted_certified_materials)
 
         extracted_materials = extract_materials(extracted_details[3], product_id)
-        print(extracted_materials)
+        materials.append(extracted_materials)
         # materials.append(extracted_materials)
 
         # extracted_origin = extract_origin(extracted_details[4])
         # origin.append(extracted_origin)
+    # materials = pd.DataFrame(materials)
+    materials = [item for sublist in materials for item in sublist]
+    df_materials = pd.DataFrame(materials)
+    return df_materials
 
-    # return materials
-
-organise_product_details()
-# print(organised_product_details)
+x = organise_product_details()
+print(x)
 
 
