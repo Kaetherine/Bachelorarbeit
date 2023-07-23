@@ -27,7 +27,8 @@ def normalize_target_groups(categories_dict):
     for item in categories_dict:
         target_group = item['name']
         target_group_id = item['id']
-        if (target_group == 'WOMAN' or target_group == 'MAN' or target_group == 'KIDS'):
+        if (target_group == 'WOMAN' or target_group == 'MAN' 
+            or target_group == 'KIDS'):
             target_groups.append({
                 'target_group_id': target_group_id,
                 'target_group': target_group
