@@ -205,6 +205,10 @@ def organise_product_details():
     origin = flatten_and_convert_to_df(origin)
 
     return materials, origin
+def convert_date(date_string):
+    '''docstring here'''
+    date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return date_time_obj.date()
 
 def normalize_products():
     '''docstring here'''
@@ -213,7 +217,10 @@ def normalize_products():
         )
     products_by_category = []
     products = []
+    availability = []
+    available_colors = []
     colors = []
+    fabric = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
@@ -224,32 +231,44 @@ def normalize_products():
                 
                 products.append({
                     'product_id': entry['id'],
-                    'price':entry['price'],
                     'name':entry['name'],
-                    'familyName':entry['familyName'],
-                    'subfamilyName':entry['subfamilyName'],
-                    'availability':entry['availability'],
-                    'startDate':entry['startDate'],
-                    'color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
+                    'price':float(entry['price']/100),
+                    'publish_date':convert_date(entry['startDate']),
+                    'color_hex_code':'# placeholder',
                     })
                 
-                colors.append({
-                    'id':entry['detail']['colors'][0]['id'],
-                    'product_id':entry['detail']['colors'][0]['productId'],
-                    'available_colors':entry['colorList'], #not atomar
+                availability.append({
+                    'product_id': entry['id'],
+                    'availability':entry['availability'],
                 })
-    #brand', 'xmedia',
-    # products_by_category = pd.DataFrame(products_by_category)
-    # products = pd.DataFrame(products)
-    # colors = pd.DataFrame(colors)
-    # return products_by_category, products, colors
-    return None
+                
+                available_colors.append({ # this whole table could be replaced with pantone
+                    'product_id':entry['detail']['colors'][0]['productId'],
+                    'available_colors':entry['colorList'], #not atomar and should be as hexcode not as interpretation
+                })
+
+                colors.append({
+                    'color_hex_code':'# placeholder',
+                    'color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
+                })
+
+                fabric.append({
+                    'familyName':entry['familyName'],
+                    'subfamilyName':entry['subfamilyName'],
+                })
+
+    products_by_category = pd.DataFrame(products_by_category)
+    products = pd.DataFrame(products)
+    availability = pd.DataFrame(availability)
+    available_colors = pd.DataFrame(available_colors)
+    colors = pd.DataFrame(colors)
+    return products_by_category, products, availability, available_colors, colors
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products, colors = normalize_products()
-print(products_by_category, '\n', products, '\n', colors)
+products_by_category, products, availability, available_colors, colors = normalize_products()
+print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', colors)
 
 
 
