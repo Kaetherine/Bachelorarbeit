@@ -15,10 +15,15 @@ def normalize_pantone():
         pantone_tcx.append({
             'code': color['code'],
             'name': color['name'],
-        })
-        print(color)
-    # df_pantone_tcx = df_pantone_tcx[['code', 'name', 'rgb.r', 'rgb.g', 'rgb.b', 'hex', 'lab.l', 'lab.a', 'lab.b', 'cmyk']]
-
+            'rgb_r': color['rgb']['r'],
+            'rgb_g': color['rgb']['g'],
+            'rgb_b': color['rgb']['b'],
+            'hex': color['hex'],
+            'lab_l': color['lab']['l'],
+            'lab_a': color['lab']['a'],
+            'lab_b': color['lab']['b'],
+            'cmyk': color['cmyk']
+            })
     # pantone_tn = get_bucket_file('pantone_tn.json')
     # pantone_tpg = get_bucket_file('pantone_tpg.json')
     # pantone_tsx = get_bucket_file('pantone_tsx.json')
