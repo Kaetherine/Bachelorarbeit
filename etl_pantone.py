@@ -24,10 +24,11 @@ def normalize_pantone():
             'lab_b': color['lab']['b'],
             'cmyk': color['cmyk']
             })
+    pantone_tcx = pd.DataFrame(pantone_tcx)
     # pantone_tn = get_bucket_file('pantone_tn.json')
     # pantone_tpg = get_bucket_file('pantone_tpg.json')
     # pantone_tsx = get_bucket_file('pantone_tsx.json')
-    return None
+    return pantone_tcx
 
 pantone = normalize_pantone()
 print(pantone)
