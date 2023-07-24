@@ -220,7 +220,7 @@ def normalize_products():
     availability = []
     available_colors = []
     colors = []
-    fabric = []
+    fabrics = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
@@ -243,7 +243,7 @@ def normalize_products():
                 })
                 
                 available_colors.append({ # this whole table could be replaced with pantone
-                    'product_id':entry['detail']['colors'][0]['productId'],
+                    'product_id':entry['id'],
                     'available_colors':entry['colorList'], #not atomar and should be as hexcode not as interpretation
                 })
 
@@ -252,7 +252,8 @@ def normalize_products():
                     'color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
                 })
 
-                fabric.append({
+                fabrics.append({
+                    'product_id': entry['id'],
                     'familyName':entry['familyName'],
                     'subfamilyName':entry['subfamilyName'],
                 })
@@ -262,13 +263,14 @@ def normalize_products():
     availability = pd.DataFrame(availability)
     available_colors = pd.DataFrame(available_colors)
     colors = pd.DataFrame(colors)
-    return products_by_category, products, availability, available_colors, colors
+    fabrics = pd.DataFrame(fabrics)
+    return products_by_category, products, availability, available_colors, colors, fabrics
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products, availability, available_colors, colors = normalize_products()
-print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', colors)
+products_by_category, products, availability, available_colors, colors, fabrics = normalize_products()
+print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', colors, '\n', fabrics)
 
 
 
