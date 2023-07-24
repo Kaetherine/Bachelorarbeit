@@ -208,7 +208,9 @@ def organise_product_details():
 
 def normalize_products():
     '''docstring here'''
-    products_by_category_dict = get_bucket_file(f'{date}-products_by_category.json')
+    products_by_category_dict = get_bucket_file(
+        f'{date}-products_by_category.json'
+        )
     products_by_category = []
     products = []
     colors = []
@@ -228,30 +230,26 @@ def normalize_products():
                     'subfamilyName':entry['subfamilyName'],
                     'availability':entry['availability'],
                     'startDate':entry['startDate'],
-                    'colorList':entry['colorList'],
-                    'priceUnavailable':entry['priceUnavailable'],
+                    'color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
                     })
                 
                 colors.append({
                     'id':entry['detail']['colors'][0]['id'],
                     'product_id':entry['detail']['colors'][0]['productId'],
-                    'color_interpretation':entry['detail']['colors'][0]['name'],
                     'available_colors':entry['colorList'], #not atomar
-                    'price':entry['detail']['colors'][0]['price'], #duplicate?
-                    'availability':entry['detail']['colors'][0]['availability'],#duplicate?
                 })
     #brand', 'xmedia',
-                print(entry['detail']['colors'][0]['xmedia'], '\n')
-    products_by_category = pd.DataFrame(products_by_category)
-    products = pd.DataFrame(products)
-    colors = pd.DataFrame(colors)
-    return products_by_category, products, colors
+    # products_by_category = pd.DataFrame(products_by_category)
+    # products = pd.DataFrame(products)
+    # colors = pd.DataFrame(colors)
+    # return products_by_category, products, colors
+    return None
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
 products_by_category, products, colors = normalize_products()
-print(colors)
+print(products_by_category, '\n', products, '\n', colors)
 
 
 
