@@ -201,6 +201,7 @@ def organise_product_details():
     return materials, origin
 
 def create_product_dict(entry):
+    '''Generates and returns a product dictionary from a provided entry.'''
     product_id = entry['id']
     color_interpretation = entry['detail']['colors'][0]['name']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
@@ -215,18 +216,24 @@ def create_product_dict(entry):
     }
 
 def create_availability_dict(entry):
+    '''Generates and returns a dictionary containing product availability from a 
+    provided entry.'''
     return {
         'product_id': entry['id'],
         'availability':entry['availability']
     }
 
 def create_color_interpretation_dict(entry, color_hex_code, color_interpretation):
+    '''Generates and returns a dictionary containing color interpretation for a 
+    given product entry.'''
     return {
         'color_hex_code':color_hex_code,
         'zara':color_interpretation
     }
 
 def transform_product_data():
+    '''Extracts product data from a JSON file, transforms it, and returns it 
+    as four Pandas DataFrames.'''
     products_by_category_dict = get_bucket_file(
         f'{date}-products_by_category.json'
         )
