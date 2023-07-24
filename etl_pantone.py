@@ -1,34 +1,51 @@
 import pandas as pd
 
-from s3_bucket import *
-from get_zara import extract_products
+from s3_bucket import get_bucket_file
 from logger import setup_logger
-from helper_functions import convert_date, date
 
 logger = setup_logger()
 
-def normalize_pantone():
+def normalize_pantone(filename):
     '''docstring here'''
-    tcx = get_bucket_file('pantone_tcx.json')
-    pantone_tcx = []
+    tcx = get_bucket_file(filename)
+    color_configs = []
+    color_names = []
     for color in tcx['data']['getBook']['colors']:
-        pantone_tcx.append({
-            'code': color['code'],
-            'name': color['name'],
+        color_configs.append({
+            'hex': f"#{color['hex']}",
             'rgb_r': color['rgb']['r'],
             'rgb_g': color['rgb']['g'],
             'rgb_b': color['rgb']['b'],
-            'hex': color['hex'],
             'lab_l': color['lab']['l'],
             'lab_a': color['lab']['a'],
             'lab_b': color['lab']['b'],
             'cmyk': color['cmyk']
             })
-    pantone_tcx = pd.DataFrame(pantone_tcx)
-    # pantone_tn = get_bucket_file('pantone_tn.json')
-    # pantone_tpg = get_bucket_file('pantone_tpg.json')
-    # pantone_tsx = get_bucket_file('pantone_tsx.json')
-    return pantone_tcx
+        color_names.append({
+            'code': color['code'],
+            'name': color['name']
+            })
+        
+    color_configs = pd.DataFrame(color_configs)
+    color_names = pd.DataFrame(color_names)
 
-pantone = normalize_pantone()
-print(pantone)
+    return color_configs, color_names
+
+def join_colors():
+    '''docstring here'''
+    tcx_color_configs, tcx_color_names = normalize_pantone('pantone_tcx.json')
+    tn_color_configs, tn_color_names = normalize_pantone('pantone_tn.json')
+    tpg_color_configs, tpg_color_names = normalize_pantone('pantone_tpg.json')
+    tsx_color_configs, tsx_color_names = normalize_pantone('pantone_tsx.json')
+
+    color_configs = pd.concat([
+        tcx_color_configs, tn_color_configs,
+        tpg_color_configs, tsx_color_configs
+    ])
+
+    color_names = pd.concat([
+        tcx_color_names, tn_color_names,
+        tpg_color_names, tsx_color_names
+    ])
+
+    return color_configs, color_names
