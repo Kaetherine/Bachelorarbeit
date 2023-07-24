@@ -219,7 +219,7 @@ def normalize_products():
     products = []
     availability = []
     available_colors = []
-    colors = []
+    color_interpretations = []
     fabrics = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
@@ -242,14 +242,14 @@ def normalize_products():
                     'availability':entry['availability'],
                 })
                 
-                available_colors.append({ # this whole table could be replaced with pantone
+                available_colors.append({
                     'product_id':entry['id'],
                     'available_colors':entry['colorList'], #not atomar and should be as hexcode not as interpretation
                 })
 
-                colors.append({
+                color_interpretations.append({
                     'color_hex_code':'# placeholder',
-                    'color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
+                    'zara_color_interpretation':entry['detail']['colors'][0]['name'], #not atomar
                 })
 
                 fabrics.append({
@@ -262,15 +262,15 @@ def normalize_products():
     products = pd.DataFrame(products)
     availability = pd.DataFrame(availability)
     available_colors = pd.DataFrame(available_colors)
-    colors = pd.DataFrame(colors)
+    color_interpretations = pd.DataFrame(color_interpretations)
     fabrics = pd.DataFrame(fabrics)
-    return products_by_category, products, availability, available_colors, colors, fabrics
+    return products_by_category, products, availability, available_colors, color_interpretations, fabrics
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products, availability, available_colors, colors, fabrics = normalize_products()
-print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', colors, '\n', fabrics)
+products_by_category, products, availability, available_colors, color_interpretations, fabrics = normalize_products()
+print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', color_interpretations, '\n', fabrics)
 
 
 
