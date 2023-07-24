@@ -23,7 +23,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             products_by_category[category_id] = get_zara.get_product_list(category_id)
         except Exception as e:
-            logger.error(e)etl_zara.
+            logger.error(e)
             continue
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
