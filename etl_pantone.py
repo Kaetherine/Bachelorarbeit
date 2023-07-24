@@ -1,19 +1,16 @@
 import pandas as pd
 
 from s3_bucket import get_bucket_file
-from logger import setup_logger
-
-logger = setup_logger()
 
 def normalize_pantone(filename):
     '''Takes a pantone catalog as json file and normalizes it
     by seperating it into two tables 'color_configs' and 'color_names'.
     Returns color_configs and color_names of given pantone color catalog.
     '''
-    colors = get_bucket_file(filename)
+    color_data = get_bucket_file(filename)
     color_configs = []
     color_names = []
-    for color in colors['data']['getBook']['colors']:
+    for color in color_data['data']['getBook']['colors']:
         color_configs.append({
             'hex': f"#{color['hex']}",
             'rgb_r': color['rgb']['r'],

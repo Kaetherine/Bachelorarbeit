@@ -245,7 +245,7 @@ def normalize_products():
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
     availability = pd.DataFrame(availability)
-    color_interpretations = pd.DataFrame(color_interpretations)
+    color_interpretations = pd.DataFrame(color_interpretations) 
     return products_by_category, products, availability, color_interpretations
 
 def augment_color_hex_codes():
