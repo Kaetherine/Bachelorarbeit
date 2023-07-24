@@ -1,13 +1,11 @@
 import pandas as pd
 
-# from postgres_connection import connect_to_db, disconnect_from_db
 from s3_bucket import *
 from get_zara import extract_products
 from logger import setup_logger
 from helper_functions import convert_date, date
 
 logger = setup_logger()
-date = '2023-07-23'
 
 def normalize_related_products():
     '''docstring here'''
