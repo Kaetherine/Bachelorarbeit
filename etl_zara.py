@@ -230,11 +230,11 @@ def normalize_products():
                     'priceUnavailable':entry['priceUnavailable'],
 
                     })
-#brand', 'xmedia', ('section'), (sectionName), 'detail']) 
+    #brand', 'xmedia', ('section'), (sectionName), 'detail']) 
                 print(entry['detail'], '\n')
-    # products_by_category = pd.DataFrame(products_by_category)
-    # products = pd.DataFrame(products)
-    # return products_by_category, products
+    products_by_category = pd.DataFrame(products_by_category)
+    products = pd.DataFrame(products)
+    return products_by_category, products
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
