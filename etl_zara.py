@@ -239,8 +239,7 @@ def normalize_products():
                     'available_colors':entry['colorList'], #not atomar
                     'price':entry['detail']['colors'][0]['price'], #duplicate?
                     'availability':entry['detail']['colors'][0]['availability'],#duplicate?
-                }
-                )
+                })
     #brand', 'xmedia',
                 print(entry['detail']['colors'][0]['xmedia'], '\n')
     products_by_category = pd.DataFrame(products_by_category)
