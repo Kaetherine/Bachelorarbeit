@@ -8,7 +8,8 @@ from helper_functions import date
 logger = setup_logger()
 
 def get_zara_data_and_upload_to_s3_bucket():
-    '''docstring here'''
+    '''Executes the zara API Client functions from the file get_zara.py and
+    saves the json data to the s3 bucket'''
     try:
         categories = get_zara.get_categories()
     except Exception as e:
@@ -53,7 +54,8 @@ def get_zara_data_and_upload_to_s3_bucket():
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
 
 def etl_zara_data_and_upload_to_db():
-    '''docstring here'''
+    '''Executes the zara ETL Script functions from the file etl_zara.py and
+    saves the data to the RDS database'''
     materials, origin = etl_zara.organise_product_details()
     related_products = etl_zara.normalize_related_products()
     target_groups, categories, categories_by_target_group = etl_zara.normalize_categories()

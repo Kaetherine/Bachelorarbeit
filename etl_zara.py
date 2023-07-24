@@ -3,12 +3,12 @@ import pandas as pd
 from s3_bucket import *
 from get_zara import extract_products
 from logger import setup_logger
-from helper_functions import convert_date, date
+from helper_functions import convert_date, flatten_and_convert_to_df, date
 
 logger = setup_logger()
 
 def normalize_related_products():
-    '''docstring here'''
+    '''Creates a normalized DataFrame from a dictionary of related products.'''
     related_products_dict = get_bucket_file(f'{date}-related_products.json')
     data = []
     for product, products in related_products_dict.items():
@@ -21,7 +21,7 @@ def normalize_related_products():
     return related_products
             
 def extract_subcategories(subcategories):
-    '''docstring here'''
+    '''Extracts relevant subcategories from a list of subcategories.'''
     ignore_ids = [
         '194501' , '2118764', 
         '2292949', '2292271', 
@@ -57,7 +57,7 @@ def extract_subcategories(subcategories):
     return categories
 
 def normalize_categories():
-    '''docstring here'''
+    '''Normalize categories data obtained from the "categories.json" file.'''
     categories_dict = get_bucket_file(f'{date}-categories.json')
     categories_dict = categories_dict['categories']
 
@@ -77,7 +77,7 @@ def normalize_categories():
         # normalizing subcategories
         categories_0 = extract_subcategories(entry['subcategories'])
         categories.extend(categories_0)
-        # normalize categories by target_grooups
+        # normalize categories by target_groups
         temp = [
                 {
                 'target_group': entry['id'],
@@ -97,7 +97,7 @@ def normalize_categories():
     return target_groups, categories, categories_by_target_group
 
 def extract_product_details(product_details, product_id):
-    '''This function extracts care, certified materials, materials, and 
+    '''Extracts care, certified materials, materials, and 
     origin details for a given product from the product details dataset.'''
     care, certified_materials, materials, origin = None, None, None, None
     for detail in product_details[product_id]:
@@ -114,7 +114,7 @@ def extract_product_details(product_details, product_id):
     return [product_id, care, certified_materials, materials, origin]
 
 def normalize_materials(materials, product_id):
-    '''docstring here'''
+    '''Normalize the materials data and extract relevant information.'''
     material_list = []
     attribute_name = None
     ignore = ['COMPOSITION', 'Which contains at least:']
@@ -155,7 +155,7 @@ def normalize_materials(materials, product_id):
     return material_list
 
 def normalize_origin(origin, product_id):
-    '''docstring here'''
+    '''Normalize the origin data and extract relevant information.'''
     origin_list = []
     country_of_origin = origin['components'][-1]['text']['value']
     country_of_origin= country_of_origin.split('Made in')[1]
@@ -164,15 +164,10 @@ def normalize_origin(origin, product_id):
                         'country_of_origin': country_of_origin
                         })
     return origin_list
-    
-def flatten_and_convert_to_df(obj):
-    '''docstring here'''
-    obj = [item for sublist in obj for item in sublist]
-    df_obj = pd.DataFrame(obj)
-    return df_obj
 
 def organise_product_details():
-    '''docstring here'''
+    '''Organize product details data by normalizing materials 
+    and origin information.'''
     product_details = get_bucket_file(f'{date}-product_details.json')
     materials = []
     origin = []
@@ -206,7 +201,7 @@ def organise_product_details():
     return materials, origin
 
 def normalize_products():
-    '''docstring here'''
+    '''Normalize product details from the products_by_category JSON file.'''
     products_by_category_dict = get_bucket_file(
         f'{date}-products_by_category.json'
         )

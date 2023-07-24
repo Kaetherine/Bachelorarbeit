@@ -38,7 +38,7 @@ def page_to_json(response):
             pass
 
 def get_page(url, client=client, headers=None, params=None):
-    '''gets and extracts the categories from given url'''
+    '''Gets and extracts the categories from given url'''
     response = get_raw_page(
         url = url,
         client = client,
@@ -49,6 +49,12 @@ def get_page(url, client=client, headers=None, params=None):
     return response
 
 def convert_date(date_string):
-    '''docstring here'''
+    '''Converts the formate of a datetime string. Example 2023-07-23'''
     date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
     return date_time_obj.date()
+
+def flatten_and_convert_to_df(obj):
+    '''Flatten a nested list and convert it into a DataFrame.'''
+    obj = [item for sublist in obj for item in sublist]
+    df_obj = pd.DataFrame(obj)
+    return df_obj

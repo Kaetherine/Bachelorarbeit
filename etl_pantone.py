@@ -6,11 +6,14 @@ from logger import setup_logger
 logger = setup_logger()
 
 def normalize_pantone(filename):
-    '''docstring here'''
-    tcx = get_bucket_file(filename)
+    '''Takes a pantone catalog as json file and normalizes it
+    by seperating it into two tables 'color_configs' and 'color_names'.
+    Returns color_configs and color_names of given pantone color catalog.
+    '''
+    colors = get_bucket_file(filename)
     color_configs = []
     color_names = []
-    for color in tcx['data']['getBook']['colors']:
+    for color in colors['data']['getBook']['colors']:
         color_configs.append({
             'hex': f"#{color['hex']}",
             'rgb_r': color['rgb']['r'],
@@ -32,7 +35,9 @@ def normalize_pantone(filename):
     return color_configs, color_names
 
 def join_colors():
-    '''docstring here'''
+    '''Normalizes pantone color data, merges the color_configs and 
+    color_names of different pantone catalouges. Returns merged
+    color_configs and color_names.'''
     tcx_color_configs, tcx_color_names = normalize_pantone('pantone_tcx.json')
     tn_color_configs, tn_color_names = normalize_pantone('pantone_tn.json')
     tpg_color_configs, tpg_color_names = normalize_pantone('pantone_tpg.json')
