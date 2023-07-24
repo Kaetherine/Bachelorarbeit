@@ -216,17 +216,20 @@ def normalize_products():
     products = []
     availability = []
     color_interpretations = []
+    hex_color_not_found = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             
             for entry in item:
-                if 'colorInfo' in entry:
+                product_id = entry['id']
+                if 'colorInfo' in entry.keys():
                     color_hex_code = entry['colorInfo']['mainColorHexCode']
                 else:
                     color_hex_code = None
+                    hex_color_not_found.append(product_id)
                 products_by_category.append({
                     'category_id': category,
-                    'product_id': entry['id']
+                    'product_id': product_id
                     })
                 
                 products.append({
@@ -244,9 +247,9 @@ def normalize_products():
 
                 color_interpretations.append({
                     'color_hex_code':color_hex_code,
-                    'zara':entry['detail']['colors'][0]['name'], #not atomar
+                    'zara':entry['detail']['colors'][0]['name']
                 })
-
+    print(hex_color_not_found)
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
     availability = pd.DataFrame(availability)
