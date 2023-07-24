@@ -57,7 +57,7 @@ headers ={
 
 #%%
 def extract_category_ids(response):
-    '''extracts the category ids only'''
+    '''Extracts the category ids only'''
     logger.info('Executing extract_category_ids.')
     categories = []
     if response:
@@ -77,7 +77,7 @@ def extract_category_ids(response):
 
 #%%
 def get_categories():
-    '''get the category pages and, extracts the categories from 
+    '''Get the category pages and, extracts the categories from 
     their responses and returns a list of categories'''
     logger.info('Executing get_categories.')
     response = helper.get_page(
@@ -89,7 +89,7 @@ def get_categories():
 
 #%%
 def extract_product_list(response):
-    '''takes the response and saves the key containing 
+    '''Takes the response and saves the key containing 
     the products of that response in "products"'''
     logger.info('Executing extract_product_list.')
     products = []
@@ -103,7 +103,7 @@ def extract_product_list(response):
 
 #%%
 def get_product_list(category_id):
-    '''gets all available products of each category of the to the constructor 
+    '''Gets all available products of each category of the to the constructor 
     passed list, extracts the products and assignes them to their category. 
     The functions output is a dictionary with the category as key and a 
     list of its products as values'''
@@ -120,7 +120,7 @@ def get_product_list(category_id):
 
 #%%
 def extract_products(products_by_category):
-    '''takes the dict "product by categories" and returns a list of 
+    '''Takes the dict "product by categories" and returns a list of 
     products (without assigned categories)'''
     logger.info('Executing get_products.')
     products = []
@@ -134,7 +134,7 @@ def extract_products(products_by_category):
 
 #%%
 def extract_product_ids(products_by_category):
-    '''returns a list with product ids'''
+    '''Returns a list with product ids'''
     logger.info('Executing get_product_ids.')
     products = extract_products(products_by_category)
     product_ids = {
@@ -145,7 +145,7 @@ def extract_product_ids(products_by_category):
 
 #%%
 def get_product_details(product_id):
-    '''gets products details of in the constructor passed product
+    '''Gets products details of in the constructor passed product
     and returns the response'''
     logger.info('Executing get_product_details.')
     logger.info(f'product details for: {product_id}')
@@ -159,7 +159,7 @@ def get_product_details(product_id):
 
 #%%
 def extract_related_product_ids(response):
-    '''extracts related products by id, stores them in a list and retunrs that list'''
+    '''Extracts related products by id, stores them in a list and retunrs that list'''
     recommended_products = []
     if 'recommend' in response:
         for product in response['recommend']:
@@ -168,7 +168,7 @@ def extract_related_product_ids(response):
     
 #%%
 def get_related_products(product_id):
-    '''gets the related products of in constructor passed products and returns'''
+    '''Gets the related products of in constructor passed products and returns'''
     logger.info('Executing get_related_products.')
     logger.info(f'related products for: {product_id}')
     product_details_url = f'{base_url}/product/{product_id}/related'
