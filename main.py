@@ -59,7 +59,7 @@ def etl_zara_data_and_upload_to_db():
     materials, origin = etl_zara.organise_product_details()
     related_products = etl_zara.normalize_related_products()
     target_groups, categories, categories_by_target_group = etl_zara.normalize_categories()
-    products_by_category, products, availability, color_interpretations = etl_zara.normalize_products()
+    products_by_category, products, availability, color_interpretations = etl_zara.transform_product_data()
 
 if __name__ == "__main__":
     get_zara_data_and_upload_to_s3_bucket()

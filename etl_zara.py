@@ -200,8 +200,33 @@ def organise_product_details():
 
     return materials, origin
 
-def normalize_products():
-    '''Normalize product details from the products_by_category JSON file.'''
+def create_product_dict(entry):
+    product_id = entry['id']
+    color_interpretation = entry['detail']['colors'][0]['name']
+    color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
+    
+    return {
+        'product_id': product_id,
+        'name':entry['name'],
+        'price':float(entry['price']/100),
+        'publish_date':convert_date(entry['startDate']),
+        'color_hex_code':color_hex_code,
+        'color_interpretation':color_interpretation
+    }
+
+def create_availability_dict(entry):
+    return {
+        'product_id': entry['id'],
+        'availability':entry['availability']
+    }
+
+def create_color_interpretation_dict(entry, color_hex_code, color_interpretation):
+    return {
+        'color_hex_code':color_hex_code,
+        'zara':color_interpretation
+    }
+
+def transform_product_data():
     products_by_category_dict = get_bucket_file(
         f'{date}-products_by_category.json'
         )
@@ -209,47 +234,32 @@ def normalize_products():
     products = []
     availability = []
     color_interpretations = []
+    
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
-            
             for entry in item:
-                product_id = entry['id']
-                color_interpretation = entry['detail']['colors'][0]['name']
-                if 'colorInfo' in entry.keys():
-                    color_hex_code = entry['colorInfo']['mainColorHexCode']
-                else:
-                    color_hex_code = None
+                product_dict = create_product_dict(entry)
+                availability_dict = create_availability_dict(entry)
+                color_interpretation_dict = create_color_interpretation_dict(
+                    entry, product_dict['color_hex_code'],
+                    product_dict['color_interpretation']
+                    )
+                
                 products_by_category.append({
                     'category_id': category,
-                    'product_id': product_id
-                    })
-                
-                products.append({
-                    'product_id': entry['id'],
-                    'name':entry['name'],
-                    'price':float(entry['price']/100),
-                    'publish_date':convert_date(entry['startDate']),
-                    'color_hex_code':color_hex_code,
-                    'color_interpretation':color_interpretation
-                    })
-                
-                availability.append({
-                    'product_id': entry['id'],
-                    'availability':entry['availability']
+                    'product_id': product_dict['product_id']
                 })
-
-                color_interpretations.append({
-                    'color_hex_code':color_hex_code,
-                    'zara':color_interpretation
-                })
+                products.append(product_dict)
+                availability.append(availability_dict)
+                color_interpretations.append(color_interpretation_dict)
+    
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
     availability = pd.DataFrame(availability)
-    color_interpretations = pd.DataFrame(color_interpretations) 
+    color_interpretations = pd.DataFrame(color_interpretations)
+    
     return products_by_category, products, availability, color_interpretations
+
 
 def augment_color_hex_codes():
     pass
-
-
-
