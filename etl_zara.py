@@ -211,6 +211,7 @@ def normalize_products():
     products_by_category_dict = get_bucket_file(f'{date}-products_by_category.json')
     products_by_category = []
     products = []
+    colors = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
@@ -218,6 +219,7 @@ def normalize_products():
                     'category_id': category,
                     'product_id': entry['id']
                     })
+                
                 products.append({
                     'product_id': entry['id'],
                     'price':entry['price'],
@@ -228,19 +230,29 @@ def normalize_products():
                     'startDate':entry['startDate'],
                     'colorList':entry['colorList'],
                     'priceUnavailable':entry['priceUnavailable'],
-
                     })
-    #brand', 'xmedia', ('section'), (sectionName), 'detail']) 
-                print(entry['detail'], '\n')
+                
+                colors.append({
+                    'id':entry['detail']['colors'][0]['id'],
+                    'product_id':entry['detail']['colors'][0]['productId'],
+                    'color_interpretation':entry['detail']['colors'][0]['name'],
+                    'available_colors':entry['colorList'], #not atomar
+                    'price':entry['detail']['colors'][0]['price'], #duplicate?
+                    'availability':entry['detail']['colors'][0]['availability'],#duplicate?
+                }
+                )
+    #brand', 'xmedia',
+                print(entry['detail']['colors'][0]['xmedia'], '\n')
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
-    return products_by_category, products
+    colors = pd.DataFrame(colors)
+    return products_by_category, products, colors
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products = normalize_products()
-print(products)
+products_by_category, products, colors = normalize_products()
+print(colors)
 
 
 
