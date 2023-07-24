@@ -206,23 +206,40 @@ def organise_product_details():
 
     return materials, origin
 
-# ['id', 'reference', 'type', 'kind', 'brand', 'xmedia', 'name', 'description', 'price', 'section', 'sectionName', 'familyName', 'subfamilyName', 'detail', 'seo', 'availability', 'tagTypes', 'extraInfo', 'startDate', 'gridPosition', 'zoomedGridPosition', 'preservedBlockPosition', 'athleticzPosition', 'productTag', 'colorList', 'isDivider', 'hasXmediaDouble', 'showAvailability', 'priceUnavailable']) 
-
 def normalize_products():
-    products_by_category = get_bucket_file(f'{date}-products_by_category.json')
-    for category in products_by_category:
-        if category == '2298051':
-            for item in products_by_category[category]:
-                for entry in item:
-                    print(entry['id'])
-                    # print(itementry), '\n')
-            # print(len(products_by_category[category]))
-    return None
+    '''docstring here'''
+    products_by_category_dict = get_bucket_file(f'{date}-products_by_category.json')
+    products_by_category = []
+    products = []
+    for category in products_by_category_dict:
+        for item in products_by_category_dict[category]:
+            for entry in item:
+                products_by_category.append({
+                    'category_id': category,
+                    'product_id': entry['id']
+                    })
+                products.append({
+                    'product_id': entry['id'],
+                    'price':entry['price'],
+                    'name':entry['name'],
+                    'familyName':entry['familyName'],
+                    'subfamilyName':entry['subfamilyName'],
+                    'availability':entry['availability'],
+                    'startDate':entry['startDate'],
+                    'colorList':entry['colorList'],
+                    'priceUnavailable':entry['priceUnavailable'],
+
+                    })
+#brand', 'xmedia', ('section'), (sectionName), 'detail']) 
+                print(entry['detail'], '\n')
+    # products_by_category = pd.DataFrame(products_by_category)
+    # products = pd.DataFrame(products)
+    # return products_by_category, products
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products = normalize_products()
+products_by_category, products = normalize_products()
 print(products)
 
 
