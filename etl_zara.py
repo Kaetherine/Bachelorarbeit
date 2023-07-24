@@ -1,7 +1,6 @@
 import pandas as pd
 
 from s3_bucket import *
-from get_zara import extract_products
 from logger import setup_logger
 from helper_functions import convert_date, flatten_and_convert_to_df, date
 
