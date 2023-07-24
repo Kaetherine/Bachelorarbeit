@@ -215,15 +215,15 @@ def normalize_products():
     products_by_category = []
     products = []
     availability = []
-    # num_available_colors = []
-    # color_interpretations = []
-    fabrics = []
+    color_interpretations = []
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             
             for entry in item:
                 if 'colorInfo' in entry:
-                    color_hex_code = entry['colorInfo']
+                    color_hex_code = entry['colorInfo']['mainColorHexCode']
+                else:
+                    color_hex_code = None
                 products_by_category.append({
                     'category_id': category,
                     'product_id': entry['id']
@@ -241,36 +241,23 @@ def normalize_products():
                     'product_id': entry['id'],
                     'availability':entry['availability'],
                 })
-                
-                # num_available_colors.append({
-                #     'product_id':entry['id'],
-                #     'num_available_colors':entry['numAdditionalColors'],
-                # })
 
-                # color_interpretations.append({
-                #     'color_hex_code':color_hex_code,
-                #     'zara':entry['detail']['colors'][0]['name'], #not atomar
-                # })
-
-                # fabrics.append({
-                #     'product_id': entry['id'],
-                #     'familyName':entry['familyName'],
-                #     'subfamilyName':entry['subfamilyName'],
-                # })
+                color_interpretations.append({
+                    'color_hex_code':color_hex_code,
+                    'zara':entry['detail']['colors'][0]['name'], #not atomar
+                })
 
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
     availability = pd.DataFrame(availability)
-    # num_available_colors = pd.DataFrame(num_available_colors)
-    # color_interpretations = pd.DataFrame(color_interpretations)
-    # fabrics = pd.DataFrame(fabrics)
-    return products_by_category, products, availability
+    color_interpretations = pd.DataFrame(color_interpretations)
+    return products_by_category, products, availability, color_interpretations
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products, availability = normalize_products()
-# print(products_by_category, '\n', products, '\n', availability, '\n', available_colors, '\n', color_interpretations, '\n', fabrics)
+products_by_category, products, availability, color_interpretations = normalize_products()
+print(products_by_category, '\n', products, '\n', availability, '\n', color_interpretations)
 
 
 
