@@ -245,16 +245,19 @@ def transform_product_data():
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
+                
                 try:
                     product_dict = create_product_dict(entry)
                     products.append(product_dict)
                 except Exception as e:
                     logger.warning(e)
+
                 try:
                     availability_dict = create_availability_dict(entry)
                     availability.append(availability_dict)
                 except Exception as e:
                     logger.warning(e)
+
                 try:
                     color_interpretation_dict = create_color_interpretation_dict(
                         product_dict['color_hex_code'],
