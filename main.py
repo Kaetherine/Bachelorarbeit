@@ -1,11 +1,9 @@
-from datetime import datetime
-
 import get_zara as zara
 from s3_bucket import upload_json_to_bucket
 from logger import setup_logger
+from helper_functions import date
 
 logger = setup_logger()
-date = datetime.now().strftime('%Y-%m-%d')
 
 def get_zara_data_and_upload():
     '''docstring here'''

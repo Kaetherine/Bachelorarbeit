@@ -1,9 +1,11 @@
 import json
 from ratelimiter import RateLimiter
+from datetime import datetime
 
 from credentials import client
 from logger import setup_logger
 
+date = datetime.now().strftime('%Y-%m-%d')
 logger = setup_logger()
 rate_limiter = RateLimiter(max_calls=5, period=1)
 
@@ -44,3 +46,8 @@ def get_page(url, client=client, headers=None, params=None):
         )
     response = page_to_json(response)
     return response
+
+def convert_date(date_string):
+    '''docstring here'''
+    date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return date_time_obj.date()
