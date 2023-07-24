@@ -223,7 +223,7 @@ def create_availability_dict(entry):
         'availability':entry['availability']
     }
 
-def create_color_interpretation_dict(entry, color_hex_code, color_interpretation):
+def create_color_interpretation_dict(color_hex_code, color_interpretation):
     '''Generates and returns a dictionary containing color interpretation for a 
     given product entry.'''
     return {
@@ -245,20 +245,29 @@ def transform_product_data():
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
-                product_dict = create_product_dict(entry)
-                availability_dict = create_availability_dict(entry)
-                color_interpretation_dict = create_color_interpretation_dict(
-                    entry, product_dict['color_hex_code'],
-                    product_dict['color_interpretation']
-                    )
+                try:
+                    product_dict = create_product_dict(entry)
+                    products.append(product_dict)
+                except Exception as e:
+                    logger.warning(e)
+                try:
+                    availability_dict = create_availability_dict(entry)
+                    availability.append(availability_dict)
+                except Exception as e:
+                    logger.warning(e)
+                try:
+                    color_interpretation_dict = create_color_interpretation_dict(
+                        product_dict['color_hex_code'],
+                        product_dict['color_interpretation']
+                        )
+                    color_interpretations.append(color_interpretation_dict)
+                except Exception as e:
+                    logger.warning(e)
                 
                 products_by_category.append({
                     'category_id': category,
                     'product_id': product_dict['product_id']
                 })
-                products.append(product_dict)
-                availability.append(availability_dict)
-                color_interpretations.append(color_interpretation_dict)
     
     products_by_category = pd.DataFrame(products_by_category)
     products = pd.DataFrame(products)
@@ -270,3 +279,7 @@ def transform_product_data():
 
 def augment_color_hex_codes():
     pass
+
+
+products_by_category, products, availability, color_interpretations = transform_product_data()
+print(products_by_category,'\n', products,'\n', availability,'\n', color_interpretations)
