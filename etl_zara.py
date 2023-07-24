@@ -29,9 +29,7 @@ def extract_subcategories(subcategories):
         '2307636', '2307635',
         '2307136',
         ]
-    ignore_names = [
-        'DISCOVER', 'JOIN LIFE', 'CAREERS'
-    ]
+    ignore_names = ['DISCOVER', 'JOIN LIFE', 'CAREERS']
     categories = []
     for subcategory in subcategories:
         subcategory_name = subcategory['name']
@@ -64,30 +62,33 @@ def normalize_categories():
     # normalizing target_groups
     categories = []
     target_groups = []
+    desired_target_groups = ['WOMAN', 'MAN', 'KIDS']
     categories_by_target_group = []
+
     for entry in categories_dict:
         target_group = entry['name']
         target_group_id = entry['id']
-        if (target_group == 'WOMAN' or 
-            target_group == 'MAN' or target_group == 'KIDS'):
+        if target_group in desired_target_groups:
             target_groups.append({
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
                 })
+            
         # normalizing subcategories
-        categories_0 = extract_subcategories(entry['subcategories'])
-        categories.extend(categories_0)
+        try:
+            categories_0 = extract_subcategories(entry['subcategories'])
+            categories.extend(categories_0)
+        except Exception as e:
+            logger.warning(e)
+
         # normalize categories by target_groups
-        temp = [
-                {
+        temp = [{
                 'target_group': entry['id'],
                 'subcategory_id': value['subcategory_id']
                 } for value in categories_0
             ]
         categories_by_target_group.append(temp)
 
-        
-    
     categories_by_target_group = flatten_and_convert_to_df(
         categories_by_target_group
         )
@@ -113,6 +114,19 @@ def extract_product_details(product_details, product_id):
 
     return [product_id, care, certified_materials, materials, origin]
 
+def create_material_dict(product_id, attribute_name, attribute_value):
+    '''Extracts the percentage and material type from a given string and 
+    returns a dictionary with the information.'''
+    m = attribute_value.split('%')
+    percentage = f'{m[0]}%'
+    material = m[1]
+    return {
+        'product_id': product_id,
+        'material_part': attribute_name,
+        'percentage': percentage,
+        'material': material
+    }
+
 def normalize_materials(materials, product_id):
     '''Normalize the materials data and extract relevant information.'''
     material_list = []
@@ -131,27 +145,18 @@ def normalize_materials(materials, product_id):
                 attribute_value = item['text']['value']
                 if attribute_value not in ignore:
                     if '<br>' in attribute_value:
-                        attribute_value = attribute_value.split('<br>')
-                        for item in attribute_value:
-                            m = item.split('%')
-                            percentage = f'{m[0]}%'
-                            material = m[1]
-                            material_list.append({
-                                'product_id': product_id,
-                                'material_part': attribute_name,
-                                'percentage': percentage,
-                                'material': material
-                                })
+                        attribute_values = attribute_value.split('<br>')
+                        for value in attribute_values:
+                            material_dict = create_material_dict(
+                                product_id, attribute_name, value
+                                )
+                            material_list.append(material_dict)
                     else:
-                        attribute_value = attribute_value.split('%')
-                        percentage = f'{attribute_value[0]}%'
-                        material = attribute_value[1]
-                        material_list.append({
-                            'product_id': product_id,
-                            'material_part': attribute_name,
-                            'percentage': percentage,
-                            'material': material
-                            })
+                        material_dict = create_material_dict(
+                            product_id, attribute_name, attribute_value
+                            )
+                        material_list.append(material_dict)
+
     return material_list
 
 def normalize_origin(origin, product_id):
@@ -160,9 +165,9 @@ def normalize_origin(origin, product_id):
     country_of_origin = origin['components'][-1]['text']['value']
     country_of_origin= country_of_origin.split('Made in')[1]
     origin_list.append({
-                        'product_id': product_id,
-                        'country_of_origin': country_of_origin
-                        })
+            'product_id': product_id,
+            'country_of_origin': country_of_origin
+            })
     return origin_list
 
 def organise_product_details():
@@ -245,7 +250,7 @@ def transform_product_data():
     for category in products_by_category_dict:
         for item in products_by_category_dict[category]:
             for entry in item:
-                
+
                 try:
                     product_dict = create_product_dict(entry)
                     products.append(product_dict)
@@ -284,5 +289,5 @@ def augment_color_hex_codes():
     pass
 
 
-products_by_category, products, availability, color_interpretations = transform_product_data()
-print(products_by_category,'\n', products,'\n', availability,'\n', color_interpretations)
+x, y = organise_product_details()
+print(x, '\n', y)

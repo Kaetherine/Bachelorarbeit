@@ -1,6 +1,7 @@
 import json
 from ratelimiter import RateLimiter
 from datetime import datetime
+import pandas as pd
 
 from credentials import client
 from logger import setup_logger
