@@ -7,14 +7,16 @@ from helper_functions import convert_date, flatten_and_convert_to_df, date
 logger = setup_logger()
 
 def normalize_related_products():
-    '''Creates a normalized DataFrame from a dictionary of related products.'''
+    '''Creates a normalized DataFrame from a dictionary of related 
+    products.'''
     related_products_dict = get_bucket_file(f'{date}-related_products.json')
     data = []
     for product, products in related_products_dict.items():
         for related_product in products:
             data.append({
-                "product_id": product,
-                "related_product_id": related_product
+                'source': 'zara.com/de',
+                'product_id': product,
+                'related_product_id': related_product
             })
     related_products = pd.DataFrame(data)
     return related_products
@@ -47,8 +49,9 @@ def extract_subcategories(subcategories):
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
         categories.append({
-            'subcategory_id': subcategory_id,
-            'category': subcategory_name,
+            'source': 'zara.com/de',
+            'category_id': subcategory_id,
+            'category_name': subcategory_name,
             'age_range': age_range
             })
     return categories
@@ -69,6 +72,7 @@ def normalize_categories():
         target_group_id = entry['id']
         if target_group in desired_target_groups:
             target_groups.append({
+                'source': 'zara.com/de',
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
                 })
@@ -82,8 +86,9 @@ def normalize_categories():
 
         # normalize categories by target_groups
         temp = [{
+                'source': 'zara.com/de',
                 'target_group': entry['id'],
-                'subcategory_id': value['subcategory_id']
+                'category_id': value['category_id']
                 } for value in categories_0
             ]
         categories_by_target_group.append(temp)
@@ -120,6 +125,7 @@ def create_material_dict(product_id, attribute_name, attribute_value):
     percentage = f'{m[0]}%'
     material = m[1]
     return {
+        'source': 'zara.com/de',
         'product_id': product_id,
         'material_part': attribute_name,
         'percentage': percentage,
@@ -164,6 +170,7 @@ def normalize_origin(origin, product_id):
     country_of_origin = origin['components'][-1]['text']['value']
     country_of_origin= country_of_origin.split('Made in')[1]
     origin_list.append({
+            'source': 'zara.com/de',
             'product_id': product_id,
             'country_of_origin': country_of_origin
             })
@@ -211,6 +218,7 @@ def create_product_dict(entry):
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
     
     return {
+        'source': 'zara.com/de',
         'product_id': product_id,
         'name':entry['name'],
         'price':float(entry['price']/100),
@@ -223,6 +231,7 @@ def create_availability_dict(entry):
     '''Generates and returns a dictionary containing product availability from a 
     provided entry.'''
     return {
+        'source': 'zara.com/de',
         'product_id': entry['id'],
         'availability':entry['availability']
     }
@@ -232,7 +241,7 @@ def create_color_interpretation_dict(color_hex_code, color_interpretation):
     given product entry.'''
     return {
         'color_hex_code':color_hex_code,
-        'zara':color_interpretation
+        'zara.com/de':color_interpretation
     }
 
 def transform_product_data():
@@ -272,6 +281,7 @@ def transform_product_data():
                     logger.warning(e)
                 
                 products_by_category.append({
+                    'source': 'zara.com/de',
                     'category_id': category,
                     'product_id': product_dict['product_id']
                 })
@@ -290,3 +300,12 @@ def augment_color_hex_codes():
 
 x, y = organise_product_details()
 print(x, '\n', y)
+
+rel_prod = normalize_related_products()
+print(rel_prod, '\n')
+
+target_groups, categories, categories_by_target_group = normalize_categories()
+print(target_groups,'\n', categories,'\n', categories_by_target_group)
+
+products_by_category, products, availability, color_interpretations = transform_product_data()
+print(products_by_category,'\n', products,'\n', availability,'\n', color_interpretations)
