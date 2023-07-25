@@ -49,6 +49,7 @@ def extract_subcategories(subcategories):
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
         categories.append({
+            'retreived_on': date,
             'source': 'zara.com/de',
             'category_id': subcategory_id,
             'category_name': subcategory_name,
@@ -72,6 +73,7 @@ def normalize_categories():
         target_group_id = entry['id']
         if target_group in desired_target_groups:
             target_groups.append({
+                'retreived_on': date,
                 'source': 'zara.com/de',
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
@@ -125,6 +127,7 @@ def create_material_dict(product_id, attribute_name, attribute_value):
     percentage = f'{m[0]}%'
     material = m[1]
     return {
+        'retreived_on': date,
         'source': 'zara.com/de',
         'product_id': product_id,
         'material_part': attribute_name,
@@ -170,6 +173,7 @@ def normalize_origin(origin, product_id):
     country_of_origin = origin['components'][-1]['text']['value']
     country_of_origin= country_of_origin.split('Made in')[1]
     origin_list.append({
+            'retreived_on': date,
             'source': 'zara.com/de',
             'product_id': product_id,
             'country_of_origin': country_of_origin
@@ -218,6 +222,7 @@ def create_product_dict(entry):
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
     
     return {
+        'retreived_on': date,
         'source': 'zara.com/de',
         'product_id': product_id,
         'name':entry['name'],
@@ -231,6 +236,7 @@ def create_availability_dict(entry):
     '''Generates and returns a dictionary containing product availability from a 
     provided entry.'''
     return {
+        'retreived_on': date,
         'source': 'zara.com/de',
         'product_id': entry['id'],
         'availability':entry['availability']
@@ -296,16 +302,3 @@ def transform_product_data():
 
 def augment_color_hex_codes():
     pass
-
-
-x, y = organise_product_details()
-print(x, '\n', y)
-
-rel_prod = normalize_related_products()
-print(rel_prod, '\n')
-
-target_groups, categories, categories_by_target_group = normalize_categories()
-print(target_groups,'\n', categories,'\n', categories_by_target_group)
-
-products_by_category, products, availability, color_interpretations = transform_product_data()
-print(products_by_category,'\n', products,'\n', availability,'\n', color_interpretations)
