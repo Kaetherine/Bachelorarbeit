@@ -3,7 +3,7 @@ import etl_zara
 from s3_bucket import upload_json_to_bucket
 from logger import setup_logger
 from helper_functions import date
-# from postgres_connection import connect_to_db, disconnect_from_db
+from postgres_db import connect_to_db, disconnect_from_db
 
 logger = setup_logger()
 
