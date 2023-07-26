@@ -7,7 +7,6 @@ import csv
 import os
 import subprocess
 
-# Erstellen Sie zuerst eine CSV-Datei aus Ihren Daten
 fake_data = [
     ('Germany', 897.4),
     ('France', 458.7),
