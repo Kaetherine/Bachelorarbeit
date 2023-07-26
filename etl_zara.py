@@ -298,7 +298,3 @@ def transform_product_data():
     color_interpretations = pd.DataFrame(color_interpretations)
     
     return products_by_category, products, availability, color_interpretations
-
-
-def augment_color_hex_codes():
-    pass
