@@ -1,5 +1,3 @@
-import pandas as pd
-
 from s3_bucket import *
 from logger import setup_logger
 from helper_functions import convert_date, flatten_and_convert_to_df, date
@@ -13,13 +11,9 @@ def normalize_related_products():
     data = []
     for product, products in related_products_dict.items():
         for related_product in products:
-            data.append({
-                'src': 'zara.com/de',
-                'product_id': product,
-                'related_product_id': related_product
-            })
-    related_products = pd.DataFrame(data)
-    return related_products
+            data.append(('zara.com/de', product, related_product))
+ 
+    return related_product
             
 def extract_subcategories(subcategories):
     '''Extracts relevant subcategories from a list of subcategories.'''
@@ -48,12 +42,10 @@ def extract_subcategories(subcategories):
                 age_range = transform_cat[0]
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
-        categories.append({
-            'src': 'zara.com/de',
-            'category_id': subcategory_id,
-            'category_name': subcategory_name,
-            'age_range': age_range
-            })
+        categories.append((
+            'zara.com/de', subcategory_id, subcategory_name, age_range
+            ))
+        
     return categories
 
 def normalize_categories():
@@ -71,11 +63,9 @@ def normalize_categories():
         target_group = entry['name']
         target_group_id = entry['id']
         if target_group in desired_target_groups:
-            target_groups.append({
-                'src': 'zara.com/de',
-                'target_group_id': str(target_group_id),
-                'target_group': target_group
-                })
+            target_groups.append((
+                'zara.com/de', str(target_group_id), target_group
+            ))
             
         # normalizing subcategories
         try:
@@ -85,20 +75,10 @@ def normalize_categories():
             logger.warning(e)
 
         # normalize categories by target_groups
-        temp = [{
-                'src': 'zara.com/de',
-                'target_group': entry['id'],
-                'category_id': value['category_id']
-                } for value in categories_0
-            ]
+        temp = (
+         ('zara.com/de', entry['id'], value['category_id']) for value in categories_0)
         categories_by_target_group.append(temp)
-
-    categories_by_target_group = flatten_and_convert_to_df(
-        categories_by_target_group
-        )
-    target_groups = pd.DataFrame(target_groups)
-    categories = pd.DataFrame(categories)
-
+    
     return target_groups, categories, categories_by_target_group
 
 def extract_product_details(product_details, product_id):
@@ -118,20 +98,14 @@ def extract_product_details(product_details, product_id):
 
     return [product_id, care, certified_materials, materials, origin]
 
-def create_material_dict(product_id, attribute_name, attribute_value):
+def create_material_tup(product_id, attribute_name, attribute_value):
     '''Extracts the percage and material type from a given string and 
     returns a dictionary with the information.'''
     m = attribute_value.split('%')
     percage = f'{m[0]}%'
     material = m[1]
-    return {
-        'retreived_on': date,
-        'src': 'zara.com/de',
-        'product_id': product_id,
-        'material_part': attribute_name,
-        'perc': percage,
-        'material': material
-    }
+
+    return (date,'zara.com/de', product_id, attribute_name, percage, material)
 
 def normalize_materials(materials, product_id):
     '''Normalize the materials data and extract relevant information.'''
@@ -153,15 +127,15 @@ def normalize_materials(materials, product_id):
                     if '<br>' in attribute_value:
                         attribute_values = attribute_value.split('<br>')
                         for value in attribute_values:
-                            material_dict = create_material_dict(
+                            material_tup = create_material_tup(
                                 product_id, attribute_name, value
                                 )
-                            material_list.append(material_dict)
+                            material_list.append(material_tup)
                     else:
-                        material_dict = create_material_dict(
+                        material_tup = create_material_tup(
                             product_id, attribute_name, attribute_value
                             )
-                        material_list.append(material_dict)
+                        material_list.append(material_tup)
 
     return material_list
 
@@ -170,12 +144,7 @@ def normalize_origin(origin, product_id):
     origin_list = []
     country_of_origin = origin['components'][-1]['text']['value']
     country_of_origin= country_of_origin.split('Made in')[1]
-    origin_list.append({
-            'retreived_on': date,
-            'src': 'zara.com/de',
-            'product_id': product_id,
-            'country_of_origin': country_of_origin
-            })
+    origin_list.append((date, 'zara.com/de', product_id, country_of_origin))
     return origin_list
 
 def organise_product_details():
@@ -195,7 +164,7 @@ def organise_product_details():
                 extracted_details[3],
                 product_id
                 )
-            materials.append(normalized_materials)
+            materials.extend(normalized_materials)
         except Exception as e:
             logger.error(e)
 
@@ -204,12 +173,9 @@ def organise_product_details():
                 extracted_details[4],
                 product_id
                 )
-            origin.append(normalized_origin)
+            origin.extend(normalized_origin)
         except Exception as e:
             logger.error(e)
-
-    materials = flatten_and_convert_to_df(materials)
-    origin = flatten_and_convert_to_df(origin)
 
     return materials, origin
 
@@ -218,35 +184,22 @@ def create_product_dict(entry):
     product_id = entry['id']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
     
-    return {
-        'retreived_on': date,
-        'src': 'zara.com/de',
-        'product_id': product_id,
-        'product_name':entry['name'],
-        'price':float(entry['price']/100),
-        'currency':'EUR',
-        'publish_date':convert_date(entry['startDate']),
-        'color_hex_code':color_hex_code,
-    }
+    return (
+        date, 'zara.com/de',  product_id, entry['name'], 
+        float(entry['price']/100), 'EUR',
+        convert_date(entry['startDate']), color_hex_code,
+    )
 
 def create_availability_dict(entry):
     '''Generates and returns a dictionary containing product availability from a 
     provided entry.'''
-    return {
-        'retreived_on': date,
-        'src': 'zara.com/de',
-        'product_id': entry['id'],
-        'availability':entry['availability']
-    }
+    return (date, 'zara.com/de', entry['id'], entry['availability'])
 
 def create_color_interpretation_dict(color_hex_code, color_interpretation):
     '''Generates and returns a dictionary containing color interpretation for a 
     given product entry.'''
 
-    return {
-        'color_hex_code':color_hex_code,
-        'interpret_zara.com/de':color_interpretation,  
-    }
+    return (color_hex_code, color_interpretation)
 
 def transform_product_data():
     '''Extracts product data from a JSON file, transforms it, and returns it 
@@ -283,17 +236,10 @@ def transform_product_data():
                     color_interpretations.append(color_interpretation_dict)
                 except Exception as e:
                     logger.warning(e)
-                
-                products_by_category.append({
-                    'src': 'zara.com/de',
-                    'category_id': category,
-                    'product_id': product_dict['product_id']
-                })
-    
-    products_by_category = pd.DataFrame(products_by_category)
-    products = pd.DataFrame(products)
-    availability = pd.DataFrame(availability)
-    color_interpretations = pd.DataFrame(color_interpretations)
+
+                products_by_category.append((
+                    'zara.com/de', category, product_dict[2])
+                    )
     
     return products_by_category, products, availability, color_interpretations
 
