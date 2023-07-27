@@ -75,10 +75,10 @@ CREATE TABLE related_products (
 
 CREATE TABLE target_groups_by_categories (
     src TEXT,
-    target_group TEXT,
+    target_group_id TEXT,
     category_id TEXT,
-    PRIMARY KEY (src, target_group , category_id),
-    FOREIGN KEY (src, target_group) REFERENCES target_groups(src, target_group_id)
+    PRIMARY KEY (src, target_group_id , category_id),
+    FOREIGN KEY (src, target_group_id) REFERENCES target_groups(src, target_group_id)
 );
 
 CREATE TABLE products_by_categories (

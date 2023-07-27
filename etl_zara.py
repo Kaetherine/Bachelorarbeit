@@ -73,8 +73,9 @@ def normalize_categories():
         except Exception as e:
             logger.warning(e)
 
-        temp = ('zara.com/de', entry['id'], target_group)
-        target_groups_by_categories.append(temp)
+        for tup in categories_0:
+            category_id = tup[1]
+            target_groups_by_categories.append('zara.com/de', target_group_id, category_id)
     
     return target_groups, categories, target_groups_by_categories
 
