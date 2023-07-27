@@ -56,7 +56,7 @@ def normalize_categories():
     categories = []
     target_groups = []
     desired_target_groups = ['WOMAN', 'MAN', 'KIDS']
-    categories_by_target_group = []
+    target_groups_by_categories = []
 
     for entry in categories_tup:
         target_group = entry['name']
@@ -73,13 +73,10 @@ def normalize_categories():
         except Exception as e:
             logger.warning(e)
 
-        # normalize categories by target_groups
-        # print(entry, value)
-        temp = (
-         ('zara.com/de', entry['id'], value) for value in categories_0)
-        categories_by_target_group.append(temp)
+        temp = ('zara.com/de', entry['id'], target_group)
+        target_groups_by_categories.append(temp)
     
-    return target_groups, categories, categories_by_target_group
+    return target_groups, categories, target_groups_by_categories
 
 def extract_product_details(product_details, product_id):
     '''Extracts care, certified materials, materials, and 
@@ -186,7 +183,8 @@ def create_product_tup(entry):
     '''Generates and returns a product tuple from a provided entry.'''
     product_id = entry['id']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
-    
+    if not color_hex_code:
+        color_hex_code = 'Not specified'
     return (
         date, 'zara.com/de',  product_id, entry['name'], 
         float(entry['price']/100), 'EUR',
@@ -249,8 +247,8 @@ def transform_product_data():
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
-# target_groups, categories, categories_by_target_group = normalize_categories()
+# target_groups, categories, target_groups_by_categories = normalize_categories()
 # products_by_category, products, availability, color_interpretations = transform_product_data()
 
-# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_group,
+# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',target_groups_by_categories,
 # products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)

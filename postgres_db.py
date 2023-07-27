@@ -2,14 +2,11 @@ from credentials import master_username, master_password, endpoint, dbname
 from helper_functions import create_csv_file
 import os
 import subprocess
-import time
 
 def copy_csv_to_db(data, csv_file_name, pk_columns):
     '''docstring here'''
     table_name = csv_file_name.split('/')[-1].split('.csv')[0]
     csv_file_name = create_csv_file(data, csv_file_name)
-    
-    time.sleep(1)
 
     commands = [
         f"DROP TABLE IF EXISTS tmp_{table_name}",
