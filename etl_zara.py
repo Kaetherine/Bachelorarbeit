@@ -218,7 +218,6 @@ def organise_product_details():
 def create_product_dict(entry):
     '''Generates and returns a product dictionary from a provided entry.'''
     product_id = entry['id']
-    color_interpretation = entry['detail']['colors'][0]['name']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
     
     return {
@@ -230,7 +229,6 @@ def create_product_dict(entry):
         'currency':'EUR',
         'publish_date':convert_date(entry['startDate']),
         'color_hex_code':color_hex_code,
-        'color_interpretation':color_interpretation
     }
 
 def create_availability_dict(entry):
@@ -246,9 +244,10 @@ def create_availability_dict(entry):
 def create_color_interpretation_dict(color_hex_code, color_interpretation):
     '''Generates and returns a dictionary containing color interpretation for a 
     given product entry.'''
+
     return {
         'color_hex_code':color_hex_code,
-        'zara.com/de':color_interpretation
+        'interpret_zara.com/de':color_interpretation,  
     }
 
 def transform_product_data():

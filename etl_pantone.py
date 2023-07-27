@@ -19,11 +19,13 @@ def normalize_pantone(filename):
             'lab_l': color['lab']['l'],
             'lab_a': color['lab']['a'],
             'lab_b': color['lab']['b'],
-            'cmyk': color['cmyk']
+            'cmyk': color['cmyk'],
+            'code': color['code'],
+
             })
         color_names.append({
             'code': color['code'],
-            'name': color['name']
+            'color_name': color['name']
             })
         
     color_configs = pd.DataFrame(color_configs)
@@ -31,7 +33,7 @@ def normalize_pantone(filename):
 
     return color_configs, color_names
 
-def join_colors():
+def organize_colors():
     '''Normalizes pantone color data, merges the color_configs and 
     color_names of different pantone catalouges. Returns merged
     color_configs and color_names.'''
@@ -51,3 +53,7 @@ def join_colors():
     ])
 
     return color_configs, color_names
+
+color_configs, color_names = organize_colors()
+
+print(color_configs,'\n', '\n', color_names)

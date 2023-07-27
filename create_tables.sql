@@ -1,3 +1,23 @@
+CREATE TABLE color_names (
+    color_code TEXT,
+    color_name TEXT,
+    PRIMARY KEY (color_code)
+);
+
+CREATE TABLE hex_colors (
+    hex TEXT,
+    rgb_r INTEGER,
+    rgb_g INTEGER,
+    rgb_b INTEGER,
+    lab_l REAL,
+    lab_a REAL,
+    lab_b REAL,
+    cmyk TEXT,
+    color_code TEXT,
+    PRIMARY KEY (hex),
+    FOREIGN KEY (color_code) REFERENCES color_names (color_code)
+);
+
 CREATE TABLE products (
     retrieved_on DATE,
     source TEXT,
@@ -7,7 +27,6 @@ CREATE TABLE products (
     currency TEXT,
     publish_date DATE,
     color_hex_code TEXT,
-    color_interpretation TEXT,
     PRIMARY KEY (retrieved_on, source, product_id)
 );
 
@@ -35,6 +54,7 @@ CREATE TABLE materials (
     material_part TEXT,
     percent FLOAT,
     material TEXT,
+    PRIMARY KEY (retrieved_on, source, product_id, material_part, percent, material)
     FOREIGN KEY (retrieved_on, source, product_id) REFERENCES products (retrieved_on, source, product_id)
 );
 
@@ -43,6 +63,7 @@ CREATE TABLE origins (
     source TEXT,
     product_id TEXT,
     country_of_origin TEXT,
+    PRIMARY KEY (retrieved_on, source, product_id, country_of_origin)
     FOREIGN KEY (retrieved_on, source, product_id) REFERENCES products (retrieved_on, source, product_id)
 );
 
@@ -50,6 +71,7 @@ CREATE TABLE related_products (
     source TEXT,
     product_id TEXT,
     related_product_id TEXT,
+    PRIMARY KEY (source, product_id , related_product_id),
     FOREIGN KEY (source, product_id) REFERENCES products (source, product_id)
 );
 
@@ -57,13 +79,15 @@ CREATE TABLE target_group_categories (
     source TEXT,
     target_group TEXT,
     category_id TEXT,
+    PRIMARY KEY (source, target_group , category_id),
     FOREIGN KEY (source, target_group) REFERENCES target_groups(source, target_group_id)
 );
 
-CREATE TABLE category_products (
+CREATE TABLE products_by_category (
     source TEXT,
     category_id TEXT,
     product_id TEXT,
+    PRIMARY KEY (source, category_id , product_id),
     FOREIGN KEY (source, category_id) REFERENCES categories(source, category_id)
 );
 
@@ -72,11 +96,13 @@ CREATE TABLE availability (
     source TEXT,
     product_id TEXT,
     availability_status TEXT,
-    FOREIGN KEY (source, category_id) REFERENCES categories(source, category_id)
+    PRIMARY KEY (retrieved_on, source, product_id),
+    FOREIGN KEY (retrieved_on, source, product_id) REFERENCES products (retrieved_on, source, product_id)
 );
 
-CREATE TABLE color_codes (
-    color_hex_code TEXT,
-    source TEXT,
-    FOREIGN KEY (source, category_id) REFERENCES categories(source, category_id)
+CREATE TABLE color_interpretations (
+    hex TEXT,
+    interpret_zara_com_de TEXT,
+    PRIMARY KEY (hex, interpret_zara_com_de),
+    FOREIGN KEY (hex) REFERENCES hex_colors(hex)
 );
