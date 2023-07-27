@@ -66,18 +66,18 @@ def normalize_categories():
                 'zara.com/de', str(target_group_id), target_group
             ))
             
-        # normalizing subcategories
-        try:
-            categories_0 = extract_subcategories(entry['subcategories'])
-            categories.extend(categories_0)
-        except Exception as e:
-            logger.warning(e)
+            # normalizing subcategories
+            try:
+                categories_0 = extract_subcategories(entry['subcategories'])
+                categories.extend(categories_0)
+            except Exception as e:
+                logger.warning(e)
 
-        for tup in categories_0:
-            category_id = tup[1]
-            categories_by_target_groups.append(
-                ('zara.com/de', target_group_id, category_id)
-                )
+            for tup in categories_0:
+                category_id = tup[1]
+                categories_by_target_groups.append(
+                    ('zara.com/de', target_group_id, category_id)
+                    )
     
     return target_groups, categories, categories_by_target_groups
 

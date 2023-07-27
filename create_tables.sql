@@ -78,7 +78,7 @@ CREATE TABLE categories_by_target_groups (
     target_group_id TEXT,
     category_id TEXT,
     PRIMARY KEY (src, target_group_id , category_id),
-    FOREIGN KEY (src, target_group_id) REFERENCES target_groups(src, target_group_id)
+    FOREIGN KEY (src, target_group_id) REFERENCES target_groups (src, target_group_id)
 );
 
 CREATE TABLE products_by_categories (
