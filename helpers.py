@@ -57,12 +57,6 @@ def convert_date(date_string):
     date_time_obj = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%S.%fZ')
     return date_time_obj.date()
 
-def flatten_and_convert_to_df(obj):
-    '''Flatten a nested list and convert it into a DataFrame.'''
-    obj = [item for sublist in obj for item in sublist]
-    df_obj = pd.DataFrame(obj)
-    return df_obj
-
 def create_csv_file(data, csv_file_name):
     '''Creates a csv file from a list of tuples'''
     with open(csv_file_name, 'w', newline='') as csvfile:
