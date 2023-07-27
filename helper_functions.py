@@ -7,8 +7,8 @@ import csv
 from credentials import client
 from logger import setup_logger
 
-# date = datetime.now().strftime('%Y-%m-%d')
-date = '2023-07-23'
+date = datetime.now().strftime('%Y-%m-%d')
+
 logger = setup_logger()
 rate_limiter = RateLimiter(max_calls=5, period=1)
 
