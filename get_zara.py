@@ -1,5 +1,5 @@
 #%%
-import helper_functions as helper
+import helpers as helper
 from credentials import client
 import random
 from logger import setup_logger

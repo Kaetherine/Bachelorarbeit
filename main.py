@@ -2,7 +2,7 @@ import get_zara
 import etl_zara
 from s3_bucket import upload_json_to_bucket
 from logger import setup_logger
-from helper_functions import date
+from helpers import date, csv_path
 from postgres_db import copy_csv_to_db
 
 logger = setup_logger()
@@ -56,64 +56,65 @@ def get_zara_data_and_upload_to_s3_bucket():
 def etl_zara_data_and_upload_to_db():
     '''Executes the zara ETL Script functions from the file etl_zara.py and
     saves the data to the RDS database'''
-    path = '/home/katherine/Development/Bachelorarbeit/'
+
+    products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
+    copy_csv_to_db(
+        products_by_cat,
+        f'{csv_path}products_by_categories.csv',
+        pk_columns='src, category_id , product_id'
+        )
+    copy_csv_to_db(
+        products,
+        f'{csv_path}products.csv',
+        pk_columns='retrieved_on, src, product_id'
+        )
+    copy_csv_to_db(
+        product_availability,
+        f'{csv_path}product_availability.csv',
+        pk_columns='retrieved_on, src, product_id'
+        )
+    copy_csv_to_db(
+        color_interp,
+        f'{csv_path}color_interpretations.csv',
+        pk_columns='hex_color, interpret_zara_com_de'
+        )
    
     materials, origins = etl_zara.organise_product_details()
     copy_csv_to_db(
         materials,
-        f'{path}materials.csv',
+        f'{csv_path}materials.csv',
         pk_columns='retrieved_on, src, product_id, material_part, perc, material'
         )
     copy_csv_to_db(
         origins,
-        f'{path}origins.csv',
+        f'{csv_path}origins.csv',
         pk_columns='retrieved_on, src, product_id, country_of_origin'
         )
 
     related_products = etl_zara.normalize_related_products()
     copy_csv_to_db(
         related_products,
-        f'{path}related_products.csv',
+        f'{csv_path}related_products.csv',
         pk_columns='src, product_id , related_product_id'
         )
 
     target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
     copy_csv_to_db(
         target_groups,
-        f'{path}target_groups.csv',
+        f'{csv_path}target_groups.csv',
         pk_columns='src, target_group_id'
         )
     copy_csv_to_db(
         categories,
-        f'{path}categories.csv',
+        f'{csv_path}categories.csv',
         pk_columns='src, category_id'
         )
     copy_csv_to_db(
         categories_by_target_groups,
-        f'{path}categories_by_target_groups.csv',
+        f'{csv_path}categories_by_target_groups.csv',
         pk_columns='src, target_group_id , category_id'
         )
-    products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
-    copy_csv_to_db(
-        products_by_cat,
-        f'{path}products_by_categories.csv',
-        pk_columns='src, category_id , product_id'
-        )
-    copy_csv_to_db(
-        products,
-        f'{path}products.csv',
-        pk_columns='retrieved_on, src, product_id'
-        )
-    copy_csv_to_db(
-        product_availability,
-        f'{path}product_availability.csv',
-        pk_columns='retrieved_on, src, product_id'
-        )
-    copy_csv_to_db(
-        color_interp,
-        f'{path}color_interpretations.csv',
-        pk_columns='hex_color, interpret_zara_com_de'
-        )
+    
 
 if __name__ == "__main__":
     # get_zara_data_and_upload_to_s3_bucket()
