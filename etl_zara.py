@@ -9,8 +9,9 @@ def normalize_related_products():
     related_products_tup = get_bucket_file(f'{date}-related_products.json')
     data = []
     for product, products in related_products_tup.items():
-        for related_product in products:
-            data.append(('zara.com/de', product, related_product))
+        if products:
+            for related_product in products:
+                data.append(('zara.com/de', product, related_product))
  
     return related_product
             
@@ -154,10 +155,13 @@ def organise_product_details():
     origin = []
 
     for product_id in product_details:
-        extracted_details = extract_product_details(
-            product_details,
-            product_id
-            )
+        try:
+            extracted_details = extract_product_details(
+                product_details,
+                product_id
+                )
+        except Exception as e:
+            logger.warning(product_id, e)
         try:
             normalized_materials = normalize_materials(
                 extracted_details[3],
@@ -165,7 +169,7 @@ def organise_product_details():
                 )
             materials.extend(normalized_materials)
         except Exception as e:
-            logger.error(e)
+            logger.error(product_id, e)
 
         try:
             normalized_origin = normalize_origin(
@@ -174,7 +178,7 @@ def organise_product_details():
                 )
             origin.extend(normalized_origin)
         except Exception as e:
-            logger.error(e)
+            logger.error(product_id, e)
 
     return materials, origin
 
@@ -243,10 +247,10 @@ def transform_product_data():
     return products_by_category, products, availability, color_interpretations
 
 
-materials, origin = organise_product_details()
-related_products = normalize_related_products()
-target_groups, categories, categories_by_target_group = normalize_categories()
-products_by_category, products, availability, color_interpretations = transform_product_data()
+# materials, origin = organise_product_details()
+# related_products = normalize_related_products()
+# target_groups, categories, categories_by_target_group = normalize_categories()
+# products_by_category, products, availability, color_interpretations = transform_product_data()
 
-print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_group,
-products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)
+# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_group,
+# products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)

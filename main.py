@@ -36,7 +36,7 @@ def get_zara_data_and_upload_to_s3_bucket():
     upload_json_to_bucket(product_ids, f'{date}-product_ids.json')
 
     product_details = {}
-    for product_id in product_ids['product_ids']:
+    for product_id in product_ids['product_ids'][:5]:
         try:
             product_details[product_id] = get_zara.get_product_details(product_id)
         except Exception as e:
@@ -45,7 +45,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         upload_json_to_bucket(product_details, f'{date}-product_details.json')
 
     related_products = {}
-    for product_id in product_ids['product_ids']:
+    for product_id in product_ids['product_ids'][:5]:
         try:
             related_products[product_id] = get_zara.get_related_products(product_id)
         except Exception as e:
@@ -62,13 +62,11 @@ def etl_zara_data_and_upload_to_db():
     copy_csv_to_db(
         materials,
         f'{path}materials.csv',
-        'materials',
         pk_columns='retrieved_on, src, product_id, material_part, perc, material'
         )
     copy_csv_to_db(
         origins,
         f'{path}origins.csv',
-        'origins',
         pk_columns='retrieved_on, src, product_id, country_of_origin'
         )
 
@@ -76,7 +74,6 @@ def etl_zara_data_and_upload_to_db():
     copy_csv_to_db(
         related_products,
         f'{path}related_products.csv',
-        'related_products',
         pk_columns='src, product_id , related_product_id'
         )
 
@@ -84,47 +81,40 @@ def etl_zara_data_and_upload_to_db():
     copy_csv_to_db(
         target_groups,
         f'{path}target_groups.csv',
-        'target_groups, src, target_group_id',
         pk_columns='src, target_group , category_id'
         )
     copy_csv_to_db(
         categories,
         f'{path}categories.csv',
-        'categories',
         pk_columns='src, category_id'
         )
     copy_csv_to_db(
         target_groups_by_categories,
         f'{path}target_groups_by_categories.csv',
-        'target_groups_by_categories'
         )
     
     products_by_cat, products, availability, color_interp = etl_zara.transform_product_data()
     copy_csv_to_db(
         products_by_cat,
         f'{path}products_by_categories.csv',
-        'products_by_categories',
         pk_columns='src, category_id , product_id'
         )
     copy_csv_to_db(
         products,
         f'{path}products.csv',
-        'products',
         pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(
         availability,
         f'{path}availability.csv',
-        'availability',
         pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(
         color_interp,
         f'{path}color_interpretations.csv',
-        'color_interpretations',
         pk_columns='hex_color, interpret_zara_com_de'
         )
 
 if __name__ == "__main__":
-    get_zara_data_and_upload_to_s3_bucket()
+    # get_zara_data_and_upload_to_s3_bucket()
     etl_zara_data_and_upload_to_db()
