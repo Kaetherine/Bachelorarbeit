@@ -153,16 +153,6 @@ def etl_zara_data_and_upload_to_db():
             )
     except Exception as e:
         logger.warning(e)
-    
-    #color interpretations
-    try:
-        copy_csv_to_db(
-            color_interp,
-            f'{csv_path}color_interpretations.csv',
-            pk_columns='hex_color, interpret_zara_com_de'
-            )
-    except Exception as e:
-        logger.warning(e)
    
 
 if __name__ == "__main__":

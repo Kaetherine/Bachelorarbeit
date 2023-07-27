@@ -96,14 +96,7 @@ CREATE TABLE product_availability (
     FOREIGN KEY (retrieved_on, src, product_id) REFERENCES products (retrieved_on, src, product_id)
 );
 
-CREATE TABLE color_interpretations (
-    hex_color TEXT,
-    interpret_zara_com_de TEXT,
-    PRIMARY KEY (hex_color, interpret_zara_com_de)
-);
 
-
-DROP TABLE IF EXISTS color_interpretations;
 DROP TABLE IF EXISTS product_availability;
 DROP TABLE IF EXISTS products_by_categories;
 DROP TABLE IF EXISTS categories_by_target_groups;
