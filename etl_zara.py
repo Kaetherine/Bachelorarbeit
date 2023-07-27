@@ -75,7 +75,9 @@ def normalize_categories():
 
         for tup in categories_0:
             category_id = tup[1]
-            target_groups_by_categories.append('zara.com/de', target_group_id, category_id)
+            target_groups_by_categories.append(
+                ('zara.com/de', target_group_id, category_id)
+                )
     
     return target_groups, categories, target_groups_by_categories
 
