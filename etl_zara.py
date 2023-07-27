@@ -162,6 +162,7 @@ def organise_product_details():
                 )
         except Exception as e:
             logger.warning(product_id, e)
+            continue
         try:
             normalized_materials = normalize_materials(
                 extracted_details[3],
