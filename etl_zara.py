@@ -43,7 +43,6 @@ def extract_subcategories(subcategories):
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
         cat = ('zara.com/de', subcategory_id, subcategory_name, age_range)
-        print(cat)
         categories.append(cat)
         
     return categories

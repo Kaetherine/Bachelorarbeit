@@ -81,7 +81,7 @@ def etl_zara_data_and_upload_to_db():
     copy_csv_to_db(
         target_groups,
         f'{path}target_groups.csv',
-        pk_columns='src, target_group , category_id'
+        pk_columns='src, target_group_id'
         )
     copy_csv_to_db(
         categories,
