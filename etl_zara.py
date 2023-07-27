@@ -29,7 +29,7 @@ def extract_subcategories(subcategories):
     for subcategory in subcategories:
         subcategory_name = subcategory['name']
         subcategory_id = str(subcategory['id'])
-        age_range = None
+        age_range = 'Not specified'
         if subcategory_id in ignore_ids:
             continue
         elif 'DIVIDER' in subcategory_name or subcategory_name in ignore_names:
@@ -42,9 +42,9 @@ def extract_subcategories(subcategories):
                 age_range = transform_cat[0]
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
-        categories.append((
-            'zara.com/de', subcategory_id, subcategory_name, age_range
-            ))
+        cat = ('zara.com/de', subcategory_id, subcategory_name, age_range)
+        print(cat)
+        categories.append(cat)
         
     return categories
 
