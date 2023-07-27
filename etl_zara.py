@@ -131,7 +131,7 @@ def create_material_dict(product_id, attribute_name, attribute_value):
         'source': 'zara.com/de',
         'product_id': product_id,
         'material_part': attribute_name,
-        'percentage': percentage,
+        'percent': percentage,
         'material': material
     }
 
@@ -225,8 +225,9 @@ def create_product_dict(entry):
         'retreived_on': date,
         'source': 'zara.com/de',
         'product_id': product_id,
-        'name':entry['name'],
+        'product_name':entry['name'],
         'price':float(entry['price']/100),
+        'currency':'EUR',
         'publish_date':convert_date(entry['startDate']),
         'color_hex_code':color_hex_code,
         'color_interpretation':color_interpretation
@@ -298,3 +299,12 @@ def transform_product_data():
     color_interpretations = pd.DataFrame(color_interpretations)
     
     return products_by_category, products, availability, color_interpretations
+
+
+materials, origin = organise_product_details()
+related_products = normalize_related_products()
+target_groups, categories, categories_by_target_group = normalize_categories()
+products_by_category, products, availability, color_interpretations = transform_product_data()
+
+print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_group,
+products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)
