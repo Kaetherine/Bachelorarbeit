@@ -75,8 +75,9 @@ def normalize_categories():
             logger.warning(e)
 
         # normalize categories by target_groups
+        # print(entry, value)
         temp = (
-         ('zara.com/de', entry['id'], value['category_id']) for value in categories_0)
+         ('zara.com/de', entry['id'], value) for value in categories_0)
         categories_by_target_group.append(temp)
     
     return target_groups, categories, categories_by_target_group
