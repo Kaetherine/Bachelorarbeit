@@ -47,5 +47,6 @@ def organize_colors():
     return color_configs, color_names
 
 color_configs, color_names = organize_colors()
-copy_csv_to_db(color_configs, 'hex_colors.csv', 'hex_colors')
-copy_csv_to_db(color_names, 'color_names.csv', 'color_names')
+path = '/home/katherine/Development/Bachelorarbeit/'
+copy_csv_to_db(color_configs, f'{path}hex_colors.csv', 'hex_colors')
+copy_csv_to_db(color_names, f'{path}color_names.csv', 'color_names')

@@ -56,27 +56,29 @@ def get_zara_data_and_upload_to_s3_bucket():
 def etl_zara_data_and_upload_to_db():
     '''Executes the zara ETL Script functions from the file etl_zara.py and
     saves the data to the RDS database'''
+    path = '/home/katherine/Development/Bachelorarbeit/'
+
     materials, origins = etl_zara.organise_product_details()
-    copy_csv_to_db(materials, 'materials.csv', 'materials')
-    copy_csv_to_db(origins, 'origins.csv', 'origins')
+    copy_csv_to_db(materials, f'{path}materials.csv', 'materials')
+    copy_csv_to_db(origins, f'{path}origins.csv', 'origins')
 
     related_products = etl_zara.normalize_related_products()
-    copy_csv_to_db(related_products, 'related_products.csv', 'related_products')
+    copy_csv_to_db(related_products, f'{path}related_products.csv', 'related_products')
 
-    target_groups, categories, categories_by_target_group = etl_zara.normalize_categories()
-    copy_csv_to_db(target_groups, 'target_groups.csv', 'target_groups')
-    copy_csv_to_db(categories, 'categories.csv', 'categories')
+    target_groups, categories, target_groups_by_categories = etl_zara.normalize_categories()
+    copy_csv_to_db(target_groups, f'{path}target_groups.csv', 'target_groups')
+    copy_csv_to_db(categories, f'{path}categories.csv', 'categories')
     copy_csv_to_db(
-        categories_by_target_group,
-        'categories_by_target_group.csv',
-        'categories_by_target_group'
+        target_groups_by_categories,
+        f'{path}target_groups_by_categories.csv',
+        'target_groups_by_categories'
         )
     
     products_by_cat, products, availability, color_interp = etl_zara.transform_product_data()
-    copy_csv_to_db(products_by_cat, 'products_by_category.csv', 'products_by_category')
-    copy_csv_to_db(products, 'products.csv', 'products')
-    copy_csv_to_db(availability, 'availability.csv', 'availability')
-    copy_csv_to_db(color_interp, 'color_interpretations.csv', 'color_interpretations')
+    copy_csv_to_db(products_by_cat, f'{path}products_by_categories.csv', 'products_by_categories')
+    copy_csv_to_db(products, f'{path}products.csv', 'products')
+    copy_csv_to_db(availability, f'{path}availability.csv', 'availability')
+    copy_csv_to_db(color_interp, f'{path}color_interpretations.csv', 'color_interpretations')
 
 if __name__ == "__main__":
     get_zara_data_and_upload_to_s3_bucket()
