@@ -73,7 +73,7 @@ CREATE TABLE related_products (
     PRIMARY KEY (src, product_id , related_product_id)
 );
 
-CREATE TABLE target_groups_by_categories (
+CREATE TABLE categories_by_target_groups (
     src TEXT,
     target_group_id TEXT,
     category_id TEXT,

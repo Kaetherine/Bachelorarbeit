@@ -56,7 +56,7 @@ def normalize_categories():
     categories = []
     target_groups = []
     desired_target_groups = ['WOMAN', 'MAN', 'KIDS']
-    target_groups_by_categories = []
+    categories_by_target_groups = []
 
     for entry in categories_tup:
         target_group = entry['name']
@@ -75,11 +75,11 @@ def normalize_categories():
 
         for tup in categories_0:
             category_id = tup[1]
-            target_groups_by_categories.append(
+            categories_by_target_groups.append(
                 ('zara.com/de', target_group_id, category_id)
                 )
     
-    return target_groups, categories, target_groups_by_categories
+    return target_groups, categories, categories_by_target_groups
 
 def extract_product_details(product_details, product_id):
     '''Extracts care, certified materials, materials, and 
@@ -250,8 +250,8 @@ def transform_product_data():
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
-# target_groups, categories, target_groups_by_categories = normalize_categories()
+# target_groups, categories, categories_by_target_groups = normalize_categories()
 # products_by_category, products, availability, color_interpretations = transform_product_data()
 
-# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',target_groups_by_categories,
+# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_groups,
 # products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)

@@ -77,7 +77,7 @@ def etl_zara_data_and_upload_to_db():
         pk_columns='src, product_id , related_product_id'
         )
 
-    target_groups, categories, target_groups_by_categories = etl_zara.normalize_categories()
+    target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
     copy_csv_to_db(
         target_groups,
         f'{path}target_groups.csv',
@@ -89,8 +89,8 @@ def etl_zara_data_and_upload_to_db():
         pk_columns='src, category_id'
         )
     copy_csv_to_db(
-        target_groups_by_categories,
-        f'{path}target_groups_by_categories.csv',
+        categories_by_target_groups,
+        f'{path}categories_by_target_groups.csv',
         pk_columns='src, target_group , category_id'
         )
     
