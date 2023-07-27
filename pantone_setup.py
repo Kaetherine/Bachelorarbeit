@@ -49,5 +49,5 @@ def organize_colors():
 
 # onetime execution
 color_configs, color_names = organize_colors()
-copy_csv_to_db(color_configs, f'{csv_path}hex_colors.csv', pk_columns='hex_color')
 copy_csv_to_db(color_names, f'{csv_path}color_names.csv', pk_columns='color_code')
+copy_csv_to_db(color_configs, f'{csv_path}hex_colors.csv', pk_columns='hex_color')

@@ -19,6 +19,8 @@ def copy_csv_to_db(data, csv_file_name, pk_columns):
         f"DROP TABLE tmp_{table_name}",
     ]
 
+
+
     os.environ['PGPASSWORD'] = master_password
 
     for command in commands:

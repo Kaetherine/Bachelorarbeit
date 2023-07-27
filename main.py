@@ -22,7 +22,7 @@ def get_zara_data_and_upload_to_s3_bucket():
     upload_json_to_bucket(category_ids, f'{date}-category_ids.json')
 
     products_by_category = {}
-    for category_id in category_ids['category_ids'][38:40]:
+    for category_id in category_ids['category_ids'][:10]:
         try:
             products_by_category[category_id] = get_zara.get_product_list(category_id)
         except Exception as e:
@@ -166,5 +166,5 @@ def etl_zara_data_and_upload_to_db():
    
 
 if __name__ == "__main__":
-    # get_zara_data_and_upload_to_s3_bucket()
+    get_zara_data_and_upload_to_s3_bucket()
     etl_zara_data_and_upload_to_db()
