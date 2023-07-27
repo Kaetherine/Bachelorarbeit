@@ -14,7 +14,7 @@ def normalize_related_products():
     for product, products in related_products_dict.items():
         for related_product in products:
             data.append({
-                'source': 'zara.com/de',
+                'src': 'zara.com/de',
                 'product_id': product,
                 'related_product_id': related_product
             })
@@ -49,8 +49,7 @@ def extract_subcategories(subcategories):
             else:
                 subcategory_name = subcategory_name.replace('|', 'AND')
         categories.append({
-            'retreived_on': date,
-            'source': 'zara.com/de',
+            'src': 'zara.com/de',
             'category_id': subcategory_id,
             'category_name': subcategory_name,
             'age_range': age_range
@@ -73,8 +72,7 @@ def normalize_categories():
         target_group_id = entry['id']
         if target_group in desired_target_groups:
             target_groups.append({
-                'retreived_on': date,
-                'source': 'zara.com/de',
+                'src': 'zara.com/de',
                 'target_group_id': str(target_group_id),
                 'target_group': target_group
                 })
@@ -88,7 +86,7 @@ def normalize_categories():
 
         # normalize categories by target_groups
         temp = [{
-                'source': 'zara.com/de',
+                'src': 'zara.com/de',
                 'target_group': entry['id'],
                 'category_id': value['category_id']
                 } for value in categories_0
@@ -121,17 +119,17 @@ def extract_product_details(product_details, product_id):
     return [product_id, care, certified_materials, materials, origin]
 
 def create_material_dict(product_id, attribute_name, attribute_value):
-    '''Extracts the percentage and material type from a given string and 
+    '''Extracts the percage and material type from a given string and 
     returns a dictionary with the information.'''
     m = attribute_value.split('%')
-    percentage = f'{m[0]}%'
+    percage = f'{m[0]}%'
     material = m[1]
     return {
         'retreived_on': date,
-        'source': 'zara.com/de',
+        'src': 'zara.com/de',
         'product_id': product_id,
         'material_part': attribute_name,
-        'percent': percentage,
+        'perc': percage,
         'material': material
     }
 
@@ -174,7 +172,7 @@ def normalize_origin(origin, product_id):
     country_of_origin= country_of_origin.split('Made in')[1]
     origin_list.append({
             'retreived_on': date,
-            'source': 'zara.com/de',
+            'src': 'zara.com/de',
             'product_id': product_id,
             'country_of_origin': country_of_origin
             })
@@ -222,7 +220,7 @@ def create_product_dict(entry):
     
     return {
         'retreived_on': date,
-        'source': 'zara.com/de',
+        'src': 'zara.com/de',
         'product_id': product_id,
         'product_name':entry['name'],
         'price':float(entry['price']/100),
@@ -236,7 +234,7 @@ def create_availability_dict(entry):
     provided entry.'''
     return {
         'retreived_on': date,
-        'source': 'zara.com/de',
+        'src': 'zara.com/de',
         'product_id': entry['id'],
         'availability':entry['availability']
     }
@@ -287,7 +285,7 @@ def transform_product_data():
                     logger.warning(e)
                 
                 products_by_category.append({
-                    'source': 'zara.com/de',
+                    'src': 'zara.com/de',
                     'category_id': category,
                     'product_id': product_dict['product_id']
                 })
