@@ -6,12 +6,12 @@ CREATE TABLE color_names (
 
 CREATE TABLE hex_colors (
     hex TEXT,
-    rgb_r INTEGER,
-    rgb_g INTEGER,
-    rgb_b INTEGER,
-    lab_l REAL,
-    lab_a REAL,
-    lab_b REAL,
+    rgb_r TEXT,
+    rgb_g TEXT,
+    rgb_b TEXT,
+    lab_l NUMERIC,
+    lab_a NUMERIC,
+    lab_b NUMERIC,
     cmyk TEXT,
     color_code TEXT,
     PRIMARY KEY (hex),
