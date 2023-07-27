@@ -99,6 +99,5 @@ CREATE TABLE product_availability (
 CREATE TABLE color_interpretations (
     hex_color TEXT,
     interpret_zara_com_de TEXT,
-    PRIMARY KEY (hex_color, interpret_zara_com_de),
-    FOREIGN KEY (hex_color) REFERENCES hex_colors(hex_color)
+    PRIMARY KEY (hex_color, interpret_zara_com_de)
 );

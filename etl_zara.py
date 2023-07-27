@@ -205,7 +205,7 @@ def create_availability_tup(entry):
 def create_color_interpretation_tup(entry, hex_code):
     '''docstring here'''
     try:
-        color_interpretation = entry['detail']['colors']['name']
+        color_interpretation = entry['detail']['colors'][0]['name']
     except:
         color_interpretation = 'Not specified'
     
@@ -239,12 +239,15 @@ def transform_product_data():
                     product_availability.append(availability_tup)
                 except Exception as e:
                     logger.warning(e)
-
-                try:
-                    color_interpretation_tup = create_color_interpretation_tup(entry, product_tup[-1])
-                    color_interpretations.append(color_interpretation_tup)
-                except Exception as e:
-                    logger.warning(e)
+                
+                if '#' not in product_tup[-1]:
+                    continue
+                else:
+                    try:
+                        color_interpretation_tup = create_color_interpretation_tup(entry, product_tup[-1])
+                        color_interpretations.append(color_interpretation_tup)
+                    except Exception as e:
+                        logger.warning(e)
 
                 products_by_category.append((
                     'zara.com/de', category, product_tup[2])
