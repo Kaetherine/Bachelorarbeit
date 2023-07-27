@@ -254,12 +254,3 @@ def transform_product_data():
                     )
     
     return products_by_category, products, product_availability, color_interpretations
-
-
-# materials, origin = organise_product_details()
-# related_products = normalize_related_products()
-# target_groups, categories, categories_by_target_groups = normalize_categories()
-# products_by_category, products, product_availability, color_interpretations = transform_product_data()
-
-# print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_groups,
-# products_by_category,'\n','\n',products,'\n','\n',product_availability,'\n','\n',color_interpretations)
