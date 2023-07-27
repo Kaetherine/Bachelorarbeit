@@ -102,7 +102,7 @@ def create_material_tup(product_id, attribute_name, attribute_value):
     '''Extracts the percage and material type from a given string and 
     returns a tuple with the information.'''
     m = attribute_value.split('%')
-    percage = f'{m[0]}%'
+    percage = f'{m[0]}'
     material = m[1]
 
     return (date,'zara.com/de', product_id, attribute_name, percage, material)
