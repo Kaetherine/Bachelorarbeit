@@ -58,63 +58,111 @@ def etl_zara_data_and_upload_to_db():
     saves the data to the RDS database'''
 
     products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
-    copy_csv_to_db(
-        products_by_cat,
-        f'{csv_path}products_by_categories.csv',
-        pk_columns='src, category_id , product_id'
-        )
-    copy_csv_to_db(
-        products,
-        f'{csv_path}products.csv',
-        pk_columns='retrieved_on, src, product_id'
-        )
-    copy_csv_to_db(
-        product_availability,
-        f'{csv_path}product_availability.csv',
-        pk_columns='retrieved_on, src, product_id'
-        )
-    copy_csv_to_db(
-        color_interp,
-        f'{csv_path}color_interpretations.csv',
-        pk_columns='hex_color, interpret_zara_com_de'
-        )
-   
-    materials, origins = etl_zara.organise_product_details()
-    copy_csv_to_db(
-        materials,
-        f'{csv_path}materials.csv',
-        pk_columns='retrieved_on, src, product_id, material_part, perc, material'
-        )
-    copy_csv_to_db(
-        origins,
-        f'{csv_path}origins.csv',
-        pk_columns='retrieved_on, src, product_id, country_of_origin'
-        )
-
-    related_products = etl_zara.normalize_related_products()
-    copy_csv_to_db(
-        related_products,
-        f'{csv_path}related_products.csv',
-        pk_columns='src, product_id , related_product_id'
-        )
-
     target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
-    copy_csv_to_db(
-        target_groups,
-        f'{csv_path}target_groups.csv',
-        pk_columns='src, target_group_id'
-        )
-    copy_csv_to_db(
-        categories,
-        f'{csv_path}categories.csv',
-        pk_columns='src, category_id'
-        )
-    copy_csv_to_db(
-        categories_by_target_groups,
-        f'{csv_path}categories_by_target_groups.csv',
-        pk_columns='src, target_group_id , category_id'
-        )
+    materials, origins = etl_zara.organise_product_details()
+    related_products = etl_zara.normalize_related_products()
+
+    # products
+    try:
+        copy_csv_to_db(
+            products,
+            f'{csv_path}products.csv',
+            pk_columns='retrieved_on, src, product_id'
+            )
+    except Exception as e:
+        logger.warning(e)
     
+    #target_groups
+    try:
+        copy_csv_to_db(
+            target_groups,
+            f'{csv_path}target_groups.csv',
+            pk_columns='src, target_group_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+    
+    #categories
+    try:
+        copy_csv_to_db(
+            categories,
+            f'{csv_path}categories.csv',
+            pk_columns='src, category_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+    
+    #materials
+    try:
+        copy_csv_to_db(
+            materials,
+            f'{csv_path}materials.csv',
+            pk_columns='retrieved_on, src, product_id, material_part, perc, material'
+            )
+    except Exception as e:
+        logger.warning(e)
+
+    #origins
+    try:
+        copy_csv_to_db(
+            origins,
+            f'{csv_path}origins.csv',
+            pk_columns='retrieved_on, src, product_id, country_of_origin'
+            )
+
+    except Exception as e:
+        logger.warning(e)
+
+    #related products
+    try:
+        copy_csv_to_db(
+            related_products,
+            f'{csv_path}related_products.csv',
+            pk_columns='src, product_id , related_product_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+    
+    #categories by target groups
+    try:
+        copy_csv_to_db(
+            categories_by_target_groups,
+            f'{csv_path}categories_by_target_groups.csv',
+            pk_columns='src, target_group_id , category_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+    
+    #products by categories
+    try:
+        copy_csv_to_db(
+            products_by_cat,
+            f'{csv_path}products_by_categories.csv',
+            pk_columns='src, category_id , product_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+
+    #product availability
+    try:
+        copy_csv_to_db(
+            product_availability,
+            f'{csv_path}product_availability.csv',
+            pk_columns='retrieved_on, src, product_id'
+            )
+    except Exception as e:
+        logger.warning(e)
+    
+    #color interpretations
+    try:
+        copy_csv_to_db(
+            color_interp,
+            f'{csv_path}color_interpretations.csv',
+            pk_columns='hex_color, interpret_zara_com_de'
+            )
+    except Exception as e:
+        logger.warning(e)
+   
 
 if __name__ == "__main__":
     # get_zara_data_and_upload_to_s3_bucket()
