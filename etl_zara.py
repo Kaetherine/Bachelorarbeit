@@ -99,7 +99,7 @@ def extract_product_details(product_details, product_id):
 
 def create_material_tup(product_id, attribute_name, attribute_value):
     '''Extracts the percage and material type from a given string and 
-    returns a dictionary with the information.'''
+    returns a tuple with the information.'''
     m = attribute_value.split('%')
     percage = f'{m[0]}%'
     material = m[1]
@@ -179,7 +179,7 @@ def organise_product_details():
     return materials, origin
 
 def create_product_tup(entry):
-    '''Generates and returns a product dictionary from a provided entry.'''
+    '''Generates and returns a product tuple from a provided entry.'''
     product_id = entry['id']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
     
@@ -190,12 +190,12 @@ def create_product_tup(entry):
     )
 
 def create_availability_tup(entry):
-    '''Generates and returns a dictionary containing product availability from a 
+    '''Generates and returns a tuple containing product availability from a 
     provided entry.'''
     return (date, 'zara.com/de', entry['id'], entry['availability'])
 
 def create_color_interpretation_tup(color_hex_code, color_interpretation):
-    '''Generates and returns a dictionary containing color interpretation for a 
+    '''Generates and returns a tuple containing color interpretation for a 
     given product entry.'''
 
     return (color_hex_code, color_interpretation)
