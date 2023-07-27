@@ -101,3 +101,17 @@ CREATE TABLE color_interpretations (
     interpret_zara_com_de TEXT,
     PRIMARY KEY (hex_color, interpret_zara_com_de)
 );
+
+
+DROP TABLE IF EXISTS color_interpretations;
+DROP TABLE IF EXISTS product_availability;
+DROP TABLE IF EXISTS products_by_categories;
+DROP TABLE IF EXISTS categories_by_target_groups;
+DROP TABLE IF EXISTS related_products;
+DROP TABLE IF EXISTS origins;
+DROP TABLE IF EXISTS materials;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS hex_colors;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS target_groups;
+DROP TABLE IF EXISTS color_names;
