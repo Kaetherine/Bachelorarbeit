@@ -1,9 +1,10 @@
-import get_zara
 import etl_zara
-from s3_bucket import upload_json_to_bucket
-from logger import setup_logger
+import get_zara
 from helpers import date, csv_path
+from logger import setup_logger
 from postgres_db import copy_csv_to_db
+from s3_bucket import upload_json_to_bucket
+
 
 logger = setup_logger()
 

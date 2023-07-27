@@ -1,6 +1,6 @@
-from s3_bucket import *
-from logger import setup_logger
 from helpers import convert_date, date
+from logger import setup_logger
+from s3_bucket import *
 
 logger = setup_logger()
 
@@ -203,7 +203,7 @@ def create_availability_tup(entry):
     return (date, 'zara.com/de', entry['id'], entry['availability'])
 
 def create_color_interpretation_tup(entry, hex_code):
-    '''docstring here'''
+    '''Gets the color name and returns it together with the hex code in a tuple'''
     try:
         color_interpretation = entry['detail']['colors'][0]['name']
     except:

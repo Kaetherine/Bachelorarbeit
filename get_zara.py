@@ -1,17 +1,13 @@
-#%%
-import helpers as helper
 from credentials import client
-import random
+import helpers as helper
 from logger import setup_logger
-from s3_bucket import upload_json_to_bucket
+import random
 
-#%%
+
 logger = setup_logger()
 
-#%%
 base_url = 'https://www.zara.com/de/en'
 
-#%%
 user_agent = [
     # collected
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0',
@@ -33,14 +29,14 @@ user_agent = [
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Brave/1.30.89 Chrome/92.0.4515.159 Safari/537.36',
     ]
 
-#%%
+
 accept_language = [
     'en-US,en;q=0.5',
     'en-US,en;q=0.8',
     'en-US,en-GB;q=0.5,en;q=0.3'
     ]
 
-#%%
+
 headers ={
     'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
     'Accept-Encoding':'gzip, deflate, br',
@@ -55,7 +51,7 @@ headers ={
     'User-Agent': random.choice(user_agent)
 }
 
-#%%
+
 def extract_category_ids(response):
     '''Extracts the category ids only'''
     logger.info('Executing extract_category_ids.')
@@ -75,7 +71,7 @@ def extract_category_ids(response):
     categories = {'category_ids':list(set(categories))}
     return categories
 
-#%%
+
 def get_categories():
     '''Get the category pages and, extracts the categories from 
     their responses and returns a list of categories'''
@@ -87,7 +83,7 @@ def get_categories():
         )
     return response
 
-#%%
+
 def extract_product_list(response):
     '''Takes the response and saves the key containing 
     the products of that response in "products"'''
@@ -101,7 +97,7 @@ def extract_product_list(response):
                         products.append(product['commercialComponents'])
     return products
 
-#%%
+
 def get_product_list(category_id):
     '''Gets all available products of each category of the to the constructor 
     passed list, extracts the products and assignes them to their category. 
@@ -118,7 +114,7 @@ def get_product_list(category_id):
         product_list = extract_product_list(response)
     return product_list
 
-#%%
+
 def extract_products(products_by_category):
     '''Takes the dict "product by categories" and returns a list of 
     products (without assigned categories)'''
@@ -132,7 +128,7 @@ def extract_products(products_by_category):
                         products.append(product)
     return products
 
-#%%
+
 def extract_product_ids(products_by_category):
     '''Returns a list with product ids'''
     logger.info('Executing get_product_ids.')
@@ -143,7 +139,7 @@ def extract_product_ids(products_by_category):
     product_ids['product_ids'] = list(set(product_ids['product_ids']))
     return product_ids
 
-#%%
+
 def get_product_details(product_id):
     '''Gets products details of in the constructor passed product
     and returns the response'''
@@ -157,7 +153,7 @@ def get_product_details(product_id):
             )
     return response
 
-#%%
+
 def extract_related_product_ids(response):
     '''Extracts related products by id, stores them in a list and retunrs that list'''
     recommended_products = []
@@ -166,7 +162,7 @@ def extract_related_product_ids(response):
             recommended_products.append(str(product['id']))
         return recommended_products
     
-#%%
+
 def get_related_products(product_id):
     '''Gets the related products of in constructor passed products and returns'''
     logger.info('Executing get_related_products.')

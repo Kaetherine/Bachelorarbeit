@@ -1,11 +1,11 @@
+import csv
+from datetime import datetime
 import json
 from ratelimiter import RateLimiter
-from datetime import datetime
-import pandas as pd
-import csv
 
 from credentials import client
 from logger import setup_logger
+
 
 date = datetime.now().strftime('%Y-%m-%d')
 
