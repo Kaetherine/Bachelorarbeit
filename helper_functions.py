@@ -2,6 +2,7 @@ import json
 from ratelimiter import RateLimiter
 from datetime import datetime
 import pandas as pd
+import csv
 
 from credentials import client
 from logger import setup_logger
@@ -61,7 +62,7 @@ def flatten_and_convert_to_df(obj):
     return df_obj
 
 def create_csv_file(data, csv_file_name):
-    '''docstring here'''
+    '''Creates a csv file from a list of tuples'''
     with open(csv_file_name, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(data)

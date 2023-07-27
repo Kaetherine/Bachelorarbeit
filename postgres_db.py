@@ -1,6 +1,5 @@
 from credentials import master_username, master_password, endpoint, dbname
 from helper_functions import create_csv_file
-import csv
 import os
 import subprocess
 
