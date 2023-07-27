@@ -63,13 +63,13 @@ def etl_zara_data_and_upload_to_db():
         materials,
         f'{path}materials.csv',
         'materials',
-        'retrieved_on, src, product_id, material_part, perc, material'
+        pk_columns='retrieved_on, src, product_id, material_part, perc, material'
         )
     copy_csv_to_db(
         origins,
         f'{path}origins.csv',
         'origins',
-        'retrieved_on, src, product_id, country_of_origin'
+        pk_columns='retrieved_on, src, product_id, country_of_origin'
         )
 
     related_products = etl_zara.normalize_related_products()
@@ -77,7 +77,7 @@ def etl_zara_data_and_upload_to_db():
         related_products,
         f'{path}related_products.csv',
         'related_products',
-        'src, product_id , related_product_id'
+        pk_columns='src, product_id , related_product_id'
         )
 
     target_groups, categories, target_groups_by_categories = etl_zara.normalize_categories()
@@ -85,13 +85,13 @@ def etl_zara_data_and_upload_to_db():
         target_groups,
         f'{path}target_groups.csv',
         'target_groups, src, target_group_id',
-        'src, target_group , category_id'
+        pk_columns='src, target_group , category_id'
         )
     copy_csv_to_db(
         categories,
         f'{path}categories.csv',
         'categories',
-        'src, category_id'
+        pk_columns='src, category_id'
         )
     copy_csv_to_db(
         target_groups_by_categories,
@@ -104,25 +104,25 @@ def etl_zara_data_and_upload_to_db():
         products_by_cat,
         f'{path}products_by_categories.csv',
         'products_by_categories',
-        'src, category_id , product_id'
+        pk_columns='src, category_id , product_id'
         )
     copy_csv_to_db(
         products,
         f'{path}products.csv',
         'products',
-        'retrieved_on, src, product_id'
+        pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(
         availability,
         f'{path}availability.csv',
         'availability',
-        'retrieved_on, src, product_id'
+        pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(
         color_interp,
         f'{path}color_interpretations.csv',
         'color_interpretations',
-        'hex_color, interpret_zara_com_de'
+        pk_columns='hex_color, interpret_zara_com_de'
         )
 
 if __name__ == "__main__":

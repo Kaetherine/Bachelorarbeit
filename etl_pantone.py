@@ -50,5 +50,5 @@ color_configs, color_names = organize_colors()
 
 path = '/home/katherine/Development/Bachelorarbeit/'
 
-copy_csv_to_db(color_configs, f'{path}hex_colors.csv', 'hex_colors', 'hex_color')
-copy_csv_to_db(color_names, f'{path}color_names.csv', 'color_names', 'color_code')
+copy_csv_to_db(color_configs, f'{path}hex_colors.csv', pk_columns='hex_color')
+copy_csv_to_db(color_names, f'{path}color_names.csv', pk_columns='color_code')
