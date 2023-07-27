@@ -59,3 +59,10 @@ def flatten_and_convert_to_df(obj):
     obj = [item for sublist in obj for item in sublist]
     df_obj = pd.DataFrame(obj)
     return df_obj
+
+def create_csv_file(data, csv_file_name):
+    '''docstring here'''
+    with open(csv_file_name, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(data)
+    return csv_file_name
