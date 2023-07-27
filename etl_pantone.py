@@ -1,4 +1,5 @@
 from s3_bucket import get_bucket_file
+from postgres_db import copy_csv_to_db
 
 def normalize_pantone(filename):
     '''Takes a pantone catalog as json file and normalizes it
@@ -46,5 +47,5 @@ def organize_colors():
     return color_configs, color_names
 
 color_configs, color_names = organize_colors()
-
-print(color_configs,'\n', '\n', color_names)
+copy_csv_to_db(color_configs, 'hex_colors.csv', 'hex_colors')
+copy_csv_to_db(color_names, 'color_names.csv', 'color_names')
