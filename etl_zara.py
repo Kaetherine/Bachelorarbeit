@@ -5,11 +5,10 @@ from helper_functions import convert_date, date
 logger = setup_logger()
 
 def normalize_related_products():
-    '''Creates a normalized DataFrame from a dictionary of related 
-    products.'''
-    related_products_dict = get_bucket_file(f'{date}-related_products.json')
+    '''Creates a list of tuples of related products.'''
+    related_products_tup = get_bucket_file(f'{date}-related_products.json')
     data = []
-    for product, products in related_products_dict.items():
+    for product, products in related_products_tup.items():
         for related_product in products:
             data.append(('zara.com/de', product, related_product))
  
@@ -50,8 +49,8 @@ def extract_subcategories(subcategories):
 
 def normalize_categories():
     '''Normalize categories data obtained from the "categories.json" file.'''
-    categories_dict = get_bucket_file(f'{date}-categories.json')
-    categories_dict = categories_dict['categories']
+    categories_tup = get_bucket_file(f'{date}-categories.json')
+    categories_tup = categories_tup['categories']
 
     # normalizing target_groups
     categories = []
@@ -59,7 +58,7 @@ def normalize_categories():
     desired_target_groups = ['WOMAN', 'MAN', 'KIDS']
     categories_by_target_group = []
 
-    for entry in categories_dict:
+    for entry in categories_tup:
         target_group = entry['name']
         target_group_id = entry['id']
         if target_group in desired_target_groups:
@@ -179,7 +178,7 @@ def organise_product_details():
 
     return materials, origin
 
-def create_product_dict(entry):
+def create_product_tup(entry):
     '''Generates and returns a product dictionary from a provided entry.'''
     product_id = entry['id']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
@@ -190,12 +189,12 @@ def create_product_dict(entry):
         convert_date(entry['startDate']), color_hex_code,
     )
 
-def create_availability_dict(entry):
+def create_availability_tup(entry):
     '''Generates and returns a dictionary containing product availability from a 
     provided entry.'''
     return (date, 'zara.com/de', entry['id'], entry['availability'])
 
-def create_color_interpretation_dict(color_hex_code, color_interpretation):
+def create_color_interpretation_tup(color_hex_code, color_interpretation):
     '''Generates and returns a dictionary containing color interpretation for a 
     given product entry.'''
 
@@ -204,7 +203,7 @@ def create_color_interpretation_dict(color_hex_code, color_interpretation):
 def transform_product_data():
     '''Extracts product data from a JSON file, transforms it, and returns it 
     as four Pandas DataFrames.'''
-    products_by_category_dict = get_bucket_file(
+    products_by_category_tup = get_bucket_file(
         f'{date}-products_by_category.json'
         )
     products_by_category = []
@@ -212,33 +211,33 @@ def transform_product_data():
     availability = []
     color_interpretations = []
     
-    for category in products_by_category_dict:
-        for item in products_by_category_dict[category]:
+    for category in products_by_category_tup:
+        for item in products_by_category_tup[category]:
             for entry in item:
 
                 try:
-                    product_dict = create_product_dict(entry)
-                    products.append(product_dict)
+                    product_tup = create_product_tup(entry)
+                    products.append(product_tup)
                 except Exception as e:
                     logger.warning(e)
 
                 try:
-                    availability_dict = create_availability_dict(entry)
-                    availability.append(availability_dict)
+                    availability_tup = create_availability_tup(entry)
+                    availability.append(availability_tup)
                 except Exception as e:
                     logger.warning(e)
 
                 try:
-                    color_interpretation_dict = create_color_interpretation_dict(
-                        product_dict['color_hex_code'],
-                        product_dict['color_interpretation']
+                    color_interpretation_tup = create_color_interpretation_tup(
+                        product_tup['color_hex_code'],
+                        product_tup['color_interpretation']
                         )
-                    color_interpretations.append(color_interpretation_dict)
+                    color_interpretations.append(color_interpretation_tup)
                 except Exception as e:
                     logger.warning(e)
 
                 products_by_category.append((
-                    'zara.com/de', category, product_dict[2])
+                    'zara.com/de', category, product_tup[2])
                     )
     
     return products_by_category, products, availability, color_interpretations
