@@ -156,13 +156,13 @@ def organise_product_details():
     origin = []
 
     for product_id in product_details:
+        logger.info(product_id)
         try:
             extracted_details = extract_product_details(
                 product_details,
                 product_id
                 )
         except Exception as e:
-            logger.warning(product_id)
             logger.warning(e)
             continue
         try:
@@ -172,7 +172,7 @@ def organise_product_details():
                 )
             materials.extend(normalized_materials)
         except Exception as e:
-            logger.error(product_id, e)
+            logger.warning(e)
 
         try:
             normalized_origin = normalize_origin(
@@ -181,7 +181,7 @@ def organise_product_details():
                 )
             origin.extend(normalized_origin)
         except Exception as e:
-            logger.error(product_id, e)
+            logger.warning(e)
 
     return materials, origin
 
@@ -202,11 +202,16 @@ def create_availability_tup(entry):
     provided entry.'''
     return (date, 'zara.com/de', entry['id'], entry['availability'])
 
-def create_color_interpretation_tup(color_hex_code, color_interpretation):
-    '''Generates and returns a tuple containing color interpretation for a 
-    given product entry.'''
+def create_color_interpretation_tup(entry, hex_code):
+    '''docstring here'''
+    try:
+        color_interpretation = entry['detail']['colors']['name']
+    except:
+        color_interpretation = 'Not specified'
+    
+    color_interpretation_tup = (hex_code, color_interpretation)
 
-    return (color_hex_code, color_interpretation)
+    return color_interpretation_tup
 
 def transform_product_data():
     '''Extracts product data from a JSON file, transforms it, and returns it 
@@ -233,14 +238,10 @@ def transform_product_data():
                     availability_tup = create_availability_tup(entry)
                     product_availability.append(availability_tup)
                 except Exception as e:
-                    print('failed')
                     logger.warning(e)
 
                 try:
-                    color_interpretation_tup = create_color_interpretation_tup(
-                        product_tup['color_hex_code'],
-                        product_tup['color_interpretation']
-                        )
+                    color_interpretation_tup = create_color_interpretation_tup(entry, product_tup[-1])
                     color_interpretations.append(color_interpretation_tup)
                 except Exception as e:
                     logger.warning(e)
