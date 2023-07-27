@@ -78,32 +78,32 @@ def etl_zara_data_and_upload_to_db():
         )
 
     target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
-    copy_csv_to_db(
-        target_groups,
-        f'{path}target_groups.csv',
-        pk_columns='src, target_group_id'
-        )
-    copy_csv_to_db(
-        categories,
-        f'{path}categories.csv',
-        pk_columns='src, category_id'
-        )
-    copy_csv_to_db(
-        categories_by_target_groups,
-        f'{path}categories_by_target_groups.csv',
-        pk_columns='src, target_group_id , category_id'
-        )
+    # copy_csv_to_db(
+    #     target_groups,
+    #     f'{path}target_groups.csv',
+    #     pk_columns='src, target_group_id'
+    #     )
+    # copy_csv_to_db(
+    #     categories,
+    #     f'{path}categories.csv',
+    #     pk_columns='src, category_id'
+    #     )
+    # copy_csv_to_db(
+    #     categories_by_target_groups,
+    #     f'{path}categories_by_target_groups.csv',
+    #     pk_columns='src, target_group_id , category_id'
+    #     )
     products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
-    copy_csv_to_db(
-        products_by_cat,
-        f'{path}products_by_categories.csv',
-        pk_columns='src, category_id , product_id'
-        )
-    copy_csv_to_db(
-        products,
-        f'{path}products.csv',
-        pk_columns='retrieved_on, src, product_id'
-        )
+    # copy_csv_to_db(
+    #     products_by_cat,
+    #     f'{path}products_by_categories.csv',
+    #     pk_columns='src, category_id , product_id'
+    #     )
+    # copy_csv_to_db(
+    #     products,
+    #     f'{path}products.csv',
+    #     pk_columns='retrieved_on, src, product_id'
+    #     )
     copy_csv_to_db(
         product_availability,
         f'{path}product_availability.csv',

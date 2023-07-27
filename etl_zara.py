@@ -84,6 +84,7 @@ def normalize_categories():
 def extract_product_details(product_details, product_id):
     '''Extracts care, certified materials, materials, and 
     origin details for a given product from the product details dataset.'''
+
     care, certified_materials, materials, origin = None, None, None, None
     for detail in product_details[product_id]:
         section_type = detail['sectionType']
@@ -161,7 +162,8 @@ def organise_product_details():
                 product_id
                 )
         except Exception as e:
-            logger.warning(product_id, e)
+            logger.warning(product_id)
+            logger.warning(e)
             continue
         try:
             normalized_materials = normalize_materials(
@@ -198,7 +200,9 @@ def create_product_tup(entry):
 def create_availability_tup(entry):
     '''Generates and returns a tuple containing product product_availability from a 
     provided entry.'''
-    return (date, 'zara.com/de', entry['id'], entry['product_availability'])
+    return (entry[0], '\n', '\n')
+    # print(date, 'zara.com/de', entry['id'], entry['product_availability'])
+    # return (date, 'zara.com/de', entry['id'], entry['product_availability'])
 
 def create_color_interpretation_tup(color_hex_code, color_interpretation):
     '''Generates and returns a tuple containing color interpretation for a 
@@ -227,11 +231,15 @@ def transform_product_data():
                 except Exception as e:
                     logger.warning(e)
 
-                try:
-                    availability_tup = create_availability_tup(entry)
-                    product_availability.append(availability_tup)
-                except Exception as e:
-                    logger.warning(e)
+                print(len(entry))
+
+                # try:
+                #     availability_tup = create_availability_tup(entry)
+                #     product_availability.append(availability_tup)
+                #     print(availability_tup)
+                # except Exception as e:
+                #     print('failed')
+                #     logger.warning(e)
 
                 try:
                     color_interpretation_tup = create_color_interpretation_tup(
