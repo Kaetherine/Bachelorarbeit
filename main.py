@@ -93,7 +93,7 @@ def etl_zara_data_and_upload_to_db():
         f'{path}categories_by_target_groups.csv',
         pk_columns='src, target_group_id , category_id'
         )
-    products_by_cat, products, availability, color_interp = etl_zara.transform_product_data()
+    products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
     copy_csv_to_db(
         products_by_cat,
         f'{path}products_by_categories.csv',
@@ -105,8 +105,8 @@ def etl_zara_data_and_upload_to_db():
         pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(
-        availability,
-        f'{path}availability.csv',
+        product_availability,
+        f'{path}product_availability.csv',
         pk_columns='retrieved_on, src, product_id'
         )
     copy_csv_to_db(

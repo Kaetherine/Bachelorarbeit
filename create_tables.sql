@@ -27,8 +27,7 @@ CREATE TABLE products (
     currency TEXT,
     publish_date DATE,
     hex_color TEXT,
-    PRIMARY KEY (retrieved_on, src, product_id),
-    FOREIGN KEY (hex_color) REFERENCES hex_colors (hex_color)
+    PRIMARY KEY (retrieved_on, src, product_id)
 );
 
 CREATE TABLE target_groups (
@@ -85,11 +84,10 @@ CREATE TABLE products_by_categories (
     src TEXT,
     category_id TEXT,
     product_id TEXT,
-    PRIMARY KEY (src, category_id , product_id),
-    FOREIGN KEY (src, category_id) REFERENCES categories(src, category_id)
+    PRIMARY KEY (src, category_id , product_id)
 );
 
-CREATE TABLE availability (
+CREATE TABLE product_availability (
     retrieved_on DATE,
     src TEXT,
     product_id TEXT,

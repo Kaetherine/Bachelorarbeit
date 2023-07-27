@@ -7,13 +7,13 @@ logger = setup_logger()
 def normalize_related_products():
     '''Creates a list of tuples of related products.'''
     related_products_tup = get_bucket_file(f'{date}-related_products.json')
-    data = []
+    related_products = []
     for product, products in related_products_tup.items():
         if products:
             for related_product in products:
-                data.append(('zara.com/de', product, related_product))
+                related_products.append(('zara.com/de', product, related_product))
  
-    return related_product
+    return related_products
             
 def extract_subcategories(subcategories):
     '''Extracts relevant subcategories from a list of subcategories.'''
@@ -195,9 +195,9 @@ def create_product_tup(entry):
     )
 
 def create_availability_tup(entry):
-    '''Generates and returns a tuple containing product availability from a 
+    '''Generates and returns a tuple containing product product_availability from a 
     provided entry.'''
-    return (date, 'zara.com/de', entry['id'], entry['availability'])
+    return (date, 'zara.com/de', entry['id'], entry['product_availability'])
 
 def create_color_interpretation_tup(color_hex_code, color_interpretation):
     '''Generates and returns a tuple containing color interpretation for a 
@@ -213,7 +213,7 @@ def transform_product_data():
         )
     products_by_category = []
     products = []
-    availability = []
+    product_availability = []
     color_interpretations = []
     
     for category in products_by_category_tup:
@@ -228,7 +228,7 @@ def transform_product_data():
 
                 try:
                     availability_tup = create_availability_tup(entry)
-                    availability.append(availability_tup)
+                    product_availability.append(availability_tup)
                 except Exception as e:
                     logger.warning(e)
 
@@ -245,13 +245,13 @@ def transform_product_data():
                     'zara.com/de', category, product_tup[2])
                     )
     
-    return products_by_category, products, availability, color_interpretations
+    return products_by_category, products, product_availability, color_interpretations
 
 
 # materials, origin = organise_product_details()
 # related_products = normalize_related_products()
 # target_groups, categories, categories_by_target_groups = normalize_categories()
-# products_by_category, products, availability, color_interpretations = transform_product_data()
+# products_by_category, products, product_availability, color_interpretations = transform_product_data()
 
 # print(materials,'\n','\n',origin,'\n','\n',related_products,'\n','\n',target_groups,'\n','\n',categories,'\n','\n',categories_by_target_groups,
-# products_by_category,'\n','\n',products,'\n','\n',availability,'\n','\n',color_interpretations)
+# products_by_category,'\n','\n',products,'\n','\n',product_availability,'\n','\n',color_interpretations)
