@@ -31,3 +31,4 @@ LOG_CONTENT=$(tail -n 50 "$LOGFILE")
 # if successful send email and run transform_zara.py
 echo -e "Subject: Execution completed for Bachelorarbeit/main.py\n\nThe script Bachelorarbeit/main.py was executed. See Logfile to verify it was successfully. It took $DURATION seconds.\n\nLogfile content:\n$LOG_CONTENT" | sendmail $EMAIL_RECEIPIENT
 
+# rm filename
