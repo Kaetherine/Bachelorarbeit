@@ -58,4 +58,3 @@ def get_bucket_file(filename, bucket_name=aws_bucket):
     file = file["Body"].read()
     file = json.loads(file.decode('utf-8'))
     return file
-
