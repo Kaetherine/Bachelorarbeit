@@ -130,3 +130,12 @@ dmypy.json
 client.py
 credentials.py
 logfile.log
+categories.csv
+categories_by_target_groups.csv
+materials.csv
+origins.csv
+product_availability.csv
+products.csv
+products_by_categories.csv
+related_products.csv
+target_groups.csv
