@@ -73,7 +73,7 @@ def normalize_categories():
                 categories_0 = extract_subcategories(entry['subcategories'])
                 categories.extend(categories_0)
             except Exception as e:
-                logger.warning(f'{e}: {traceback}')
+                logger.warning(f'{e}: {traceback.format_exc()}')
 
             for tup in categories_0:
                 category_id = tup[1]
@@ -165,7 +165,7 @@ def organise_product_details():
                 product_id
                 )
         except Exception as e:
-            logger.warning(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         try:
             normalized_materials = normalize_materials(
@@ -174,7 +174,7 @@ def organise_product_details():
                 )
             materials.extend(normalized_materials)
         except Exception as e:
-            logger.warning(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
 
         try:
             normalized_origin = normalize_origin(
@@ -183,7 +183,7 @@ def organise_product_details():
                 )
             origin.extend(normalized_origin)
         except Exception as e:
-            logger.warning(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
 
     return materials, origin
 
@@ -234,13 +234,13 @@ def transform_product_data():
                     product_tup = create_product_tup(entry)
                     products.append(product_tup)
                 except Exception as e:
-                    logger.warning(f'{e}: {traceback}')
+                    logger.warning(f'{e}: {traceback.format_exc()}')
 
                 try:
                     availability_tup = create_availability_tup(entry)
                     product_availability.append(availability_tup)
                 except Exception as e:
-                    logger.warning(f'{e}: {traceback}')
+                    logger.warning(f'{e}: {traceback.format_exc()}')
                 
                 if '#' not in product_tup[-1]:
                     continue
@@ -249,7 +249,7 @@ def transform_product_data():
                         color_interpretation_tup = create_color_interpretation_tup(entry, product_tup[-1])
                         color_interpretations.append(color_interpretation_tup)
                     except Exception as e:
-                        logger.warning(f'{e}: {traceback}')
+                        logger.warning(f'{e}: {traceback.format_exc()}')
 
                 products_by_category.append((
                     'zara.com/de', category, product_tup[2])

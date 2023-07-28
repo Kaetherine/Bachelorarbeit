@@ -39,7 +39,7 @@ def page_to_json(response):
             json_response = json.loads(response.text)
             return json_response
         except Exception as e:
-            logger.error(f'{e}: {traceback}')
+            logger.error(f'{e}: {traceback.format_exc()}')
             pass
 
 def get_page(url, client=client, headers=None, params=None):

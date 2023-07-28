@@ -15,7 +15,7 @@ def get_zara_data_and_upload_to_s3_bucket():
     try:
         categories = get_zara.get_categories()
     except Exception as e:
-        logger.error(f'{e}: {traceback}')
+        logger.error(f'{e}: {traceback.format_exc()}')
     if categories:
         upload_json_to_bucket(categories, f'{date}-categories.json')
 
@@ -27,7 +27,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             products_by_category[category_id] = get_zara.get_product_list(category_id)
         except Exception as e:
-            logger.error(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
@@ -42,7 +42,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             product_details[product_id] = get_zara.get_product_details(product_id)
         except Exception as e:
-            logger.error(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         upload_json_to_bucket(product_details, f'{date}-product_details.json')
 
@@ -51,7 +51,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             related_products[product_id] = get_zara.get_related_products(product_id)
         except Exception as e:
-            logger.error(f'{e}: {traceback}')
+            logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
 
@@ -72,7 +72,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
     
     #target_groups
     try:
@@ -82,7 +82,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, target_group_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
     
     #categories
     try:
@@ -92,7 +92,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, category_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
     
     #materials
     try:
@@ -102,7 +102,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id, material_part, perc, material'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
 
     #origins
     try:
@@ -113,7 +113,7 @@ def etl_zara_data_and_upload_to_db():
             )
 
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
 
     #related products
     try:
@@ -123,7 +123,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, product_id , related_product_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
     
     #categories by target groups
     try:
@@ -133,7 +133,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, target_group_id , category_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
     
     #products by categories
     try:
@@ -143,7 +143,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, category_id , product_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
 
     #product availability
     try:
@@ -153,7 +153,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id'
             )
     except Exception as e:
-        logger.warning(f'{e}: {traceback}')
+        logger.warning(f'{e}: {traceback.format_exc()}')
    
 
 if __name__ == "__main__":
