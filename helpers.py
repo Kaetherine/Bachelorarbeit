@@ -9,7 +9,7 @@ from logger import setup_logger
 
 date = datetime.now().strftime('%Y-%m-%d')
 
-csv_path = '/home/katherine/Development/Bachelorarbeit/'
+csv_path = '/home/ubuntu/Bachelorarbeit/'
 
 logger = setup_logger()
 rate_limiter = RateLimiter(max_calls=3, period=1)
