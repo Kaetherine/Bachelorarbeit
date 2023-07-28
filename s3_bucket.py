@@ -1,14 +1,15 @@
 import boto3
 import json
 
-from credentials import aws_access_key, aws_secret_access_key, aws_bucket, aws_region
+from credentials import aws_bucket
 
 
 s3_client = boto3.client(
     's3',
-    aws_access_key_id=aws_access_key,
-    aws_secret_access_key=aws_secret_access_key,
-    region_name=aws_region
+    # uncomment in local development
+    # aws_access_key_id=aws_access_key,
+    # aws_secret_access_key=aws_secret_access_key,
+    # region_name=aws_region
 )
 
 def data_to_byte(data):
