@@ -3,11 +3,15 @@ import subprocess
 
 from credentials import master_username, master_password, endpoint, dbname
 from helpers import create_csv_file
+from logger import setup_logger
 
+logger = setup_logger()
 
 def copy_csv_to_db(data, csv_file_name, pk_columns):
     '''Converts a list of tuples to csv and copies the csv file to the 
     specified table in the database'''
+    logger.info(f'Executing {csv_file_name[:-4]}')
+
     table_name = csv_file_name.split('/')[-1].split('.csv')[0]
     csv_file_name = create_csv_file(data, csv_file_name)
 
@@ -37,6 +41,8 @@ def copy_csv_to_db(data, csv_file_name, pk_columns):
 
         process = subprocess.Popen(psql_command, stdout=subprocess.PIPE)
         process.wait()
+
+    logger.info(f'Done executing {csv_file_name[:-4]}')
 
     return process.stdout.read()
 

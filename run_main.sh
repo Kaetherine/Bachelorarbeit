@@ -1,16 +1,15 @@
 #!/bin/bash
 
-EMAIL_RECEIPIENT='kuhle.katherine@gmail.com'
+EMAIL="kuhle.katherine@gmail.com"
 
 # main file to be executed
-SCRIPT='/home/ubuntu/Bachelorarbeit/main.py'
+SCRIPT="/home/ubuntu/Bachelorarbeit/main.py"
 
 # path to logfile
-LOGFILE='/home/ubuntu/Bachelorarbeit/logfile.log'
+LOGFILE="/home/ubuntu/Bachelorarbeit/logfile.log"
 
-# send notificationmal to email receipient
-echo -e '''Subject: Cronjob for Bachelorarbeit/main.py started\n\n
-    The cronjob started the script now.''' | sendmail $EMAIL_RECEIPIENT
+# send notificationmal to email
+echo "The cronjob has started the script $SCRIPT" | mail -s "Cronjob started" $EMAIL
 
 # get start time
 START_TIME=$(date +%s)
@@ -30,20 +29,16 @@ DURATION=$((END_TIME - START_TIME))
 # whole logfile
 LOG_CONTENT=$LOGFILE
 
-# check if script failed or ran successfully
+# send notificationmal to email
+echo "Execution completed for $SCRIPT\n\nThe script $SCRIPT was executed. See Logfile to verify it was successfully. It took $DURATION seconds.\n\nLogfile content:\n$LOG_CONTENT"| mail -s "Cronjob: execution completed" -A $LOGFILE $EMAIL
 
-# if successful send email and run transform_zara.py
-echo -e '''Subject: Execution completed for Bachelorarbeit/main.py\n\nThe script 
-    Bachelorarbeit/main.py was executed. See Logfile to verify it was successfully. 
-    It took $DURATION seconds.\n\nLogfile content:\n$LOG_CONTENT''' | sendmail $EMAIL_RECEIPIENT
-
-# rm logfile.log
-# rm categories.csv
-# rm categories_by_target_groups.csv
-# rm materials.csv
-# rm origins.csv
-# rm product_availability.csv
-# rm products.csv
-# rm products_by_categories.csv
-# rm related_products.csv
-# rm target_groups.csv
+rm "/home/ubuntu/Bachelorarbeit/logfile.log"
+rm "/home/ubuntu/Bachelorarbeit/categories.csv"
+rm "/home/ubuntu/Bachelorarbeit/categories_by_target_groups.csv"
+rm "/home/ubuntu/Bachelorarbeit/materials.csv"
+rm "/home/ubuntu/Bachelorarbeit/origins.csv"
+rm "/home/ubuntu/Bachelorarbeit/product_availability.csv"
+rm "/home/ubuntu/Bachelorarbeit/products.csv"
+rm "/home/ubuntu/Bachelorarbeit/products_by_categories.csv"
+rm "/home/ubuntu/Bachelorarbeit/related_products.csv"
+rm "/home/ubuntu/Bachelorarbeit/target_groups.csv"
