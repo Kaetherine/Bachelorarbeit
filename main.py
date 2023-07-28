@@ -1,3 +1,4 @@
+import traceback
 import etl_zara
 import get_zara
 from helpers import date, csv_path
@@ -14,7 +15,7 @@ def get_zara_data_and_upload_to_s3_bucket():
     try:
         categories = get_zara.get_categories()
     except Exception as e:
-        logger.error(e)
+        logger.error(f'{e}: {traceback}')
     if categories:
         upload_json_to_bucket(categories, f'{date}-categories.json')
 
@@ -26,7 +27,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             products_by_category[category_id] = get_zara.get_product_list(category_id)
         except Exception as e:
-            logger.error(e)
+            logger.error(f'{e}: {traceback}')
             continue
         upload_json_to_bucket(products_by_category, f'{date}-products_by_category.json')
 
@@ -41,7 +42,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             product_details[product_id] = get_zara.get_product_details(product_id)
         except Exception as e:
-            logger.error(e)
+            logger.error(f'{e}: {traceback}')
             continue
         upload_json_to_bucket(product_details, f'{date}-product_details.json')
 
@@ -50,7 +51,7 @@ def get_zara_data_and_upload_to_s3_bucket():
         try:
             related_products[product_id] = get_zara.get_related_products(product_id)
         except Exception as e:
-            logger.error(e)
+            logger.error(f'{e}: {traceback}')
             continue
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
 
@@ -71,7 +72,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
     
     #target_groups
     try:
@@ -81,7 +82,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, target_group_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
     
     #categories
     try:
@@ -91,7 +92,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, category_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
     
     #materials
     try:
@@ -101,7 +102,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id, material_part, perc, material'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
 
     #origins
     try:
@@ -112,7 +113,7 @@ def etl_zara_data_and_upload_to_db():
             )
 
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
 
     #related products
     try:
@@ -122,7 +123,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, product_id , related_product_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
     
     #categories by target groups
     try:
@@ -132,7 +133,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, target_group_id , category_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
     
     #products by categories
     try:
@@ -142,7 +143,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='src, category_id , product_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
 
     #product availability
     try:
@@ -152,7 +153,7 @@ def etl_zara_data_and_upload_to_db():
             pk_columns='retrieved_on, src, product_id'
             )
     except Exception as e:
-        logger.warning(e)
+        logger.warning(f'{e}: {traceback}')
    
 
 if __name__ == "__main__":

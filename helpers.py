@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 import json
 from ratelimiter import RateLimiter
+import traceback
 
 from credentials import client
 from logger import setup_logger
@@ -38,7 +39,7 @@ def page_to_json(response):
             json_response = json.loads(response.text)
             return json_response
         except Exception as e:
-            logger.error(e)
+            logger.error(f'{e}: {traceback}')
             pass
 
 def get_page(url, client=client, headers=None, params=None):
