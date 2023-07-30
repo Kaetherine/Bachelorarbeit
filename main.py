@@ -129,7 +129,6 @@ def etl_zara_data_and_upload_to_db():
         logger.warning(f'{e}: {traceback.format_exc()}')
     
     #categories by target groups
-    # categories_by_target_groups = compare_list_of_tups_and_remove_outliers(categories_by_target_groups, 1, target_groups, 1)
     try:
         copy_csv_to_db(
             categories_by_target_groups,

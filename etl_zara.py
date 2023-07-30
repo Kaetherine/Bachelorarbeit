@@ -1,4 +1,4 @@
-from helpers import convert_date, compare_list_of_tups_and_remove_outliers, date
+from helpers import convert_date, date
 from logger import setup_logger
 from s3_bucket import *
 
@@ -262,6 +262,3 @@ def transform_product_data():
                     )
     
     return products_by_category, products, product_availability, color_interpretations
-
-# materials, origins = organise_product_details()
-# for item in 
