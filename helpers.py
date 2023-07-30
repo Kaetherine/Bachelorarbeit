@@ -14,7 +14,7 @@ date = '2023-07-29'
 csv_path = '/home/ubuntu/Bachelorarbeit/'
 
 logger = setup_logger()
-rate_limiter = RateLimiter(max_calls=3, period=1)
+rate_limiter = RateLimiter(max_calls=4, period=1)
 
 def get_raw_page(url, client=client, headers=None, params=None):
     '''function to get the content of a specific url'''

@@ -32,7 +32,7 @@ LOG_CONTENT=$LOGFILE
 # send notificationmal to email
 echo "Execution completed for $SCRIPT\n\nThe script $SCRIPT was executed. See Logfile to verify it was successfully. It took $DURATION seconds.\n\nLogfile content:\n$LOG_CONTENT"| mail -s "Cronjob: execution completed" -A $LOGFILE $EMAIL
 
-rm "/home/ubuntu/Bachelorarbeit/logfile.log"
+# rm "/home/ubuntu/Bachelorarbeit/logfile.log"
 rm "/home/ubuntu/Bachelorarbeit/categories.csv"
 rm "/home/ubuntu/Bachelorarbeit/categories_by_target_groups.csv"
 rm "/home/ubuntu/Bachelorarbeit/materials.csv"
