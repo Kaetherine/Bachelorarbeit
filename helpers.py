@@ -79,10 +79,19 @@ def compare_list_of_tups(list1, index_list1, list2, index_list2):
     return outliers
 
 
-def remove_outliers(list_containing_outliers, i, outliers):
+def remove_outliers_from_tup(list_containing_outliers, i, outliers):
     '''Removes tuples from a list if the element at a specific index is 
-    found in the list of "outliers.'''
+    found in the list "outliers".'''
     filtered_list = [tup for tup in list_containing_outliers if tup[i] not in outliers]
+
+    return filtered_list
+
+def compare_obj_and_remove_outliers(list1, index_list1, list2, index_list2):
+    '''Compares two lists of tuples at specific indices and removes the tuples from list1 
+    if the elements at index_list1 are not found at index_list2 in list2.'''
+    
+    outliers = compare_list_of_tups(list1, index_list1, list2, index_list2)
+    filtered_list = remove_outliers_from_tup(list1, index_list1, outliers)
 
     return filtered_list
 
