@@ -69,10 +69,10 @@ def create_csv_file(data, csv_file_name):
 def compare_list_of_tups(list1, index_list1, list2, index_list2):
     '''Compares elements at a specific index in the tuples of two lists.'''
     outliers = []
-    elements_list2 = {item[index_list2] for item in list2}
+    elements_list2 = [str(item[index_list2]) for item in list2]
 
     for item in list1:
-        if item[index_list1] not in elements_list2:
+        if str(item[index_list1]) not in elements_list2:
             outliers.append(item[index_list1])
 
     logger.info(f'compare_list_of_tups: {outliers} of {list1} could not be found in {list2}')
@@ -82,13 +82,10 @@ def compare_list_of_tups(list1, index_list1, list2, index_list2):
 def remove_outliers_from_tup(list_containing_outliers, i, outliers):
     '''Removes tuples from a list if the element at a specific index is 
     found in the list "outliers".'''
-    for tup in list_containing_outliers:
-        if tup[i] in outliers:
-            list_containing_outliers.remove(tup[i])
 
-    return list_containing_outliers
-
+    filtered_list = [tup for tup in list_containing_outliers if tup[i] not in outliers]
     return filtered_list
+
 
 def compare_list_of_tups_and_remove_outliers(list1, index_list1, list2, index_list2):
     '''Compares two lists of tuples at specific indices and removes the tuples from list1 
@@ -96,6 +93,5 @@ def compare_list_of_tups_and_remove_outliers(list1, index_list1, list2, index_li
     
     outliers = compare_list_of_tups(list1, index_list1, list2, index_list2)
     filtered_list = remove_outliers_from_tup(list1, index_list1, outliers)
-
     return filtered_list
 
