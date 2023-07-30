@@ -84,7 +84,7 @@ def remove_outliers_from_tup(list_containing_outliers, i, outliers):
     found in the list "outliers".'''
     for tup in list_containing_outliers:
         if tup[i] in outliers:
-            list_containing_outliers.delete(tup[i])
+            list_containing_outliers.remove(tup[i])
 
     return list_containing_outliers
 
