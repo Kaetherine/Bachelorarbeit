@@ -104,11 +104,17 @@ def extract_product_details(product_details, product_id):
 def create_material_tup(product_id, attribute_name, attribute_value):
     '''Extracts the percage and material type from a given string and 
     returns a tuple with the information.'''
-    m = attribute_value.split('%')
-    percage = f'{m[0]}'
-    material = m[1]
+    material_info = attribute_value.split('%')
+    percent = f'{material_info[0]}'
+    material = material_info[1]
+    if ':' in percent:
+        garment_piece_and_percentage = percent.split(':')
+        garment_piece = garment_piece_and_percentage[0]
+        percent = garment_piece_and_percentage[1]
+    else:
+        garment_piece = 'Not specified'
 
-    return (date,'zara.com/de', product_id, attribute_name, percage, material)
+    return (date,'zara.com/de', product_id, garment_piece, attribute_name, percent, material)
 
 def normalize_materials(materials, product_id):
     '''Normalize the materials data and extract relevant information.'''
@@ -256,3 +262,6 @@ def transform_product_data():
                     )
     
     return products_by_category, products, product_availability, color_interpretations
+
+# materials, origins = organise_product_details()
+# for item in 

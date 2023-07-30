@@ -23,6 +23,15 @@ def copy_csv_to_db(data, csv_file_name, pk_columns):
         f"DROP TABLE tmp_{table_name}",
     ]
 
+    commands = [
+        f"DROP TABLE IF EXISTS tmp_{table_name}",
+        f"CREATE TABLE tmp_{table_name} AS SELECT * FROM {table_name} LIMIT 0",
+        f"\COPY tmp_{table_name} FROM '{csv_file_name}' CSV",
+        f"INSERT INTO {table_name} SELECT tmp.* FROM tmp_{table_name} tmp JOIN products p ON tmp.retrieved_on = p.retrieved_on AND tmp.src = p.src AND tmp.product_id = p.product_id ON CONFLICT ({pk_columns}) DO NOTHING",
+        f"DROP TABLE tmp_{table_name}",
+    ]
+
+
     os.environ['PGPASSWORD'] = master_password
 
     for command in commands:

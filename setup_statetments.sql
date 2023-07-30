@@ -49,11 +49,12 @@ CREATE TABLE materials (
     retrieved_on DATE,
     src TEXT,
     product_id TEXT,
+    garment_piece TEXT,
     material_part TEXT,
     perc FLOAT,
     material TEXT,
-    PRIMARY KEY (retrieved_on, src, product_id, material_part, perc, material),
-    FOREIGN KEY (retrieved_on, src, product_id) REFERENCES products (retrieved_on, src, product_id)
+    PRIMARY KEY (retrieved_on, src, product_id, garment_piece, material_part, perc, material)
+    -- FOREIGN KEY (retrieved_on, src, product_id) REFERENCES products (retrieved_on, src, product_id)
 );
 
 CREATE TABLE origins (
