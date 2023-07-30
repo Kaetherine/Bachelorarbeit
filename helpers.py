@@ -76,7 +76,9 @@ def compare_list_of_tups(list1, index_list1, list2, index_list2):
             outliers.append(item[index_list1])
 
     logger.info(f'compare_list_of_tups: {outliers} of {list1} could not be found in {list2}')
-    return outliers
+
+    if outliers:
+        return outliers
 
 
 def remove_outliers_from_tup(list_containing_outliers, i, outliers):
@@ -91,7 +93,11 @@ def compare_list_of_tups_and_remove_outliers(list1, index_list1, list2, index_li
     if the elements at index_list1 are not found at index_list2 in list2.'''
     
     outliers = compare_list_of_tups(list1, index_list1, list2, index_list2)
-    filtered_list = remove_outliers_from_tup(list1, index_list1, outliers)
+    if outliers:
+        filtered_list = remove_outliers_from_tup(list1, index_list1, outliers)
+        return filtered_list
+    else:
+        return list1
 
-    return filtered_list
+    
 

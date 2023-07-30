@@ -1,4 +1,4 @@
-from helpers import convert_date, date
+from helpers import convert_date, compare_list_of_tups_and_remove_outliers, date
 from logger import setup_logger
 from s3_bucket import *
 
@@ -145,7 +145,7 @@ def normalize_materials(materials, product_id):
                             product_id, attribute_name, attribute_value
                             )
                         material_list.append(material_tup)
-
+                        
     return material_list
 
 def normalize_origin(origin, product_id):

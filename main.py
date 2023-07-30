@@ -1,7 +1,7 @@
 import traceback
 import etl_zara
 import get_zara
-from helpers import date, csv_path
+from helpers import compare_list_of_tups_and_remove_outliers, date, csv_path
 from logger import setup_logger
 from postgres_db import copy_csv_to_db
 from s3_bucket import upload_json_to_bucket
@@ -54,7 +54,7 @@ def get_zara_data_and_upload_to_s3_bucket():
             logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
-        
+
 
 def etl_zara_data_and_upload_to_db():
     '''Executes the zara ETL Script functions from the file etl_zara.py and
@@ -96,9 +96,10 @@ def etl_zara_data_and_upload_to_db():
         logger.warning(f'{e}: {traceback.format_exc()}')
     
     #materials
+    materials = compare_list_of_tups_and_remove_outliers(materials, 2, products, 2)
     try:
         copy_csv_to_db(
-            materials,
+            materials, 
             f'{csv_path}materials.csv',
             pk_columns='retrieved_on, src, product_id, garment_piece, material_part, perc, material'
             )
@@ -106,6 +107,7 @@ def etl_zara_data_and_upload_to_db():
         logger.warning(f'{e}: {traceback.format_exc()}')
 
     #origins
+    origins = compare_list_of_tups_and_remove_outliers(origins, 2, products, 2)
     try:
         copy_csv_to_db(
             origins,
@@ -127,6 +129,7 @@ def etl_zara_data_and_upload_to_db():
         logger.warning(f'{e}: {traceback.format_exc()}')
     
     #categories by target groups
+    # categories_by_target_groups = compare_list_of_tups_and_remove_outliers(categories_by_target_groups, 1, target_groups, 1)
     try:
         copy_csv_to_db(
             categories_by_target_groups,
@@ -147,6 +150,7 @@ def etl_zara_data_and_upload_to_db():
         logger.warning(f'{e}: {traceback.format_exc()}')
 
     #product availability
+    product_availability = compare_list_of_tups_and_remove_outliers(product_availability, 2, products, 2)
     try:
         copy_csv_to_db(
             product_availability,

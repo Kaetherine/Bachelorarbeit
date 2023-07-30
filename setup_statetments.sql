@@ -98,7 +98,7 @@ CREATE TABLE products_by_categories (
     src TEXT,
     category_id TEXT,
     product_id TEXT,
-    PRIMARY KEY (src, category_id , product_id)
+    PRIMARY KEY (src, category_id, product_id)
 );
 
 CREATE TABLE product_availability (
