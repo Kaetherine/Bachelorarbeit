@@ -54,6 +54,7 @@ def get_zara_data_and_upload_to_s3_bucket():
             logger.warning(f'{e}: {traceback.format_exc()}')
             continue
         upload_json_to_bucket(related_products, f'{date}-related_products.json')
+        
 
 def etl_zara_data_and_upload_to_db():
     '''Executes the zara ETL Script functions from the file etl_zara.py and
