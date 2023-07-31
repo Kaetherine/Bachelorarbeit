@@ -94,8 +94,3 @@ def compare_list_of_tuples_and_remove_outliers(list1, index_list1, list2, index_
     outliers = compare_list_of_tuples(list1, index_list1, list2, index_list2)
     filtered_list = remove_outliers_from_tuple(list1, index_list1, outliers)
     return filtered_list
-
-def correct_values_in_material_tuples(tuple_list_with_incorrect_values, duplicates, material_name):
-    '''docstring here'''
-    pass
-

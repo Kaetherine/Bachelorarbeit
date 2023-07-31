@@ -118,49 +118,6 @@ def create_material_tuple(product_id, material_part, material_info):
 
     return (date,'zara.com/de', product_id, garment_piece, material_part, percent, material)
 
-def search_duplicates_in_materials(tuple_list_with_duplicates):
-    '''Searches for duplicate elements at a specific index in the tuples of a list.'''
-    elements_at_i = [str(item[2]) for item in tuple_list_with_duplicates]
-    elements = []
-    duplicates = []
-    for item in elements_at_i:
-        item = str(item)
-        if item not in elements:
-            elements.append(item)
-            elements = list(set(elements))
-        else:
-            duplicates.append(item)
-            duplicates = list(set(duplicates))
-
-    return duplicates
-
-
-def correct_values_in_material_tuples(tuple_list_with_incorrect_values, material_name, duplicates):
-    '''Corrects the percentage values in tuples based on the duplicates and given material name.'''
-    corrected_list = []
-    for tup in tuple_list_with_incorrect_values:
-        if tup[3] in duplicates:
-            certified_material_tuple = None
-            non_certified_material_tuple = None
-            if material_name in tup[6]:
-                certified_material_tuple = tup
-            else:
-                non_certified_material_tuple = tup
-
-            if certified_material_tuple and non_certified_material_tuple:
-                corrected_percentage = non_certified_material_tuple[5] - certified_material_tuple[5]
-                corrected_tuple = tuple(
-                    non_certified_material_tuple[:5] + (corrected_percentage,) + non_certified_material_tuple[6:]
-                )
-                corrected_list.append(corrected_tuple)
-                corrected_list.append(certified_material_tuple)
-            else:
-                corrected_list.append(tup)
-        else:
-            corrected_list.append(tup)
-
-    return corrected_list
-
 
 def normalize_materials(materials, product_id):
     '''Normalize the materials data and extract relevant information.'''
@@ -236,13 +193,6 @@ def organise_product_details():
             origin.extend(normalized_origin)
         except Exception as e:
             logger.warning(f'{e}: {traceback.format_exc()}')
-
-    print(len(materials))
-    duplicates = search_duplicates_in_materials(materials)
-    materials = correct_values_in_material_tuples(materials, 'cotton', duplicates)
-    materials = correct_values_in_material_tuples(materials, 'polyester', duplicates)
-    print(len(materials))
-    # print(materials)
 
     return materials, origin
 
