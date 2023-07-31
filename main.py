@@ -161,5 +161,5 @@ def etl_zara_data_and_upload_to_db():
    
 
 if __name__ == "__main__":
-    # get_zara_data_and_upload_to_s3_bucket()
+    get_zara_data_and_upload_to_s3_bucket()
     etl_zara_data_and_upload_to_db()
