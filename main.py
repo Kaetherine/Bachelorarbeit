@@ -1,7 +1,7 @@
 import traceback
 import etl_zara
 import get_zara
-from helpers import compare_list_of_tups_and_remove_outliers, date, csv_path
+from helpers import compare_list_of_tuples_and_remove_outliers, date, csv_path
 from logger import setup_logger
 from postgres_db import copy_csv_to_db
 from s3_bucket import upload_json_to_bucket
@@ -61,42 +61,42 @@ def etl_zara_data_and_upload_to_db():
     saves the data to the RDS database'''
 
     products_by_cat, products, product_availability, color_interp = etl_zara.transform_product_data()
-    target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
+    # target_groups, categories, categories_by_target_groups = etl_zara.normalize_categories()
     materials, origins = etl_zara.organise_product_details()
-    related_products = etl_zara.normalize_related_products()
+    # related_products = etl_zara.normalize_related_products()
 
-    # products
-    try:
-        copy_csv_to_db(
-            products,
-            f'{csv_path}products.csv',
-            pk_columns='retrieved_on, src, product_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # # products
+    # try:
+    #     copy_csv_to_db(
+    #         products,
+    #         f'{csv_path}products.csv',
+    #         pk_columns='retrieved_on, src, product_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
     
-    #target_groups
-    try:
-        copy_csv_to_db(
-            target_groups,
-            f'{csv_path}target_groups.csv',
-            pk_columns='src, target_group_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #target_groups
+    # try:
+    #     copy_csv_to_db(
+    #         target_groups,
+    #         f'{csv_path}target_groups.csv',
+    #         pk_columns='src, target_group_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
     
-    #categories
-    try:
-        copy_csv_to_db(
-            categories,
-            f'{csv_path}categories.csv',
-            pk_columns='src, category_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #categories
+    # try:
+    #     copy_csv_to_db(
+    #         categories,
+    #         f'{csv_path}categories.csv',
+    #         pk_columns='src, category_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
     
     #materials
-    materials = compare_list_of_tups_and_remove_outliers(materials, 2, products, 2)
+    materials = compare_list_of_tuples_and_remove_outliers(materials, 2, products, 2)
     try:
         copy_csv_to_db(
             materials, 
@@ -106,60 +106,60 @@ def etl_zara_data_and_upload_to_db():
     except Exception as e:
         logger.warning(f'{e}: {traceback.format_exc()}')
 
-    #origins
-    origins = compare_list_of_tups_and_remove_outliers(origins, 2, products, 2)
-    try:
-        copy_csv_to_db(
-            origins,
-            f'{csv_path}origins.csv',
-            pk_columns='retrieved_on, src, product_id, country_of_origin'
-            )
+    # #origins
+    # origins = compare_list_of_tuples_and_remove_outliers(origins, 2, products, 2)
+    # try:
+    #     copy_csv_to_db(
+    #         origins,
+    #         f'{csv_path}origins.csv',
+    #         pk_columns='retrieved_on, src, product_id, country_of_origin'
+    #         )
 
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
 
-    #related products
-    try:
-        copy_csv_to_db(
-            related_products,
-            f'{csv_path}related_products.csv',
-            pk_columns='src, product_id , related_product_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #related products
+    # try:
+    #     copy_csv_to_db(
+    #         related_products,
+    #         f'{csv_path}related_products.csv',
+    #         pk_columns='src, product_id , related_product_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
     
-    #categories by target groups
-    try:
-        copy_csv_to_db(
-            categories_by_target_groups,
-            f'{csv_path}categories_by_target_groups.csv',
-            pk_columns='src, target_group_id , category_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #categories by target groups
+    # try:
+    #     copy_csv_to_db(
+    #         categories_by_target_groups,
+    #         f'{csv_path}categories_by_target_groups.csv',
+    #         pk_columns='src, target_group_id , category_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
     
-    #products by categories
-    try:
-        copy_csv_to_db(
-            products_by_cat,
-            f'{csv_path}products_by_categories.csv',
-            pk_columns='src, category_id , product_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #products by categories
+    # try:
+    #     copy_csv_to_db(
+    #         products_by_cat,
+    #         f'{csv_path}products_by_categories.csv',
+    #         pk_columns='src, category_id , product_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
 
-    #product availability
-    product_availability = compare_list_of_tups_and_remove_outliers(product_availability, 2, products, 2)
-    try:
-        copy_csv_to_db(
-            product_availability,
-            f'{csv_path}product_availability.csv',
-            pk_columns='retrieved_on, src, product_id'
-            )
-    except Exception as e:
-        logger.warning(f'{e}: {traceback.format_exc()}')
+    # #product availability
+    # product_availability = compare_list_of_tuples_and_remove_outliers(product_availability, 2, products, 2)
+    # try:
+    #     copy_csv_to_db(
+    #         product_availability,
+    #         f'{csv_path}product_availability.csv',
+    #         pk_columns='retrieved_on, src, product_id'
+    #         )
+    # except Exception as e:
+    #     logger.warning(f'{e}: {traceback.format_exc()}')
    
 
 if __name__ == "__main__":
-    get_zara_data_and_upload_to_s3_bucket()
+    # get_zara_data_and_upload_to_s3_bucket()
     etl_zara_data_and_upload_to_db()

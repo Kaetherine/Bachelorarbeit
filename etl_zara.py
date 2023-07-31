@@ -8,9 +8,9 @@ logger = setup_logger()
 
 def normalize_related_products():
     '''Creates a list of tuples of related products.'''
-    related_products_tup = get_bucket_file(f'{date}-related_products.json')
+    related_products_tuple = get_bucket_file(f'{date}-related_products.json')
     related_products = []
-    for product, products in related_products_tup.items():
+    for product, products in related_products_tuple.items():
         if products:
             for related_product in products:
                 related_products.append(('zara.com/de', product, related_product))
@@ -51,8 +51,8 @@ def extract_subcategories(subcategories):
 
 def normalize_categories():
     '''Normalize categories data obtained from the "categories.json" file.'''
-    categories_tup = get_bucket_file(f'{date}-categories.json')
-    categories_tup = categories_tup['categories']
+    categories_tuple = get_bucket_file(f'{date}-categories.json')
+    categories_tuple = categories_tuple['categories']
 
     # normalizing target_groups
     categories = []
@@ -60,7 +60,7 @@ def normalize_categories():
     desired_target_groups = ['WOMAN', 'MAN', 'KIDS']
     categories_by_target_groups = []
 
-    for entry in categories_tup:
+    for entry in categories_tuple:
         target_group = entry['name']
         target_group_id = entry['id']
         if target_group in desired_target_groups:
@@ -101,10 +101,12 @@ def extract_product_details(product_details, product_id):
 
     return [product_id, care, certified_materials, materials, origin]
 
-def create_material_tup(product_id, attribute_name, attribute_value):
+def create_material_tuple(product_id, material_part, material_info):
     '''Extracts the percage and material type from a given string and 
     returns a tuple with the information.'''
-    material_info = attribute_value.split('%')
+    if material_part == 'MAIN FABRIC':
+        material_part = 'OUTER SHELL'
+    material_info = material_info.split('%')
     percent = f'{material_info[0]}'
     material = material_info[1]
     if ':' in percent:
@@ -114,7 +116,51 @@ def create_material_tup(product_id, attribute_name, attribute_value):
     else:
         garment_piece = 'Not specified'
 
-    return (date,'zara.com/de', product_id, garment_piece, attribute_name, percent, material)
+    return (date,'zara.com/de', product_id, garment_piece, material_part, percent, material)
+
+def search_duplicates_in_materials(tuple_list_with_duplicates):
+    '''Searches for duplicate elements at a specific index in the tuples of a list.'''
+    elements_at_i = [str(item[2]) for item in tuple_list_with_duplicates]
+    elements = []
+    duplicates = []
+    for item in elements_at_i:
+        item = str(item)
+        if item not in elements:
+            elements.append(item)
+            elements = list(set(elements))
+        else:
+            duplicates.append(item)
+            duplicates = list(set(duplicates))
+
+    return duplicates
+
+
+def correct_values_in_material_tuples(tuple_list_with_incorrect_values, material_name, duplicates):
+    '''Corrects the percentage values in tuples based on the duplicates and given material name.'''
+    corrected_list = []
+    for tup in tuple_list_with_incorrect_values:
+        if tup[3] in duplicates:
+            certified_material_tuple = None
+            non_certified_material_tuple = None
+            if material_name in tup[6]:
+                certified_material_tuple = tup
+            else:
+                non_certified_material_tuple = tup
+
+            if certified_material_tuple and non_certified_material_tuple:
+                corrected_percentage = non_certified_material_tuple[5] - certified_material_tuple[5]
+                corrected_tuple = tuple(
+                    non_certified_material_tuple[:5] + (corrected_percentage,) + non_certified_material_tuple[6:]
+                )
+                corrected_list.append(corrected_tuple)
+                corrected_list.append(certified_material_tuple)
+            else:
+                corrected_list.append(tup)
+        else:
+            corrected_list.append(tup)
+
+    return corrected_list
+
 
 def normalize_materials(materials, product_id):
     '''Normalize the materials data and extract relevant information.'''
@@ -136,19 +182,19 @@ def normalize_materials(materials, product_id):
                     if '<br>' in attribute_value:
                         attribute_values = attribute_value.split('<br>')
                         for value in attribute_values:
-                            material_tup = create_material_tup(
+                            material_tuple = create_material_tuple(
                                 product_id, attribute_name, value
                                 )
-                            material_list.append(material_tup)
+                            material_list.append(material_tuple)
                     else:
-                        material_tup = create_material_tup(
+                        material_tuple = create_material_tuple(
                             product_id, attribute_name, attribute_value
                             )
-                        material_list.append(material_tup)
+                        material_list.append(material_tuple)
                         
     return material_list
 
-def normalize_origin(origin, product_id):
+def normalize_origins(origin, product_id):
     '''Normalize the origin data and extract relevant information.'''
     origin_list = []
     country_of_origin = origin['components'][-1]['text']['value']
@@ -183,7 +229,7 @@ def organise_product_details():
             logger.warning(f'{e}: {traceback.format_exc()}')
 
         try:
-            normalized_origin = normalize_origin(
+            normalized_origin = normalize_origins(
                 extracted_details[4],
                 product_id
                 )
@@ -191,9 +237,16 @@ def organise_product_details():
         except Exception as e:
             logger.warning(f'{e}: {traceback.format_exc()}')
 
+    print(len(materials))
+    duplicates = search_duplicates_in_materials(materials)
+    materials = correct_values_in_material_tuples(materials, 'cotton', duplicates)
+    materials = correct_values_in_material_tuples(materials, 'polyester', duplicates)
+    print(len(materials))
+    # print(materials)
+
     return materials, origin
 
-def create_product_tup(entry):
+def create_product_tuple(entry):
     '''Generates and returns a product tuple from a provided entry.'''
     product_id = entry['id']
     color_hex_code = entry.get('colorInfo', {}).get('mainColorHexCode')
@@ -205,26 +258,26 @@ def create_product_tup(entry):
         convert_date(entry['startDate']), color_hex_code,
     )
 
-def create_availability_tup(entry):
+def create_availability_tuple(entry):
     '''Generates and returns a tuple containing product product_availability from a 
     provided entry.'''
     return (date, 'zara.com/de', entry['id'], entry['availability'])
 
-def create_color_interpretation_tup(entry, hex_code):
+def create_color_interpretation_tuple(entry, hex_code):
     '''Gets the color name and returns it together with the hex code in a tuple'''
     try:
         color_interpretation = entry['detail']['colors'][0]['name']
     except:
         color_interpretation = 'Not specified'
     
-    color_interpretation_tup = (hex_code, color_interpretation)
+    color_interpretation_tuple = (hex_code, color_interpretation)
 
-    return color_interpretation_tup
+    return color_interpretation_tuple
 
 def transform_product_data():
     '''Extracts product data from a JSON file, transforms it, and returns it 
     as four Pandas DataFrames.'''
-    products_by_category_tup = get_bucket_file(
+    products_by_category_tuple = get_bucket_file(
         f'{date}-products_by_category.json'
         )
     products_by_category = []
@@ -232,33 +285,33 @@ def transform_product_data():
     product_availability = []
     color_interpretations = []
     
-    for category in products_by_category_tup:
-        for item in products_by_category_tup[category]:
+    for category in products_by_category_tuple:
+        for item in products_by_category_tuple[category]:
             for entry in item:
 
                 try:
-                    product_tup = create_product_tup(entry)
-                    products.append(product_tup)
+                    product_tuple = create_product_tuple(entry)
+                    products.append(product_tuple)
                 except Exception as e:
                     logger.warning(f'{e}: {traceback.format_exc()}')
 
                 try:
-                    availability_tup = create_availability_tup(entry)
-                    product_availability.append(availability_tup)
+                    availability_tuple = create_availability_tuple(entry)
+                    product_availability.append(availability_tuple)
                 except Exception as e:
                     logger.warning(f'{e}: {traceback.format_exc()}')
                 
-                if '#' not in product_tup[-1]:
+                if '#' not in product_tuple[-1]:
                     continue
                 else:
                     try:
-                        color_interpretation_tup = create_color_interpretation_tup(entry, product_tup[-1])
-                        color_interpretations.append(color_interpretation_tup)
+                        color_interpretation_tuple = create_color_interpretation_tuple(entry, product_tuple[-1])
+                        color_interpretations.append(color_interpretation_tuple)
                     except Exception as e:
                         logger.warning(f'{e}: {traceback.format_exc()}')
 
                 products_by_category.append((
-                    'zara.com/de', category, product_tup[2])
+                    'zara.com/de', category, product_tuple[2])
                     )
     
     return products_by_category, products, product_availability, color_interpretations
