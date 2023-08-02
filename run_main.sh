@@ -9,13 +9,13 @@ SCRIPT="/home/ubuntu/Bachelorarbeit/main.py"
 LOGFILE="/home/ubuntu/Bachelorarbeit/logfile.log"
 
 # send notificationmal to email
-echo "The cronjob has started the script $SCRIPT" | mail -s "Cronjob started" $EMAIL
+echo "The cronjob on you VM BA has started the script $SCRIPT" | mail -s "VM BA: Cronjob started" $EMAIL
 
 # get start time
 START_TIME=$(date +%s)
 
 # execution of python script
-python3 $SCRIPT 2>> $LOGFILE
+# python3 $SCRIPT 2>> $LOGFILE
 
 # get end time
 END_TIME=$(date +%s)
@@ -24,13 +24,10 @@ END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
 
 # read last 50 lines of logfile
-# LOG_CONTENT=$(tail -n 50 "$LOGFILE")
-
-# whole logfile
-LOG_CONTENT=$LOGFILE
+LOG_CONTENT=$(tail -n 100 "$LOGFILE")
 
 # send notificationmal to email
-echo "Execution completed for $SCRIPT\n\nThe script $SCRIPT was executed. See Logfile to verify it was successfully. It took $DURATION seconds.\n\nLogfile content:\n$LOG_CONTENT"| mail -s "Cronjob: execution completed" -A $LOGFILE $EMAIL
+echo "Execution completed for $SCRIPT. The script $SCRIPT was executed. It took $DURATION seconds. Logfile content:$LOG_CONTENT"| mail -s "VM BA: Execution completed" $EMAIL
 
 # rm "/home/ubuntu/Bachelorarbeit/logfile.log"
 rm "/home/ubuntu/Bachelorarbeit/categories.csv"

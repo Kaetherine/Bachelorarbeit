@@ -8,8 +8,7 @@ from credentials import client
 from logger import setup_logger
 
 
-# date = datetime.now().strftime('%Y-%m-%d')
-date = '2023-07-29'
+date = datetime.now().strftime('%Y-%m-%d')
 
 csv_path = '/home/ubuntu/Bachelorarbeit/'
 
