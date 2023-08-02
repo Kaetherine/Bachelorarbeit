@@ -15,7 +15,7 @@ echo "The cronjob on you VM BA has started the script $SCRIPT" | mail -s "VM BA:
 START_TIME=$(date +%s)
 
 # execution of python script
-# python3 $SCRIPT 2>> $LOGFILE
+python3 $SCRIPT 2>> $LOGFILE
 
 # get end time
 END_TIME=$(date +%s)
