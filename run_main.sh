@@ -24,7 +24,7 @@ END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))
 
 # read last 50 lines of logfile
-LOG_CONTENT=$(tail -n 100 "$LOGFILE")
+LOG_CONTENT=$(tail -n 50 "$LOGFILE")
 
 # send notificationmal to email
 echo "Execution completed for $SCRIPT. The script $SCRIPT was executed. It took $DURATION seconds. Logfile content:$LOG_CONTENT"| mail -s "VM BA: Execution completed" $EMAIL
